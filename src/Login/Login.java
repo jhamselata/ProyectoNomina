@@ -4,7 +4,11 @@
  */
 package Login;
 import Menu.Menu;
-
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -65,7 +69,13 @@ public class Login extends javax.swing.JFrame {
                 .addGap(39, 39, 39))
         );
 
+        TF_Usuario.setToolTipText("Ingresa un usuario válido");
         TF_Usuario.setName(""); // NOI18N
+        TF_Usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TF_UsuarioActionPerformed(evt);
+            }
+        });
         TF_Usuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 TF_UsuarioKeyPressed(evt);
@@ -75,12 +85,16 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        PF_Contrasenia.setToolTipText("Ingresa una contraseña válida");
         PF_Contrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PF_ContraseniaActionPerformed(evt);
             }
         });
         PF_Contrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                PF_ContraseniaKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 PF_ContraseniaKeyTyped(evt);
             }
@@ -120,16 +134,16 @@ public class Login extends javax.swing.JFrame {
         Panel_BotonLoginLayout.setHorizontalGroup(
             Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_BotonLoginLayout.createSequentialGroup()
-                .addGap(109, 109, 109)
+                .addGap(108, 108, 108)
                 .addComponent(jButton1)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
         Panel_BotonLoginLayout.setVerticalGroup(
             Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_BotonLoginLayout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
+            .addGroup(Panel_BotonLoginLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addComponent(jButton1)
-                .addGap(56, 56, 56))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout PanelFondoLayout = new javax.swing.GroupLayout(PanelFondo);
@@ -177,8 +191,58 @@ public class Login extends javax.swing.JFrame {
     jButton1.setEnabled(habilitar);
 }
     
+    private boolean iniciarSesion() {
+    String usuario = TF_Usuario.getText();
+    String contrasenia = new String(PF_Contrasenia.getPassword());
+    boolean encontrado = false;
+    
+    try {
+        File f = new File("BaseDeDatos/Usuarios.txt");
+        Scanner s = new Scanner(f);
+        
+        if (f.exists()) {
+            while (s.hasNextLine() && !encontrado) {
+                String linea = s.nextLine();
+                Scanner s1 = new Scanner(linea);
+                s1.useDelimiter("\\s*;\\s*");
+                
+                String usuarioGuardado = s1.next();
+                String contraseniaGuardada = s1.next();
+                
+                if (usuario.equals(usuarioGuardado)) {
+                    encontrado = true;
+                    if (contrasenia.equals(contraseniaGuardada)) {
+                        this.dispose();
+                        Menu MenuPrincipal = new Menu();
+                        MenuPrincipal.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Contraseña incorrecta");
+                        PF_Contrasenia.setText("");
+                    }
+                }
+            }
+            s.close();
+            
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
+                TF_Usuario.setText("");
+                PF_Contrasenia.setText("");
+                TF_Usuario.requestFocus();
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "No existe el archivo de usuarios");
+        }
+    } catch (HeadlessException | FileNotFoundException e) {
+        System.out.println("Error al leer el archivo: " + e);
+        JOptionPane.showMessageDialog(rootPane, "Error al leer los datos");
+    }
+        return false;
+}
+    
     private void TF_UsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyPressed
-
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !TF_Usuario.getText().isEmpty()) {
+            PF_Contrasenia.requestFocus();
+        }
     }//GEN-LAST:event_TF_UsuarioKeyPressed
 
     private void PF_ContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PF_ContraseniaActionPerformed
@@ -193,13 +257,27 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_TF_UsuarioKeyTyped
    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Menu MenuPrincipal = new Menu();
-        MenuPrincipal.setVisible(true);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void PF_ContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyTyped
         validarCampos();
     }//GEN-LAST:event_PF_ContraseniaKeyTyped
+
+    private void TF_UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TF_UsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TF_UsuarioActionPerformed
+
+    private void PF_ContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !PF_Contrasenia.getText().isEmpty()) {
+            if(iniciarSesion()) {
+                this.dispose();
+            
+            Menu MenuPrincipal = new Menu();
+            MenuPrincipal.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_PF_ContraseniaKeyPressed
 
     /**
      * @param args the command line arguments
