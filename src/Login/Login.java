@@ -197,7 +197,7 @@ public class Login extends javax.swing.JFrame {
     boolean encontrado = false;
     
     try {
-        File f = new File("BaseDeDatos/Usuarios.txt");
+        File f = new File("src/BaseDeDatos/Usuarios.txt");
         Scanner s = new Scanner(f);
         
         if (f.exists()) {
