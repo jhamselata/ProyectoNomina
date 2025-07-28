@@ -4,6 +4,14 @@
  */
 package Mantenimientos;
 
+import ManejoDeArchivos.ManejoArchivos;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author jhams
@@ -13,9 +21,41 @@ public class Usuarios extends javax.swing.JFrame {
     /**
      * Creates new form Usuarios
      */
+    boolean encontrado = false;
+    String cadenaAnterior = "";
+    File archivo = new File("src/BaseDeDatos/Auxiliar.txt");
+
     public Usuarios() {
         initComponents();
+        setTitle("Mantenimiento de Usuario"); 
     }
+    
+    public String buscar(String usuarioBuscado) {
+    String lineaEncontrada = null;
+
+    try {
+        File archivo = new File("src/BaseDeDatos/Usuarios.txt");
+        BufferedReader br = new BufferedReader(new FileReader(archivo));
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(";");
+            if (partes.length >= 6 && partes[0].equalsIgnoreCase(usuarioBuscado.trim())) {
+                lineaEncontrada = linea;
+                br.close();
+                return lineaEncontrada;
+            }
+        }
+
+        br.close();
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar el usuario: " + e.getMessage());
+    }
+
+    return null;
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,21 +66,315 @@ public class Usuarios extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        RolGroup = new javax.swing.ButtonGroup();
+        jPanel1 = new javax.swing.JPanel();
+        Usuario_lbl = new javax.swing.JLabel();
+        Usuario_txt = new javax.swing.JTextField();
+        Usuario_lbl1 = new javax.swing.JLabel();
+        Usuario_lbl2 = new javax.swing.JLabel();
+        Nombre_lbl = new javax.swing.JLabel();
+        Nombre_txt = new javax.swing.JTextField();
+        Apellidos_lbl = new javax.swing.JLabel();
+        Apellido_txt = new javax.swing.JTextField();
+        Email_lbl = new javax.swing.JLabel();
+        Email_txt = new javax.swing.JTextField();
+        Contrasena_pwd = new javax.swing.JPasswordField();
+        Admin_rbtn = new javax.swing.JRadioButton();
+        Empleado_rbtn = new javax.swing.JRadioButton();
+        Limpiar_btn = new javax.swing.JButton();
+        Anadir_btn = new javax.swing.JButton();
+        Salir_btn = new javax.swing.JButton();
+        Estado_txt = new javax.swing.JTextField();
+        Estado_lbl = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Usuario_lbl.setText("Usuario");
+
+        Usuario_txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Usuario_txtKeyPressed(evt);
+            }
+        });
+
+        Usuario_lbl1.setText("Contraseña");
+
+        Usuario_lbl2.setText("Rol");
+
+        Nombre_lbl.setText("Nombre");
+
+        Apellidos_lbl.setText("Apellidos");
+
+        Email_lbl.setText("Email");
+
+        Email_txt.setToolTipText("JhonDoe@gmail.example");
+
+        RolGroup.add(Admin_rbtn);
+        Admin_rbtn.setText("Admin");
+        Admin_rbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_rbtnActionPerformed(evt);
+            }
+        });
+
+        RolGroup.add(Empleado_rbtn);
+        Empleado_rbtn.setText("Empleado");
+
+        Limpiar_btn.setText("Limpiar");
+        Limpiar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Limpiar_btnActionPerformed(evt);
+            }
+        });
+
+        Anadir_btn.setText("Añadir");
+        Anadir_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Anadir_btnActionPerformed(evt);
+            }
+        });
+
+        Salir_btn.setText("Salir");
+        Salir_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Salir_btnActionPerformed(evt);
+            }
+        });
+
+        Estado_txt.setEditable(false);
+        Estado_txt.setEnabled(false);
+
+        Estado_lbl.setText("Estado:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Usuario_lbl2)
+                        .addGap(73, 73, 73)
+                        .addComponent(Admin_rbtn)
+                        .addGap(51, 51, 51)
+                        .addComponent(Empleado_rbtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Nombre_lbl)
+                        .addGap(46, 46, 46)
+                        .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Apellidos_lbl)
+                        .addGap(41, 41, 41)
+                        .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Email_lbl)
+                        .addGap(61, 61, 61)
+                        .addComponent(Email_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Usuario_lbl1)
+                        .addGap(30, 30, 30)
+                        .addComponent(Contrasena_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Usuario_lbl)
+                        .addGap(50, 50, 50)
+                        .addComponent(Usuario_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(100, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Estado_lbl)
+                    .addComponent(Estado_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(Estado_lbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Estado_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Usuario_lbl)
+                    .addComponent(Usuario_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Usuario_lbl1)
+                    .addComponent(Contrasena_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Usuario_lbl2)
+                    .addComponent(Admin_rbtn)
+                    .addComponent(Empleado_rbtn))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Nombre_lbl)
+                    .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Apellidos_lbl)
+                    .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Email_lbl)
+                    .addComponent(Email_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(57, 57, 57)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Admin_rbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_rbtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Admin_rbtnActionPerformed
+
+    private void Anadir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Anadir_btnActionPerformed
+        // TODO add your handling code here:
+            
+        // Al inicio de Anadir_btnActionPerformed
+        String usuario = Usuario_txt.getText().trim();
+        String lineaExistente = buscar(usuario);
+
+        // Verifica si el usuario ya existe y no estamos modificando
+        if (lineaExistente != null && !encontrado) {
+            JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
+        return;
+        }
+        
+      
+        String contrasena = Contrasena_pwd.getText().trim();
+        String nombres = Nombre_txt.getText().trim();
+        String apellidos = Apellido_txt.getText().trim();
+        String email = Email_txt.getText().trim();
+        String rol = "";
+
+        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+            return;
+        }
+
+        if (Admin_rbtn.isSelected()) {
+            rol = "0";
+        } else if (Empleado_rbtn.isSelected()) {
+            rol = "1";
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un rol.");
+            return;
+        }
+
+        String nuevaLinea = usuario + ";" + contrasena + ";" + rol + ";" + nombres + ";" + apellidos + ";" + email;
+
+        ManejoArchivos manejo = new ManejoArchivos();
+
+        try {
+            if (!encontrado) {
+            // Guardar nuevo
+                manejo.GuardarDatos(nuevaLinea, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
+            } else {
+                // Modificar usuario existente usando tu método Modificar
+                manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
+            }
+
+            // Resetear formulario
+            encontrado = false;
+            Usuario_txt.setText("");
+            Contrasena_pwd.setText("");
+            Nombre_txt.setText("");
+            Apellido_txt.setText("");
+            Email_txt.setText("");
+            Estado_txt.setText("");
+            RolGroup.clearSelection();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
+        }
+    
+
+    }//GEN-LAST:event_Anadir_btnActionPerformed
+
+    private void Limpiar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Limpiar_btnActionPerformed
+        // TODO add your handling code here:
+        Usuario_txt.setText("");
+        Contrasena_pwd.setText("");
+        Nombre_txt.setText("");
+        Apellido_txt.setText("");
+        Email_txt.setText("");
+        Estado_txt.setText("");
+        RolGroup.clearSelection();
+    }//GEN-LAST:event_Limpiar_btnActionPerformed
+
+    private void Usuario_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyPressed
+        // TODO add your handling code here:
+       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        String usuarioBuscado = Usuario_txt.getText().trim();
+        String lineaEncontrada = buscar(usuarioBuscado);
+
+        if (lineaEncontrada != null) {
+            String[] datos = lineaEncontrada.split(";");
+
+            Usuario_txt.setText(datos[0]);
+            Contrasena_pwd.setText(datos[1]);
+
+            if (datos[2].equals("0")) {
+                Admin_rbtn.setSelected(true);
+            } else {
+                Empleado_rbtn.setSelected(true);
+            }
+
+            Nombre_txt.setText(datos[3]);
+            Apellido_txt.setText(datos[4]);
+            Email_txt.setText(datos[5]);
+
+            Estado_txt.setText("Modificando");
+            encontrado = true;
+            cadenaAnterior = lineaEncontrada;
+        } else {
+            // Limpiar excepto Usuario_txt
+            Contrasena_pwd.setText("");
+            Nombre_txt.setText("");
+            Apellido_txt.setText("");
+            Email_txt.setText("");
+            RolGroup.clearSelection();
+
+            Estado_txt.setText("Creando");
+            encontrado = false;
+            cadenaAnterior = "";
+        }
+    }
+    
+    
+    }//GEN-LAST:event_Usuario_txtKeyPressed
+
+    private void Salir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btnActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_Salir_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +412,25 @@ public class Usuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton Admin_rbtn;
+    private javax.swing.JButton Anadir_btn;
+    private javax.swing.JTextField Apellido_txt;
+    private javax.swing.JLabel Apellidos_lbl;
+    private javax.swing.JPasswordField Contrasena_pwd;
+    private javax.swing.JLabel Email_lbl;
+    private javax.swing.JTextField Email_txt;
+    private javax.swing.JRadioButton Empleado_rbtn;
+    private javax.swing.JLabel Estado_lbl;
+    private javax.swing.JTextField Estado_txt;
+    private javax.swing.JButton Limpiar_btn;
+    private javax.swing.JLabel Nombre_lbl;
+    private javax.swing.JTextField Nombre_txt;
+    private javax.swing.ButtonGroup RolGroup;
+    private javax.swing.JButton Salir_btn;
+    private javax.swing.JLabel Usuario_lbl;
+    private javax.swing.JLabel Usuario_lbl1;
+    private javax.swing.JLabel Usuario_lbl2;
+    private javax.swing.JTextField Usuario_txt;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
