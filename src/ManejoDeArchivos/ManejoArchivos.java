@@ -24,7 +24,8 @@ public class ManejoArchivos {
             }
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true));
-            bw.write(cadena + "\r\n");
+            bw.write(cadena + "\r");
+            
             bw.close();
         } catch (IOException e) {
             System.out.println(e);
