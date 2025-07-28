@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 public class Usuarios extends javax.swing.JFrame {
 
     /**
-     * Creates new form Usuarios
+     * Creates new form Login
      */
     boolean encontrado = false;
     String cadenaAnterior = "";
@@ -401,6 +401,7 @@ public class Usuarios extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
