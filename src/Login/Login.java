@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Login;
+import Menu.Menu;
+
 
 /**
  *
@@ -15,6 +17,10 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla.
+        
+        PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
+        jButton1.setEnabled(!TF_Usuario.getText().isEmpty());
     }
 
     /**
@@ -36,6 +42,7 @@ public class Login extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
         setResizable(false);
 
         EtiquetaBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
@@ -59,6 +66,25 @@ public class Login extends javax.swing.JFrame {
         );
 
         TF_Usuario.setName(""); // NOI18N
+        TF_Usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TF_UsuarioKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TF_UsuarioKeyTyped(evt);
+            }
+        });
+
+        PF_Contrasenia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PF_ContraseniaActionPerformed(evt);
+            }
+        });
+        PF_Contrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PF_ContraseniaKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelCamposLayout = new javax.swing.GroupLayout(PanelCampos);
         PanelCampos.setLayout(PanelCamposLayout);
@@ -78,27 +104,32 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(TF_Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(PF_Contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jButton1.setText("Iniciar Sesión");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout Panel_BotonLoginLayout = new javax.swing.GroupLayout(Panel_BotonLogin);
         Panel_BotonLogin.setLayout(Panel_BotonLoginLayout);
         Panel_BotonLoginLayout.setHorizontalGroup(
             Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_BotonLoginLayout.createSequentialGroup()
-                .addGap(103, 103, 103)
+                .addGap(109, 109, 109)
                 .addComponent(jButton1)
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         Panel_BotonLoginLayout.setVerticalGroup(
             Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_BotonLoginLayout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
+                .addContainerGap(81, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(57, 57, 57))
+                .addGap(56, 56, 56))
         );
 
         javax.swing.GroupLayout PanelFondoLayout = new javax.swing.GroupLayout(PanelFondo);
@@ -119,7 +150,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(PanelMensajeBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(PanelCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(48, 48, 48)
                 .addComponent(Panel_BotonLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -137,10 +168,43 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void validarCampos() {
+    String usuario = TF_Usuario.getText().trim();
+    String contrasenia = new String(PF_Contrasenia.getPassword()).trim();
+
+    boolean habilitar = !usuario.isEmpty() && !contrasenia.isEmpty();
+    jButton1.setEnabled(habilitar);
+}
+    
+    private void TF_UsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyPressed
+
+    }//GEN-LAST:event_TF_UsuarioKeyPressed
+
+    private void PF_ContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PF_ContraseniaActionPerformed
+  
+    }//GEN-LAST:event_PF_ContraseniaActionPerformed
+
+    private void TF_UsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyTyped
+
+        PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
+        
+        validarCampos();
+    }//GEN-LAST:event_TF_UsuarioKeyTyped
+   
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Menu MenuPrincipal = new Menu();
+        MenuPrincipal.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void PF_ContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyTyped
+        validarCampos();
+    }//GEN-LAST:event_PF_ContraseniaKeyTyped
 
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
