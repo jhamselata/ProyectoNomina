@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Login;
+
 import Menu.Menu;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -22,7 +23,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
-        
+
         PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
         jButton1.setEnabled(!TF_Usuario.getText().isEmpty());
     }
@@ -182,63 +183,63 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void validarCampos() {
-    String usuario = TF_Usuario.getText().trim();
-    String contrasenia = new String(PF_Contrasenia.getPassword()).trim();
 
-    boolean habilitar = !usuario.isEmpty() && !contrasenia.isEmpty();
-    jButton1.setEnabled(habilitar);
-}
-    
+    private void validarCampos() {
+        String usuario = TF_Usuario.getText().trim();
+        String contrasenia = new String(PF_Contrasenia.getPassword()).trim();
+
+        boolean habilitar = !usuario.isEmpty() && !contrasenia.isEmpty();
+        jButton1.setEnabled(habilitar);
+    }
+
     private boolean iniciarSesion() {
-    String usuario = TF_Usuario.getText();
-    String contrasenia = new String(PF_Contrasenia.getPassword());
-    boolean encontrado = false;
-    
-    try {
-        File f = new File("BaseDeDatos/Usuarios.txt");
-        Scanner s = new Scanner(f);
-        
-        if (f.exists()) {
-            while (s.hasNextLine() && !encontrado) {
-                String linea = s.nextLine();
-                Scanner s1 = new Scanner(linea);
-                s1.useDelimiter("\\s*;\\s*");
-                
-                String usuarioGuardado = s1.next();
-                String contraseniaGuardada = s1.next();
-                
-                if (usuario.equals(usuarioGuardado)) {
-                    encontrado = true;
-                    if (contrasenia.equals(contraseniaGuardada)) {
-                        this.dispose();
-                        Menu MenuPrincipal = new Menu();
-                        MenuPrincipal.setVisible(true);
-                    } else {
-                        JOptionPane.showMessageDialog(rootPane, "Contraseña incorrecta");
-                        PF_Contrasenia.setText("");
+        String usuario = TF_Usuario.getText();
+        String contrasenia = new String(PF_Contrasenia.getPassword());
+        boolean encontrado = false;
+
+        try {
+            File f = new File("BaseDeDatos/Usuarios.txt");
+            Scanner s = new Scanner(f);
+
+            if (f.exists()) {
+                while (s.hasNextLine() && !encontrado) {
+                    String linea = s.nextLine();
+                    Scanner s1 = new Scanner(linea);
+                    s1.useDelimiter("\\s*;\\s*");
+
+                    String usuarioGuardado = s1.next();
+                    String contraseniaGuardada = s1.next();
+
+                    if (usuario.equals(usuarioGuardado)) {
+                        encontrado = true;
+                        if (contrasenia.equals(contraseniaGuardada)) {
+                            this.dispose();
+                            Menu MenuPrincipal = new Menu();
+                            MenuPrincipal.setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(rootPane, "Contraseña incorrecta");
+                            PF_Contrasenia.setText("");
+                        }
                     }
                 }
+                s.close();
+
+                if (!encontrado) {
+                    JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
+                    TF_Usuario.setText("");
+                    PF_Contrasenia.setText("");
+                    TF_Usuario.requestFocus();
+                }
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "No existe el archivo de usuarios");
             }
-            s.close();
-            
-            if (!encontrado) {
-                JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
-                TF_Usuario.setText("");
-                PF_Contrasenia.setText("");
-                TF_Usuario.requestFocus();
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "No existe el archivo de usuarios");
+        } catch (HeadlessException | FileNotFoundException e) {
+            System.out.println("Error al leer el archivo: " + e);
+            JOptionPane.showMessageDialog(rootPane, "Error al leer los datos");
         }
-    } catch (HeadlessException | FileNotFoundException e) {
-        System.out.println("Error al leer el archivo: " + e);
-        JOptionPane.showMessageDialog(rootPane, "Error al leer los datos");
-    }
         return false;
-}
-    
+    }
+
     private void TF_UsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !TF_Usuario.getText().isEmpty()) {
             PF_Contrasenia.requestFocus();
@@ -246,18 +247,18 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_TF_UsuarioKeyPressed
 
     private void PF_ContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PF_ContraseniaActionPerformed
-  
+
     }//GEN-LAST:event_PF_ContraseniaActionPerformed
 
     private void TF_UsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyTyped
 
         PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
-        
+
         validarCampos();
     }//GEN-LAST:event_TF_UsuarioKeyTyped
-   
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void PF_ContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyTyped
@@ -270,11 +271,11 @@ public class Login extends javax.swing.JFrame {
 
     private void PF_ContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !PF_Contrasenia.getText().isEmpty()) {
-            if(iniciarSesion()) {
+            if (iniciarSesion()) {
                 this.dispose();
-            
-            Menu MenuPrincipal = new Menu();
-            MenuPrincipal.setVisible(true);
+
+                Menu MenuPrincipal = new Menu();
+                MenuPrincipal.setVisible(true);
             }
         }
     }//GEN-LAST:event_PF_ContraseniaKeyPressed
@@ -282,7 +283,6 @@ public class Login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
