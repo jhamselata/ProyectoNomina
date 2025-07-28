@@ -11,7 +11,7 @@ package Mantenimientos;
 public class Usuarios extends javax.swing.JFrame {
 
     /**
-     * Creates new form Usuarios
+     * Creates new form Login
      */
     public Usuarios() {
         initComponents();
@@ -26,115 +26,17 @@ public class Usuarios extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PanelFondo = new javax.swing.JPanel();
-        PanelMensajeBienvenida = new javax.swing.JPanel();
-        EtiquetaBienvenida = new javax.swing.JLabel();
-        PanelCampos = new javax.swing.JPanel();
-        TF_Usuario = new javax.swing.JTextField();
-        PF_Contrasenia = new javax.swing.JPasswordField();
-        Panel_BotonLogin = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
-
-        EtiquetaBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        EtiquetaBienvenida.setText("Bienvenido");
-
-        javax.swing.GroupLayout PanelMensajeBienvenidaLayout = new javax.swing.GroupLayout(PanelMensajeBienvenida);
-        PanelMensajeBienvenida.setLayout(PanelMensajeBienvenidaLayout);
-        PanelMensajeBienvenidaLayout.setHorizontalGroup(
-            PanelMensajeBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelMensajeBienvenidaLayout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(EtiquetaBienvenida)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        PanelMensajeBienvenidaLayout.setVerticalGroup(
-            PanelMensajeBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelMensajeBienvenidaLayout.createSequentialGroup()
-                .addContainerGap(45, Short.MAX_VALUE)
-                .addComponent(EtiquetaBienvenida)
-                .addGap(39, 39, 39))
-        );
-
-        TF_Usuario.setName(""); // NOI18N
-
-        PF_Contrasenia.setText("jPasswordField1");
-
-        javax.swing.GroupLayout PanelCamposLayout = new javax.swing.GroupLayout(PanelCampos);
-        PanelCampos.setLayout(PanelCamposLayout);
-        PanelCamposLayout.setHorizontalGroup(
-            PanelCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCamposLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PF_Contrasenia)
-                    .addComponent(TF_Usuario))
-                .addContainerGap())
-        );
-        PanelCamposLayout.setVerticalGroup(
-            PanelCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelCamposLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TF_Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(PF_Contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
-
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jButton1.setText("Iniciar Sesión");
-
-        javax.swing.GroupLayout Panel_BotonLoginLayout = new javax.swing.GroupLayout(Panel_BotonLogin);
-        Panel_BotonLogin.setLayout(Panel_BotonLoginLayout);
-        Panel_BotonLoginLayout.setHorizontalGroup(
-            Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Panel_BotonLoginLayout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(jButton1)
-                .addContainerGap(128, Short.MAX_VALUE))
-        );
-        Panel_BotonLoginLayout.setVerticalGroup(
-            Panel_BotonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_BotonLoginLayout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(57, 57, 57))
-        );
-
-        javax.swing.GroupLayout PanelFondoLayout = new javax.swing.GroupLayout(PanelFondo);
-        PanelFondo.setLayout(PanelFondoLayout);
-        PanelFondoLayout.setHorizontalGroup(
-            PanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelMensajeBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelFondoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Panel_BotonLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        PanelFondoLayout.setVerticalGroup(
-            PanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelFondoLayout.createSequentialGroup()
-                .addComponent(PanelMensajeBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(PanelCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Panel_BotonLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -166,6 +68,7 @@ public class Usuarios extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -176,13 +79,5 @@ public class Usuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel EtiquetaBienvenida;
-    private javax.swing.JPasswordField PF_Contrasenia;
-    private javax.swing.JPanel PanelCampos;
-    private javax.swing.JPanel PanelFondo;
-    private javax.swing.JPanel PanelMensajeBienvenida;
-    private javax.swing.JPanel Panel_BotonLogin;
-    private javax.swing.JTextField TF_Usuario;
-    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }
