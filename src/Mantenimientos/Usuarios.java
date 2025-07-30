@@ -23,7 +23,7 @@ public class Usuarios extends javax.swing.JFrame {
      */
     boolean encontrado = false;
     String cadenaAnterior = "";
-    File archivo = new File("src/BaseDeDatos/Auxiliar.txt");
+    File archivo = new File("src/BaseDeDatos/Usuarios.txt");
 
     public Usuarios() {
         initComponents();
