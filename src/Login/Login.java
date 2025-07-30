@@ -48,6 +48,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
+        setUndecorated(true);
         setResizable(false);
 
         EtiquetaBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
