@@ -54,8 +54,8 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         TF_Usuario = new javax.swing.JTextField();
-        PF_Contrasenia = new javax.swing.JPasswordField();
         jButton3 = new javax.swing.JButton();
+        PF_Contrasenia = new javax.swing.JPasswordField();
         EtiquetaBienvenida = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -157,6 +157,25 @@ public class Login extends javax.swing.JFrame {
         });
         PanelFondo.add(TF_Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 190, 330, 42));
 
+        jButton3.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/visibility_off.png"))); // NOI18N
+        jButton3.setBorder(null);
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton3MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jButton3MouseReleased(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        PanelFondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 240, 40, 44));
+
         PF_Contrasenia.setBackground(new java.awt.Color(255, 102, 102));
         PF_Contrasenia.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         PF_Contrasenia.setForeground(new java.awt.Color(200, 200, 200));
@@ -176,25 +195,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
         PanelFondo.add(PF_Contrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 240, 280, 44));
-
-        jButton3.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/visibility_off.png"))); // NOI18N
-        jButton3.setBorder(null);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton3MousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jButton3MouseReleased(evt);
-            }
-        });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        PanelFondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 240, 40, 44));
 
         EtiquetaBienvenida.setBackground(new java.awt.Color(0, 0, 0));
         EtiquetaBienvenida.setFont(new java.awt.Font("Noto Sans", 1, 36)); // NOI18N
