@@ -57,8 +57,24 @@ public class Inicio extends javax.swing.JFrame {
         mnbMenu.setPreferredSize(new java.awt.Dimension(234, 40));
 
         mnMantenimientos.setText("Mantenimientos");
+        mnMantenimientos.addMenuDragMouseListener(new javax.swing.event.MenuDragMouseListener() {
+            public void menuDragMouseDragged(javax.swing.event.MenuDragMouseEvent evt) {
+            }
+            public void menuDragMouseEntered(javax.swing.event.MenuDragMouseEvent evt) {
+                mnMantenimientosMenuDragMouseEntered(evt);
+            }
+            public void menuDragMouseExited(javax.swing.event.MenuDragMouseEvent evt) {
+            }
+            public void menuDragMouseReleased(javax.swing.event.MenuDragMouseEvent evt) {
+            }
+        });
 
         mniMantUsuarios.setText("Usuarios");
+        mniMantUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniMantUsuariosActionPerformed(evt);
+            }
+        });
         mnMantenimientos.add(mniMantUsuarios);
 
         mniMantDepartamentos.setText("Departamentos");
@@ -134,6 +150,14 @@ public class Inicio extends javax.swing.JFrame {
     private void mniMantDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantDepartamentosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mniMantDepartamentosActionPerformed
+
+    private void mnMantenimientosMenuDragMouseEntered(javax.swing.event.MenuDragMouseEvent evt) {//GEN-FIRST:event_mnMantenimientosMenuDragMouseEntered
+        // TODO add your handling code here
+    }//GEN-LAST:event_mnMantenimientosMenuDragMouseEntered
+
+    private void mniMantUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantUsuariosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mniMantUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
