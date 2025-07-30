@@ -33,25 +33,89 @@ public class Inicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        mnbMenu = new javax.swing.JMenuBar();
+        mnMantenimientos = new javax.swing.JMenu();
+        mniMantUsuarios = new javax.swing.JMenuItem();
+        mniMantDepartamentos = new javax.swing.JMenuItem();
+        mniMantPuestos = new javax.swing.JMenuItem();
+        mniMantEmpleados = new javax.swing.JMenuItem();
+        mnProcesos = new javax.swing.JMenu();
+        mniProcGenerarNomina = new javax.swing.JMenuItem();
+        mniProcReversarNomina = new javax.swing.JMenuItem();
+        mnConsultas = new javax.swing.JMenu();
+        mniConsDepartamentos = new javax.swing.JMenuItem();
+        mniConsPuestos = new javax.swing.JMenuItem();
+        mniConsEmpleados = new javax.swing.JMenuItem();
+        mniConsEmpleadosXDep = new javax.swing.JMenuItem();
+        mniConsEmpleadosXPue = new javax.swing.JMenuItem();
+        mniConsEmpleadosXFI = new javax.swing.JMenuItem();
+        mniConsNominaXF = new javax.swing.JMenuItem();
+        mniConsNominaXIDEmp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenuBar1.setPreferredSize(new java.awt.Dimension(234, 40));
+        mnbMenu.setPreferredSize(new java.awt.Dimension(234, 40));
 
-        jMenu1.setText("Mantenimientos");
-        jMenuBar1.add(jMenu1);
+        mnMantenimientos.setText("Mantenimientos");
 
-        jMenu2.setText("Consultas");
-        jMenuBar1.add(jMenu2);
+        mniMantUsuarios.setText("Usuarios");
+        mnMantenimientos.add(mniMantUsuarios);
 
-        jMenu3.setText("Procesos");
-        jMenuBar1.add(jMenu3);
+        mniMantDepartamentos.setText("Departamentos");
+        mniMantDepartamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniMantDepartamentosActionPerformed(evt);
+            }
+        });
+        mnMantenimientos.add(mniMantDepartamentos);
 
-        setJMenuBar(jMenuBar1);
+        mniMantPuestos.setText("Puestos");
+        mnMantenimientos.add(mniMantPuestos);
+
+        mniMantEmpleados.setText("Empleados");
+        mnMantenimientos.add(mniMantEmpleados);
+
+        mnbMenu.add(mnMantenimientos);
+
+        mnProcesos.setText("Procesos");
+
+        mniProcGenerarNomina.setText("Generar nómina");
+        mnProcesos.add(mniProcGenerarNomina);
+
+        mniProcReversarNomina.setText("Reversar Nómina");
+        mnProcesos.add(mniProcReversarNomina);
+
+        mnbMenu.add(mnProcesos);
+
+        mnConsultas.setText("Consultas");
+
+        mniConsDepartamentos.setText("Departamentos");
+        mnConsultas.add(mniConsDepartamentos);
+
+        mniConsPuestos.setText("Puestos");
+        mnConsultas.add(mniConsPuestos);
+
+        mniConsEmpleados.setText("Empleados");
+        mnConsultas.add(mniConsEmpleados);
+
+        mniConsEmpleadosXDep.setText("Empleados por Departamento");
+        mnConsultas.add(mniConsEmpleadosXDep);
+
+        mniConsEmpleadosXPue.setText("Empleados por Puesto");
+        mnConsultas.add(mniConsEmpleadosXPue);
+
+        mniConsEmpleadosXFI.setText("Empleados por Fecha de Ingreso");
+        mnConsultas.add(mniConsEmpleadosXFI);
+
+        mniConsNominaXF.setText("Nómina por Fecha");
+        mnConsultas.add(mniConsNominaXF);
+
+        mniConsNominaXIDEmp.setText("Nómina por ID de Empleado");
+        mnConsultas.add(mniConsNominaXIDEmp);
+
+        mnbMenu.add(mnConsultas);
+
+        setJMenuBar(mnbMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,6 +130,10 @@ public class Inicio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mniMantDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantDepartamentosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mniMantDepartamentosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -104,9 +172,23 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu mnConsultas;
+    private javax.swing.JMenu mnMantenimientos;
+    private javax.swing.JMenu mnProcesos;
+    private javax.swing.JMenuBar mnbMenu;
+    private javax.swing.JMenuItem mniConsDepartamentos;
+    private javax.swing.JMenuItem mniConsEmpleados;
+    private javax.swing.JMenuItem mniConsEmpleadosXDep;
+    private javax.swing.JMenuItem mniConsEmpleadosXFI;
+    private javax.swing.JMenuItem mniConsEmpleadosXPue;
+    private javax.swing.JMenuItem mniConsNominaXF;
+    private javax.swing.JMenuItem mniConsNominaXIDEmp;
+    private javax.swing.JMenuItem mniConsPuestos;
+    private javax.swing.JMenuItem mniMantDepartamentos;
+    private javax.swing.JMenuItem mniMantEmpleados;
+    private javax.swing.JMenuItem mniMantPuestos;
+    private javax.swing.JMenuItem mniMantUsuarios;
+    private javax.swing.JMenuItem mniProcGenerarNomina;
+    private javax.swing.JMenuItem mniProcReversarNomina;
     // End of variables declaration//GEN-END:variables
 }

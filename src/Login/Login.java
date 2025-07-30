@@ -30,11 +30,11 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
 
-        PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
-        jButton1.setEnabled(!TF_Usuario.getText().isEmpty());
+        pwdContrasenia.setEnabled(!txtUsuario.getText().isEmpty());
+        btnInicioSesion.setEnabled(!txtUsuario.getText().isEmpty());
 
-        String contrasenia = new String(PF_Contrasenia.getPassword());
-        jButton3.setEnabled(!contrasenia.isEmpty());
+        String contrasenia = new String(pwdContrasenia.getPassword());
+        btnMostrarContrasenia.setEnabled(!contrasenia.isEmpty());
 
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20)); //Redondea Bordes de la ventana Jframe
     }
@@ -48,15 +48,15 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PanelFondo = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlFondo = new javax.swing.JPanel();
+        pnlImagen = new javax.swing.JPanel();
+        pnlBarraEstado = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        TF_Usuario = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        PF_Contrasenia = new javax.swing.JPasswordField();
-        EtiquetaBienvenida = new javax.swing.JLabel();
+        btnInicioSesion = new javax.swing.JButton();
+        txtUsuario = new javax.swing.JTextField();
+        btnMostrarContrasenia = new javax.swing.JButton();
+        pwdContrasenia = new javax.swing.JPasswordField();
+        txtBienvenida = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -64,30 +64,30 @@ public class Login extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        PanelFondo.setBackground(new java.awt.Color(49, 55, 68));
-        PanelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlFondo.setBackground(new java.awt.Color(49, 55, 68));
+        pnlFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlImagenLayout = new javax.swing.GroupLayout(pnlImagen);
+        pnlImagen.setLayout(pnlImagenLayout);
+        pnlImagenLayout.setHorizontalGroup(
+            pnlImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 480, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlImagenLayout.setVerticalGroup(
+            pnlImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        PanelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 480, 440));
+        pnlFondo.add(pnlImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 480, 440));
 
-        jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        pnlBarraEstado.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel2MouseDragged(evt);
+                pnlBarraEstadoMouseDragged(evt);
             }
         });
-        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        pnlBarraEstado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel2MousePressed(evt);
+                pnlBarraEstadoMousePressed(evt);
             }
         });
 
@@ -101,131 +101,131 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlBarraEstadoLayout = new javax.swing.GroupLayout(pnlBarraEstado);
+        pnlBarraEstado.setLayout(pnlBarraEstadoLayout);
+        pnlBarraEstadoLayout.setHorizontalGroup(
+            pnlBarraEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBarraEstadoLayout.createSequentialGroup()
                 .addContainerGap(814, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        pnlBarraEstadoLayout.setVerticalGroup(
+            pnlBarraEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBarraEstadoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        PanelFondo.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 50));
+        pnlFondo.add(pnlBarraEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 50));
 
-        jButton1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        jButton1.setText("Iniciar Sesión");
-        jButton1.setBorder(null);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnInicioSesion.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        btnInicioSesion.setText("Iniciar Sesión");
+        btnInicioSesion.setBorder(null);
+        btnInicioSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInicioSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnInicioSesionActionPerformed(evt);
             }
         });
-        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnInicioSesion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jButton1KeyTyped(evt);
+                btnInicioSesionKeyTyped(evt);
             }
         });
-        PanelFondo.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 300, -1, 40));
+        pnlFondo.add(btnInicioSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 300, -1, 40));
 
-        TF_Usuario.setBackground(new java.awt.Color(255, 102, 102));
-        TF_Usuario.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        TF_Usuario.setForeground(new java.awt.Color(200, 200, 200));
-        TF_Usuario.setToolTipText("Ingresa un usuario válido");
-        TF_Usuario.setBorder(null);
-        TF_Usuario.setName(""); // NOI18N
-        TF_Usuario.addActionListener(new java.awt.event.ActionListener() {
+        txtUsuario.setBackground(new java.awt.Color(255, 102, 102));
+        txtUsuario.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtUsuario.setForeground(new java.awt.Color(200, 200, 200));
+        txtUsuario.setToolTipText("Ingresa un usuario válido");
+        txtUsuario.setBorder(null);
+        txtUsuario.setName(""); // NOI18N
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TF_UsuarioActionPerformed(evt);
+                txtUsuarioActionPerformed(evt);
             }
         });
-        TF_Usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                TF_UsuarioKeyPressed(evt);
+                txtUsuarioKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                TF_UsuarioKeyTyped(evt);
+                txtUsuarioKeyTyped(evt);
             }
         });
-        PanelFondo.add(TF_Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 190, 330, 42));
+        pnlFondo.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 190, 330, 42));
 
-        jButton3.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/visibility_off.png"))); // NOI18N
-        jButton3.setBorder(null);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnMostrarContrasenia.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        btnMostrarContrasenia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/visibility_off.png"))); // NOI18N
+        btnMostrarContrasenia.setBorder(null);
+        btnMostrarContrasenia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMostrarContrasenia.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton3MousePressed(evt);
+                btnMostrarContraseniaMousePressed(evt);
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jButton3MouseReleased(evt);
+                btnMostrarContraseniaMouseReleased(evt);
             }
         });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnMostrarContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnMostrarContraseniaActionPerformed(evt);
             }
         });
-        PanelFondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 240, 40, 44));
+        pnlFondo.add(btnMostrarContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 240, 40, 44));
 
-        PF_Contrasenia.setBackground(new java.awt.Color(255, 102, 102));
-        PF_Contrasenia.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        PF_Contrasenia.setForeground(new java.awt.Color(200, 200, 200));
-        PF_Contrasenia.setToolTipText("Ingresa una contraseña válida");
-        PF_Contrasenia.setBorder(null);
-        PF_Contrasenia.addActionListener(new java.awt.event.ActionListener() {
+        pwdContrasenia.setBackground(new java.awt.Color(255, 102, 102));
+        pwdContrasenia.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        pwdContrasenia.setForeground(new java.awt.Color(200, 200, 200));
+        pwdContrasenia.setToolTipText("Ingresa una contraseña válida");
+        pwdContrasenia.setBorder(null);
+        pwdContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PF_ContraseniaActionPerformed(evt);
+                pwdContraseniaActionPerformed(evt);
             }
         });
-        PF_Contrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
+        pwdContrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                PF_ContraseniaKeyPressed(evt);
+                pwdContraseniaKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                PF_ContraseniaKeyTyped(evt);
+                pwdContraseniaKeyTyped(evt);
             }
         });
-        PanelFondo.add(PF_Contrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 240, 280, 44));
+        pnlFondo.add(pwdContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 240, 280, 44));
 
-        EtiquetaBienvenida.setBackground(new java.awt.Color(0, 0, 0));
-        EtiquetaBienvenida.setFont(new java.awt.Font("Noto Sans", 1, 36)); // NOI18N
-        EtiquetaBienvenida.setForeground(new java.awt.Color(236, 239, 244));
-        EtiquetaBienvenida.setText("Bienvenido");
-        PanelFondo.add(EtiquetaBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 100, -1, -1));
+        txtBienvenida.setBackground(new java.awt.Color(0, 0, 0));
+        txtBienvenida.setFont(new java.awt.Font("Noto Sans", 1, 36)); // NOI18N
+        txtBienvenida.setForeground(new java.awt.Color(236, 239, 244));
+        txtBienvenida.setText("Bienvenido");
+        pnlFondo.add(txtBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 100, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void validarCampos() {
-        String contrasenia = new String(PF_Contrasenia.getPassword());
+        String contrasenia = new String(pwdContrasenia.getPassword());
 
-        boolean habilitar = !TF_Usuario.getText().isEmpty() && !contrasenia.isEmpty();
-        jButton1.setEnabled(habilitar);
+        boolean habilitar = !txtUsuario.getText().isEmpty() && !contrasenia.isEmpty();
+        btnInicioSesion.setEnabled(habilitar);
     }
 
     private boolean iniciarSesion() {
-        String usuario = TF_Usuario.getText();
-        String contrasenia = new String(PF_Contrasenia.getPassword());
+        String usuario = txtUsuario.getText();
+        String contrasenia = new String(pwdContrasenia.getPassword());
         boolean encontrado = false;
 
         try {
@@ -249,7 +249,7 @@ public class Login extends javax.swing.JFrame {
                             MenuPrincipal.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(rootPane, "Contraseña incorrecta");
-                            PF_Contrasenia.setText("");
+                            pwdContrasenia.setText("");
                         }
                     }
                 }
@@ -257,9 +257,9 @@ public class Login extends javax.swing.JFrame {
 
                 if (!encontrado) {
                     JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
-                    TF_Usuario.setText("");
-                    PF_Contrasenia.setText("");
-                    TF_Usuario.requestFocus();
+                    txtUsuario.setText("");
+                    pwdContrasenia.setText("");
+                    txtUsuario.requestFocus();
                 }
             } else {
                 JOptionPane.showMessageDialog(rootPane, "No existe el archivo de usuarios");
@@ -271,45 +271,45 @@ public class Login extends javax.swing.JFrame {
         return false;
     }
 
-    private void TF_UsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !TF_Usuario.getText().isEmpty()) {
-            PF_Contrasenia.requestFocus();
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !txtUsuario.getText().isEmpty()) {
+            pwdContrasenia.requestFocus();
         }
-    }//GEN-LAST:event_TF_UsuarioKeyPressed
+    }//GEN-LAST:event_txtUsuarioKeyPressed
 
-    private void PF_ContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PF_ContraseniaActionPerformed
+    private void pwdContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdContraseniaActionPerformed
 
-    }//GEN-LAST:event_PF_ContraseniaActionPerformed
+    }//GEN-LAST:event_pwdContraseniaActionPerformed
 
-    private void TF_UsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TF_UsuarioKeyTyped
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
 
-        PF_Contrasenia.setEnabled(!TF_Usuario.getText().isEmpty());
+        pwdContrasenia.setEnabled(!txtUsuario.getText().isEmpty());
 
         validarCampos();
-    }//GEN-LAST:event_TF_UsuarioKeyTyped
+    }//GEN-LAST:event_txtUsuarioKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
         if (iniciarSesion()) {
                 this.dispose();
 
                 Inicio MenuPrincipal = new Inicio();
                 MenuPrincipal.setVisible(true);
             }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnInicioSesionActionPerformed
 
-    private void PF_ContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyTyped
-        String contrasenia = new String(PF_Contrasenia.getPassword());
-        jButton3.setEnabled(!contrasenia.isEmpty());
+    private void pwdContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyTyped
+        String contrasenia = new String(pwdContrasenia.getPassword());
+        btnMostrarContrasenia.setEnabled(!contrasenia.isEmpty());
 
         validarCampos();
-    }//GEN-LAST:event_PF_ContraseniaKeyTyped
+    }//GEN-LAST:event_pwdContraseniaKeyTyped
 
-    private void TF_UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TF_UsuarioActionPerformed
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TF_UsuarioActionPerformed
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
-    private void PF_ContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PF_ContraseniaKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !PF_Contrasenia.getText().isEmpty()) {
+    private void pwdContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
             if (iniciarSesion()) {
                 this.dispose();
 
@@ -317,40 +317,40 @@ public class Login extends javax.swing.JFrame {
                 MenuPrincipal.setVisible(true);
             }
         }
-    }//GEN-LAST:event_PF_ContraseniaKeyPressed
+    }//GEN-LAST:event_pwdContraseniaKeyPressed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnMostrarContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaActionPerformed
 
 
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnMostrarContraseniaActionPerformed
 
-    private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
+    private void pnlBarraEstadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBarraEstadoMousePressed
         xMouse = evt.getX();
         yMouse = evt.getY();
-    }//GEN-LAST:event_jPanel2MousePressed
+    }//GEN-LAST:event_pnlBarraEstadoMousePressed
 
-    private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
+    private void pnlBarraEstadoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBarraEstadoMouseDragged
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
         this.setLocation(x - xMouse, y - yMouse);
-    }//GEN-LAST:event_jPanel2MouseDragged
+    }//GEN-LAST:event_pnlBarraEstadoMouseDragged
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         System.exit(0);
     }//GEN-LAST:event_jLabel1MouseClicked
 
-    private void jButton3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MousePressed
-        PF_Contrasenia.setEchoChar((char) 0);
-        jButton3.setIcon(iconoPresionado);
-    }//GEN-LAST:event_jButton3MousePressed
+    private void btnMostrarContraseniaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMousePressed
+        pwdContrasenia.setEchoChar((char) 0);
+        btnMostrarContrasenia.setIcon(iconoPresionado);
+    }//GEN-LAST:event_btnMostrarContraseniaMousePressed
 
-    private void jButton3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseReleased
-        PF_Contrasenia.setEchoChar('•');
-        jButton3.setIcon(iconoNormal);
-    }//GEN-LAST:event_jButton3MouseReleased
+    private void btnMostrarContraseniaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMouseReleased
+        pwdContrasenia.setEchoChar('•');
+        btnMostrarContrasenia.setIcon(iconoNormal);
+    }//GEN-LAST:event_btnMostrarContraseniaMouseReleased
 
-    private void jButton1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyTyped
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !PF_Contrasenia.getText().isEmpty()) {
+    private void btnInicioSesionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnInicioSesionKeyTyped
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
             if (iniciarSesion()) {
                 this.dispose();
 
@@ -358,7 +358,7 @@ public class Login extends javax.swing.JFrame {
                 MenuPrincipal.setVisible(true);
             }
         }
-    }//GEN-LAST:event_jButton1KeyTyped
+    }//GEN-LAST:event_btnInicioSesionKeyTyped
 
     /**
      * @param args the command line arguments
@@ -411,14 +411,14 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel EtiquetaBienvenida;
-    private javax.swing.JPasswordField PF_Contrasenia;
-    private javax.swing.JPanel PanelFondo;
-    private javax.swing.JTextField TF_Usuario;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnInicioSesion;
+    private javax.swing.JButton btnMostrarContrasenia;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel pnlBarraEstado;
+    private javax.swing.JPanel pnlFondo;
+    private javax.swing.JPanel pnlImagen;
+    private javax.swing.JPasswordField pwdContrasenia;
+    private javax.swing.JLabel txtBienvenida;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
