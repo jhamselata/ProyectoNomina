@@ -32,7 +32,7 @@ public class ManejoArchivos {
     }
 
     public void Modificar(String cadenaA, String cadenaN, File archivoA) {
-        File archivoN = new File("src/BaseDeDatos/Auxiliar.txt");
+        File archivoN = new File("src/BaseDeDatos/Temporal.txt");
 
         try {
             archivoN.createNewFile();
