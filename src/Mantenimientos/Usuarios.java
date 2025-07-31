@@ -27,7 +27,8 @@ public class Usuarios extends javax.swing.JFrame {
 
     public Usuarios() {
         initComponents();
-        setTitle("Mantenimiento de Usuario"); 
+        setTitle("Mantenimiento de Usuario");
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla.
     }
     
     public String buscar(String usuarioBuscado) {
@@ -372,8 +373,7 @@ public class Usuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_Usuario_txtKeyPressed
 
     private void Salir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btnActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_Salir_btnActionPerformed
 
     /**
