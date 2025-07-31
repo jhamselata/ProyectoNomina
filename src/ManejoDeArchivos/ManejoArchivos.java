@@ -98,5 +98,45 @@ public class ManejoArchivos {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         }
     }
+    
+    public void Eliminar(String lineaAEliminar, File archivoA) {
+    File archivoN = new File("src/BaseDeDatos/Auxiliar.txt");
+
+    try {
+        archivoN.createNewFile();
+    } catch (IOException ex) {
+        System.out.println(ex);
+    }
+    
+    BufferedReader br;
+    try {
+        if (archivoA.exists()) {
+
+            br = new BufferedReader(new FileReader(archivoA));
+
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                // Si la línea NO es la que queremos eliminar, la guardamos
+                if (!linea.equals(lineaAEliminar)) {
+                    GuardarDatos(linea, archivoN);
+                }
+                // Si es la línea a eliminar, simplemente no la guardamos (se omite)
+            }
+
+            br.close();
+
+            // Borrar el archivo original y renombrar el auxiliar
+            Borrar(archivoA);
+            archivoN.renameTo(archivoA);
+
+        } else {
+            System.out.println("No existe el archivo");
+        }
+
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+}
 
 }

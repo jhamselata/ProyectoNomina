@@ -29,10 +29,13 @@ public class Usuarios extends javax.swing.JFrame {
         initComponents();
         setTitle("Mantenimiento de Usuario");
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
-        
+
+        // Establecer estado inicial
+        Estado_txt.setText("Creando");
+
         String usuario = Usuario_txt.getText().trim();
         String contrasena = Contrasena_pwd.getText().trim();
-        
+
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             Admin_rbtn.setEnabled(false);
             Empleado_rbtn.setEnabled(false);
@@ -47,33 +50,32 @@ public class Usuarios extends javax.swing.JFrame {
             Email_txt.setEnabled(true);
         }
     }
-    
+
     public String buscar(String usuarioBuscado) {
-    String lineaEncontrada = null;
+        String lineaEncontrada = null;
 
-    try {
-        File archivo = new File("src/BaseDeDatos/Usuarios.txt");
-        BufferedReader br = new BufferedReader(new FileReader(archivo));
-        String linea;
+        try {
+            File archivo = new File("src/BaseDeDatos/Usuarios.txt");
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            String linea;
 
-        while ((linea = br.readLine()) != null) {
-            String[] partes = linea.split(";");
-            if (partes.length >= 6 && partes[0].equalsIgnoreCase(usuarioBuscado.trim())) {
-                lineaEncontrada = linea;
-                br.close();
-                return lineaEncontrada;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length >= 6 && partes[0].equalsIgnoreCase(usuarioBuscado.trim())) {
+                    lineaEncontrada = linea;
+                    br.close();
+                    return lineaEncontrada;
+                }
             }
+
+            br.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar el usuario: " + e.getMessage());
         }
 
-        br.close();
-
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al buscar el usuario: " + e.getMessage());
+        return null;
     }
-
-    return null;
-    }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,9 +103,10 @@ public class Usuarios extends javax.swing.JFrame {
         Empleado_rbtn = new javax.swing.JRadioButton();
         Limpiar_btn = new javax.swing.JButton();
         Anadir_btn = new javax.swing.JButton();
-        Salir_btn = new javax.swing.JButton();
+        Eliminar_btn = new javax.swing.JButton();
         Estado_txt = new javax.swing.JTextField();
         Estado_lbl = new javax.swing.JLabel();
+        Salir_btn1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -217,11 +220,11 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
 
-        Salir_btn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        Salir_btn.setText("Salir");
-        Salir_btn.addActionListener(new java.awt.event.ActionListener() {
+        Eliminar_btn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        Eliminar_btn.setText("Eliminar");
+        Eliminar_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Salir_btnActionPerformed(evt);
+                Eliminar_btnActionPerformed(evt);
             }
         });
 
@@ -231,6 +234,14 @@ public class Usuarios extends javax.swing.JFrame {
 
         Estado_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Estado_lbl.setText("Estado:");
+
+        Salir_btn1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        Salir_btn1.setText("Salir");
+        Salir_btn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Salir_btn1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlFondoLayout = new javax.swing.GroupLayout(pnlFondo);
         pnlFondo.setLayout(pnlFondoLayout);
@@ -270,9 +281,11 @@ public class Usuarios extends javax.swing.JFrame {
                         .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(100, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Salir_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(46, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,8 +328,9 @@ public class Usuarios extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Salir_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -340,7 +354,7 @@ public class Usuarios extends javax.swing.JFrame {
 
     private void Anadir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Anadir_btnActionPerformed
         // TODO add your handling code here:
-            
+
         // Al inicio de Anadir_btnActionPerformed
         String usuario = Usuario_txt.getText().trim();
         String lineaExistente = buscar(usuario);
@@ -348,17 +362,24 @@ public class Usuarios extends javax.swing.JFrame {
         // Verifica si el usuario ya existe y no estamos modificando
         if (lineaExistente != null && !encontrado) {
             JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
-        return;
+            return;
         }
-        
-      
+
         String contrasena = Contrasena_pwd.getText().trim();
         String nombres = Nombre_txt.getText().trim();
         String apellidos = Apellido_txt.getText().trim();
-        String email = Email_txt.getText().trim();
+
+        String email = "";
+
+        if (email.isEmpty()) {
+            email = "example@gmail.com";
+        } else {
+            email = Email_txt.getText().trim();
+        }
+
         String rol = "";
 
-        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
             return;
         }
@@ -378,7 +399,7 @@ public class Usuarios extends javax.swing.JFrame {
 
         try {
             if (!encontrado) {
-            // Guardar nuevo
+                // Guardar nuevo
                 manejo.GuardarDatos(nuevaLinea, archivo);
                 JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
             } else {
@@ -400,155 +421,221 @@ public class Usuarios extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
         }
-    
+
 
     }//GEN-LAST:event_Anadir_btnActionPerformed
 
     private void Limpiar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Limpiar_btnActionPerformed
-        // TODO add your handling code here:
+        // Limpiar todos los campos
         Usuario_txt.setText("");
         Contrasena_pwd.setText("");
         Nombre_txt.setText("");
         Apellido_txt.setText("");
         Email_txt.setText("");
-        Estado_txt.setText("");
+        Estado_txt.setText("Creando"); // Cambiar estado a "Creando"
         RolGroup.clearSelection();
-        
+
+        // Resetear las variables de control
+        encontrado = false;
+        cadenaAnterior = "";
+
+        // Deshabilitar campos hasta que se ingrese usuario y contraseña
+        Admin_rbtn.setEnabled(false);
+        Empleado_rbtn.setEnabled(false);
+        Nombre_txt.setEnabled(false);
+        Apellido_txt.setEnabled(false);
+        Email_txt.setEnabled(false);
     }//GEN-LAST:event_Limpiar_btnActionPerformed
 
     private void Usuario_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyPressed
-        
+
         if (!encontrado && Estado_txt.getText().equals("Creando")) {
             return;
         }
-        
-       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-        Contrasena_pwd.requestFocus();
-        String usuarioBuscado = Usuario_txt.getText().trim();
-        String lineaEncontrada = buscar(usuarioBuscado);
 
-        if (lineaEncontrada != null) {
-            String[] datos = lineaEncontrada.split(";");
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            Contrasena_pwd.requestFocus();
+            String usuarioBuscado = Usuario_txt.getText().trim();
+            String lineaEncontrada = buscar(usuarioBuscado);
 
-            Usuario_txt.setText(datos[0]);
-            Contrasena_pwd.setText(datos[1]);
+            if (lineaEncontrada != null) {
+                String[] datos = lineaEncontrada.split(";");
 
-            if (datos[2].equals("0")) {
-                Admin_rbtn.setSelected(true);
+                Usuario_txt.setText(datos[0]);
+                Contrasena_pwd.setText(datos[1]);
+
+                if (datos[2].equals("0")) {
+                    Admin_rbtn.setSelected(true);
+                } else {
+                    Empleado_rbtn.setSelected(true);
+                }
+
+                Nombre_txt.setText(datos[3]);
+                Apellido_txt.setText(datos[4]);
+                Email_txt.setText(datos[5]);
+
+                Estado_txt.setText("Modificando");
+                encontrado = true;
+                cadenaAnterior = lineaEncontrada;
             } else {
-                Empleado_rbtn.setSelected(true);
+                if (!encontrado) {
+                    // Limpiar excepto Usuario_txt
+                    Contrasena_pwd.setText("");
+                    Nombre_txt.setText("");
+                    Apellido_txt.setText("");
+                    Email_txt.setText("");
+                    RolGroup.clearSelection();
+
+                    Estado_txt.setText("Creando");
+                    encontrado = false;
+                    cadenaAnterior = "";
+                }
+
             }
 
-            Nombre_txt.setText(datos[3]);
-            Apellido_txt.setText(datos[4]);
-            Email_txt.setText(datos[5]);
+            String usuario = Usuario_txt.getText().trim();
+            String contrasena = Contrasena_pwd.getText().trim();
 
-            Estado_txt.setText("Modificando");
-            encontrado = true;
-            cadenaAnterior = lineaEncontrada;
-        } else {
-            if(!encontrado) {
-            // Limpiar excepto Usuario_txt
-            Contrasena_pwd.setText("");
-            Nombre_txt.setText("");
-            Apellido_txt.setText("");
-            Email_txt.setText("");
-            RolGroup.clearSelection();
+            if (usuario.isEmpty() & contrasena.isEmpty()) {
+                Admin_rbtn.setEnabled(false);
+                Empleado_rbtn.setEnabled(false);
+                Nombre_txt.setEnabled(false);
+                Apellido_txt.setEnabled(false);
+                Email_txt.setEnabled(false);
+            } else {
+                Admin_rbtn.setEnabled(true);
+                Empleado_rbtn.setEnabled(true);
+                Nombre_txt.setEnabled(true);
+                Apellido_txt.setEnabled(true);
+                Email_txt.setEnabled(true);
+            }
+        }
 
-            Estado_txt.setText("Creando");
-            encontrado = false;
-            cadenaAnterior = "";}
-            
-        }
-        
-        String usuario = Usuario_txt.getText().trim();
-        String contrasena = Contrasena_pwd.getText().trim();
-        
-        if (usuario.isEmpty() & contrasena.isEmpty()) {
-            Admin_rbtn.setEnabled(false);
-            Empleado_rbtn.setEnabled(false);
-            Nombre_txt.setEnabled(false);
-            Apellido_txt.setEnabled(false);
-            Email_txt.setEnabled(false);
-        } else {
-            Admin_rbtn.setEnabled(true);
-            Empleado_rbtn.setEnabled(true);
-            Nombre_txt.setEnabled(true);
-            Apellido_txt.setEnabled(true);
-            Email_txt.setEnabled(true);
-        }
-    }
-    
-    
+
     }//GEN-LAST:event_Usuario_txtKeyPressed
 
-    private void Salir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btnActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_Salir_btnActionPerformed
+    private void Eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Eliminar_btnActionPerformed
+        String usuario = Usuario_txt.getText().trim();
+
+        // Verificar si hay un usuario ingresado
+        if (usuario.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un usuario para eliminar.");
+            return;
+        }
+
+        // Buscar si el usuario existe
+        String lineaEncontrada = buscar(usuario);
+
+        if (lineaEncontrada == null) {
+            JOptionPane.showMessageDialog(null, "El usuario no existe.");
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(
+                null,
+                "¿Está seguro de que desea eliminar el usuario '" + usuario + "'?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            ManejoArchivos manejo = new ManejoArchivos();
+
+            try {
+                // Eliminar el usuario usando el método de ManejoArchivos
+                manejo.Eliminar(lineaEncontrada, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente.");
+
+                // Limpiar el formulario después de eliminar
+                Usuario_txt.setText("");
+                Contrasena_pwd.setText("");
+                Nombre_txt.setText("");
+                Apellido_txt.setText("");
+                Email_txt.setText("");
+                Estado_txt.setText("Creando");
+                RolGroup.clearSelection();
+
+                // Resetear variables de control
+                encontrado = false;
+                cadenaAnterior = "";
+
+                // Deshabilitar campos
+                Admin_rbtn.setEnabled(false);
+                Empleado_rbtn.setEnabled(false);
+                Nombre_txt.setEnabled(false);
+                Apellido_txt.setEnabled(false);
+                Email_txt.setEnabled(false);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al eliminar el usuario: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_Eliminar_btnActionPerformed
 
     private void Email_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Email_txtKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             // TODO add your handling code here:
-            
-        // Al inicio de Anadir_btnActionPerformed
-        String usuario = Usuario_txt.getText().trim();
-        String lineaExistente = buscar(usuario);
 
-        // Verifica si el usuario ya existe y no estamos modificando
-        if (lineaExistente != null && !encontrado) {
-            JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
-        return;
-        }
-        
-      
-        String contrasena = Contrasena_pwd.getText().trim();
-        String nombres = Nombre_txt.getText().trim();
-        String apellidos = Apellido_txt.getText().trim();
-        String email = Email_txt.getText().trim();
-        String rol = "";
+            // Al inicio de Anadir_btnActionPerformed
+            String usuario = Usuario_txt.getText().trim();
+            String lineaExistente = buscar(usuario);
 
-        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
-            return;
-        }
-
-        if (Admin_rbtn.isSelected()) {
-            rol = "0";
-        } else if (Empleado_rbtn.isSelected()) {
-            rol = "1";
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un rol.");
-            return;
-        }
-
-        String nuevaLinea = usuario + ";" + contrasena + ";" + rol + ";" + nombres + ";" + apellidos + ";" + email;
-
-        ManejoArchivos manejo = new ManejoArchivos();
-
-        try {
-            if (!encontrado) {
-            // Guardar nuevo
-                manejo.GuardarDatos(nuevaLinea, archivo);
-                JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
-            } else {
-                // Modificar usuario existente usando tu método Modificar
-                manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
-                JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
+            // Verifica si el usuario ya existe y no estamos modificando
+            if (lineaExistente != null && !encontrado) {
+                JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
+                return;
             }
 
-            // Resetear formulario
-            encontrado = false;
-            Usuario_txt.setText("");
-            Contrasena_pwd.setText("");
-            Nombre_txt.setText("");
-            Apellido_txt.setText("");
-            Email_txt.setText("");
-            Estado_txt.setText("");
-            RolGroup.clearSelection();
+            String contrasena = Contrasena_pwd.getText().trim();
+            String nombres = Nombre_txt.getText().trim();
+            String apellidos = Apellido_txt.getText().trim();
+            String email = Email_txt.getText().trim();
+            String rol = "";
 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
-        }
+            if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+                return;
+            }
+
+            if (Admin_rbtn.isSelected()) {
+                rol = "0";
+            } else if (Empleado_rbtn.isSelected()) {
+                rol = "1";
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un rol.");
+                return;
+            }
+
+            String nuevaLinea = usuario + ";" + contrasena + ";" + rol + ";" + nombres + ";" + apellidos + ";" + email;
+
+            ManejoArchivos manejo = new ManejoArchivos();
+
+            try {
+                if (!encontrado) {
+                    // Guardar nuevo
+                    manejo.GuardarDatos(nuevaLinea, archivo);
+                    JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
+                } else {
+                    // Modificar usuario existente usando tu método Modificar
+                    manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
+                    JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
+                }
+
+                // Resetear formulario
+                encontrado = false;
+                Usuario_txt.setText("");
+                Contrasena_pwd.setText("");
+                Nombre_txt.setText("");
+                Apellido_txt.setText("");
+                Email_txt.setText("");
+                Estado_txt.setText("");
+                RolGroup.clearSelection();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event_Email_txtKeyPressed
 
@@ -589,7 +676,68 @@ public class Usuarios extends javax.swing.JFrame {
     private void Usuario_txtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyReleased
         String usuario = Usuario_txt.getText().trim();
         String contrasena = Contrasena_pwd.getText().trim();
-        
+
+        // Autocompletado: buscar y llenar campos automáticamente
+        if (!usuario.isEmpty()) {
+            String lineaEncontrada = buscar(usuario);
+
+            if (lineaEncontrada != null) {
+                // Usuario encontrado - llenar todos los campos
+                String[] datos = lineaEncontrada.split(";");
+
+                // Solo llenar si los campos están vacíos o si estamos en modo modificación
+                if (Contrasena_pwd.getText().trim().isEmpty() || encontrado) {
+                    Contrasena_pwd.setText(datos[1]);
+                }
+
+                // Seleccionar el rol apropiado
+                if (datos[2].equals("0")) {
+                    Admin_rbtn.setSelected(true);
+                } else if (datos[2].equals("1")) {
+                    Empleado_rbtn.setSelected(true);
+                }
+
+                // Llenar campos de información personal
+                Nombre_txt.setText(datos[3]);
+                Apellido_txt.setText(datos[4]);
+                if (datos.length > 5) { // Verificar que existe el campo email
+                    Email_txt.setText(datos[5]);
+                }
+
+                // Cambiar estado a "Modificando"
+                Estado_txt.setText("Modificando");
+                encontrado = true;
+                cadenaAnterior = lineaEncontrada;
+
+            } else {
+                
+                if (!Estado_txt.getText().equals("Creando")) {
+                    
+                    Contrasena_pwd.setText("");
+                    Nombre_txt.setText("");
+                    Apellido_txt.setText("");
+                    Email_txt.setText("");
+                    RolGroup.clearSelection();
+
+                    Estado_txt.setText("Creando");
+                    encontrado = false;
+                    cadenaAnterior = "";
+                }
+            }
+        } else {
+            
+            Contrasena_pwd.setText("");
+            Nombre_txt.setText("");
+            Apellido_txt.setText("");
+            Email_txt.setText("");
+            Estado_txt.setText("Creando");
+            RolGroup.clearSelection();
+            encontrado = false;
+            cadenaAnterior = "";
+        }
+
+        contrasena = Contrasena_pwd.getText().trim();
+
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             Admin_rbtn.setEnabled(false);
             Empleado_rbtn.setEnabled(false);
@@ -608,7 +756,7 @@ public class Usuarios extends javax.swing.JFrame {
     private void Contrasena_pwdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Contrasena_pwdKeyReleased
         String usuario = Usuario_txt.getText().trim();
         String contrasena = Contrasena_pwd.getText().trim();
-        
+
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             Admin_rbtn.setEnabled(false);
             Empleado_rbtn.setEnabled(false);
@@ -627,7 +775,7 @@ public class Usuarios extends javax.swing.JFrame {
     private void Limpiar_btnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Limpiar_btnMouseReleased
         String usuario = Usuario_txt.getText().trim();
         String contrasena = Contrasena_pwd.getText().trim();
-        
+
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             Admin_rbtn.setEnabled(false);
             Empleado_rbtn.setEnabled(false);
@@ -642,6 +790,10 @@ public class Usuarios extends javax.swing.JFrame {
             Email_txt.setEnabled(true);
         }
     }//GEN-LAST:event_Limpiar_btnMouseReleased
+
+    private void Salir_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btn1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_Salir_btn1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -685,6 +837,7 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JTextField Apellido_txt;
     private javax.swing.JLabel Apellidos_lbl;
     private javax.swing.JPasswordField Contrasena_pwd;
+    private javax.swing.JButton Eliminar_btn;
     private javax.swing.JLabel Email_lbl;
     private javax.swing.JTextField Email_txt;
     private javax.swing.JRadioButton Empleado_rbtn;
@@ -694,7 +847,7 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JLabel Nombre_lbl;
     private javax.swing.JTextField Nombre_txt;
     private javax.swing.ButtonGroup RolGroup;
-    private javax.swing.JButton Salir_btn;
+    private javax.swing.JButton Salir_btn1;
     private javax.swing.JLabel Usuario_lbl;
     private javax.swing.JLabel Usuario_lbl1;
     private javax.swing.JLabel Usuario_lbl2;
