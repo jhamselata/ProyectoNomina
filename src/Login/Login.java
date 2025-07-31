@@ -4,7 +4,7 @@
  */
 package Login;
 
-import PantallaPrincipal.Inicio;
+import VentanaPrincipal.Inicio;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,8 +44,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
-
-        pwdContrasenia.setEnabled(!txtUsuario.getText().isEmpty());
+        
         btnInicioSesion.setEnabled(!txtUsuario.getText().isEmpty());
 
         String contrasenia = new String(pwdContrasenia.getPassword());
@@ -61,6 +60,8 @@ public class Login extends javax.swing.JFrame {
 
         SetImageLabel(txtUserIcon, "src/Iconos/img_User_Login_400x400.png");
         SetImageLabel(txtImagenFondo, "src/Imágenes/ImagenFondo.png");
+        SetImageLabel(txtUserAcc, "src/Iconos/account_user.png");
+        SetImageLabel(txtUserPwd, "src/Iconos/pwd_Ico.png");
     }
 
     /**
@@ -83,6 +84,8 @@ public class Login extends javax.swing.JFrame {
         btnMostrarContrasenia = new javax.swing.JButton();
         pnlBotonIniciarSesion = new Utilidades.PanelesBordesRedondeados();
         btnInicioSesion = new javax.swing.JButton();
+        txtUserPwd = new javax.swing.JLabel();
+        txtUserAcc = new javax.swing.JLabel();
         pntlIconoUsuario = new Utilidades.PanelesBordesRedondeados();
         txtUserIcon = new javax.swing.JLabel();
         pnlBarraTitulo = new Utilidades.PanelesBordesRedondeados();
@@ -226,6 +229,8 @@ public class Login extends javax.swing.JFrame {
         );
 
         pnlFormularioLogin.add(pnlBotonIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 130, 40));
+        pnlFormularioLogin.add(txtUserPwd, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 93, 30, 30));
+        pnlFormularioLogin.add(txtUserAcc, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 33, 30, 30));
 
         pnlFondo.add(pnlFormularioLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 380, 360));
 
@@ -374,8 +379,14 @@ public class Login extends javax.swing.JFrame {
     private void pwdContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyTyped
         String contrasenia = new String(pwdContrasenia.getPassword());
         btnMostrarContrasenia.setEnabled(!contrasenia.isEmpty());
-        pnlBotonIniciarSesion.setBackground(new Color(143, 188, 187));
-        btnInicioSesion.setForeground(new Color(236, 239, 244));
+        
+        if(!contrasenia.isEmpty()) {
+            pnlBotonIniciarSesion.setBackground(new Color(143, 188, 187));
+            btnInicioSesion.setForeground(new Color(236, 239, 244));
+        } else {
+            pnlBotonIniciarSesion.setBackground(new Color(59, 66, 82));
+            btnInicioSesion.setForeground(new Color(204,204,204));
+        }
 
         validarCampos();
     }//GEN-LAST:event_pwdContraseniaKeyTyped
@@ -401,8 +412,11 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMostrarContraseniaActionPerformed
 
     private void btnMostrarContraseniaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMousePressed
-        pwdContrasenia.setEchoChar((char) 0);
-        btnMostrarContrasenia.setIcon(iconoPresionado);
+        String contrasenia = new String(pwdContrasenia.getPassword());
+        if(!contrasenia.isEmpty()) {
+            pwdContrasenia.setEchoChar((char) 0);
+            btnMostrarContrasenia.setIcon(iconoPresionado);
+        }
     }//GEN-LAST:event_btnMostrarContraseniaMousePressed
 
     private void btnMostrarContraseniaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMouseReleased
@@ -514,7 +528,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JSeparator sdrCampoContrasenia;
     private javax.swing.JSeparator sdrCampoUsuario;
     private javax.swing.JLabel txtImagenFondo;
+    private javax.swing.JLabel txtUserAcc;
     private javax.swing.JLabel txtUserIcon;
+    private javax.swing.JLabel txtUserPwd;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
