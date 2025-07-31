@@ -32,8 +32,10 @@ public class Inicio extends javax.swing.JFrame {
 
         if ("1".equals(rolUsuario)) {
             mniMantUsuarios.setEnabled(false);
+            mnProcesos.setEnabled(false);
         } else {
             mniMantUsuarios.setEnabled(true);
+            mnProcesos.setEnabled(true);
         }
     }
 
@@ -47,6 +49,7 @@ public class Inicio extends javax.swing.JFrame {
     private void initComponents() {
 
         panelesBordesRedondeados1 = new Utilidades.PanelesBordesRedondeados();
+        jButton1 = new javax.swing.JButton();
         mnbMenu = new javax.swing.JMenuBar();
         mnMantenimientos = new javax.swing.JMenu();
         mniMantUsuarios = new javax.swing.JMenuItem();
@@ -70,15 +73,28 @@ public class Inicio extends javax.swing.JFrame {
 
         panelesBordesRedondeados1.setBackground(new java.awt.Color(46, 52, 64));
 
+        jButton1.setText("Cerrar Sesión");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelesBordesRedondeados1Layout = new javax.swing.GroupLayout(panelesBordesRedondeados1);
         panelesBordesRedondeados1.setLayout(panelesBordesRedondeados1Layout);
         panelesBordesRedondeados1Layout.setHorizontalGroup(
             panelesBordesRedondeados1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 957, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelesBordesRedondeados1Layout.createSequentialGroup()
+                .addContainerGap(852, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         panelesBordesRedondeados1Layout.setVerticalGroup(
             panelesBordesRedondeados1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGroup(panelesBordesRedondeados1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(542, Short.MAX_VALUE))
         );
 
         mnbMenu.setBackground(new java.awt.Color(76, 86, 106));
@@ -190,6 +206,13 @@ public class Inicio extends javax.swing.JFrame {
         Mant_Usuarios.setVisible(true);
     }//GEN-LAST:event_mniMantUsuariosActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+
+            Login ventanaLogin = new Login();
+            ventanaLogin.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -227,6 +250,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu mnConsultas;
     private javax.swing.JMenu mnMantenimientos;
     private javax.swing.JMenu mnProcesos;

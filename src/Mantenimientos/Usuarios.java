@@ -29,6 +29,23 @@ public class Usuarios extends javax.swing.JFrame {
         initComponents();
         setTitle("Mantenimiento de Usuario");
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
+        
+        String usuario = Usuario_txt.getText().trim();
+        String contrasena = Contrasena_pwd.getText().trim();
+        
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            Admin_rbtn.setEnabled(false);
+            Empleado_rbtn.setEnabled(false);
+            Nombre_txt.setEnabled(false);
+            Apellido_txt.setEnabled(false);
+            Email_txt.setEnabled(false);
+        } else {
+            Admin_rbtn.setEnabled(true);
+            Empleado_rbtn.setEnabled(true);
+            Nombre_txt.setEnabled(true);
+            Apellido_txt.setEnabled(true);
+            Email_txt.setEnabled(true);
+        }
     }
     
     public String buscar(String usuarioBuscado) {
@@ -68,7 +85,7 @@ public class Usuarios extends javax.swing.JFrame {
     private void initComponents() {
 
         RolGroup = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        pnlFondo = new javax.swing.JPanel();
         Usuario_lbl = new javax.swing.JLabel();
         Usuario_txt = new javax.swing.JTextField();
         Usuario_lbl1 = new javax.swing.JLabel();
@@ -89,37 +106,56 @@ public class Usuarios extends javax.swing.JFrame {
         Estado_lbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
+        pnlFondo.setBackground(new java.awt.Color(76, 86, 106));
+
+        Usuario_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Usuario_lbl.setText("Usuario");
 
+        Usuario_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Usuario_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Usuario_txtKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                Usuario_txtKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                Usuario_txtKeyTyped(evt);
+            }
         });
 
+        Usuario_lbl1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Usuario_lbl1.setText("Contraseña");
 
+        Usuario_lbl2.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Usuario_lbl2.setText("Rol");
 
+        Nombre_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Nombre_lbl.setText("Nombre");
 
+        Nombre_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Nombre_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Nombre_txtKeyPressed(evt);
             }
         });
 
+        Apellidos_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Apellidos_lbl.setText("Apellidos");
 
+        Apellido_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Apellido_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Apellido_txtKeyPressed(evt);
             }
         });
 
+        Email_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Email_lbl.setText("Email");
 
+        Email_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Email_txt.setToolTipText("JhonDoe@gmail.example");
         Email_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -127,14 +163,19 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
 
+        Contrasena_pwd.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Contrasena_pwd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Contrasena_pwdKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                Contrasena_pwdKeyReleased(evt);
+            }
         });
 
         RolGroup.add(Admin_rbtn);
-        Admin_rbtn.setText("Admin");
+        Admin_rbtn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        Admin_rbtn.setText("Administrador");
         Admin_rbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Admin_rbtnActionPerformed(evt);
@@ -147,20 +188,28 @@ public class Usuarios extends javax.swing.JFrame {
         });
 
         RolGroup.add(Empleado_rbtn);
-        Empleado_rbtn.setText("Empleado");
+        Empleado_rbtn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        Empleado_rbtn.setText("Usuario");
         Empleado_rbtn.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Empleado_rbtnKeyPressed(evt);
             }
         });
 
+        Limpiar_btn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Limpiar_btn.setText("Limpiar");
+        Limpiar_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Limpiar_btnMouseReleased(evt);
+            }
+        });
         Limpiar_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Limpiar_btnActionPerformed(evt);
             }
         });
 
+        Anadir_btn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Anadir_btn.setText("Añadir");
         Anadir_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,6 +217,7 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
 
+        Salir_btn.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Salir_btn.setText("Salir");
         Salir_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,44 +226,46 @@ public class Usuarios extends javax.swing.JFrame {
         });
 
         Estado_txt.setEditable(false);
+        Estado_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Estado_txt.setEnabled(false);
 
+        Estado_lbl.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         Estado_lbl.setText("Estado:");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlFondoLayout = new javax.swing.GroupLayout(pnlFondo);
+        pnlFondo.setLayout(pnlFondoLayout);
+        pnlFondoLayout.setHorizontalGroup(
+            pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFondoLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Usuario_lbl2)
                         .addGap(73, 73, 73)
                         .addComponent(Admin_rbtn)
                         .addGap(51, 51, 51)
                         .addComponent(Empleado_rbtn))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Nombre_lbl)
                         .addGap(46, 46, 46)
                         .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Apellidos_lbl)
                         .addGap(41, 41, 41)
                         .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Email_lbl)
                         .addGap(61, 61, 61)
                         .addComponent(Email_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Usuario_lbl1)
                         .addGap(30, 30, 30)
                         .addComponent(Contrasena_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Usuario_lbl)
                         .addGap(50, 50, 50)
                         .addComponent(Usuario_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
@@ -221,47 +273,47 @@ public class Usuarios extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(100, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Estado_lbl)
                     .addComponent(Estado_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlFondoLayout.setVerticalGroup(
+            pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFondoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(Estado_lbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Estado_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Usuario_lbl)
                     .addComponent(Usuario_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Usuario_lbl1)
                     .addComponent(Contrasena_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Usuario_lbl2)
                     .addComponent(Admin_rbtn)
                     .addComponent(Empleado_rbtn))
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Nombre_lbl)
                     .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Apellidos_lbl)
                     .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Email_lbl)
                     .addComponent(Email_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Salir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -272,11 +324,11 @@ public class Usuarios extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -361,6 +413,7 @@ public class Usuarios extends javax.swing.JFrame {
         Email_txt.setText("");
         Estado_txt.setText("");
         RolGroup.clearSelection();
+        
     }//GEN-LAST:event_Limpiar_btnActionPerformed
 
     private void Usuario_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyPressed
@@ -406,6 +459,23 @@ public class Usuarios extends javax.swing.JFrame {
             encontrado = false;
             cadenaAnterior = "";}
             
+        }
+        
+        String usuario = Usuario_txt.getText().trim();
+        String contrasena = Contrasena_pwd.getText().trim();
+        
+        if (usuario.isEmpty() & contrasena.isEmpty()) {
+            Admin_rbtn.setEnabled(false);
+            Empleado_rbtn.setEnabled(false);
+            Nombre_txt.setEnabled(false);
+            Apellido_txt.setEnabled(false);
+            Email_txt.setEnabled(false);
+        } else {
+            Admin_rbtn.setEnabled(true);
+            Empleado_rbtn.setEnabled(true);
+            Nombre_txt.setEnabled(true);
+            Apellido_txt.setEnabled(true);
+            Email_txt.setEnabled(true);
         }
     }
     
@@ -512,6 +582,67 @@ public class Usuarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Empleado_rbtnKeyPressed
 
+    private void Usuario_txtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyTyped
+
+    }//GEN-LAST:event_Usuario_txtKeyTyped
+
+    private void Usuario_txtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyReleased
+        String usuario = Usuario_txt.getText().trim();
+        String contrasena = Contrasena_pwd.getText().trim();
+        
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            Admin_rbtn.setEnabled(false);
+            Empleado_rbtn.setEnabled(false);
+            Nombre_txt.setEnabled(false);
+            Apellido_txt.setEnabled(false);
+            Email_txt.setEnabled(false);
+        } else {
+            Admin_rbtn.setEnabled(true);
+            Empleado_rbtn.setEnabled(true);
+            Nombre_txt.setEnabled(true);
+            Apellido_txt.setEnabled(true);
+            Email_txt.setEnabled(true);
+        }
+    }//GEN-LAST:event_Usuario_txtKeyReleased
+
+    private void Contrasena_pwdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Contrasena_pwdKeyReleased
+        String usuario = Usuario_txt.getText().trim();
+        String contrasena = Contrasena_pwd.getText().trim();
+        
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            Admin_rbtn.setEnabled(false);
+            Empleado_rbtn.setEnabled(false);
+            Nombre_txt.setEnabled(false);
+            Apellido_txt.setEnabled(false);
+            Email_txt.setEnabled(false);
+        } else {
+            Admin_rbtn.setEnabled(true);
+            Empleado_rbtn.setEnabled(true);
+            Nombre_txt.setEnabled(true);
+            Apellido_txt.setEnabled(true);
+            Email_txt.setEnabled(true);
+        }
+    }//GEN-LAST:event_Contrasena_pwdKeyReleased
+
+    private void Limpiar_btnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Limpiar_btnMouseReleased
+        String usuario = Usuario_txt.getText().trim();
+        String contrasena = Contrasena_pwd.getText().trim();
+        
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            Admin_rbtn.setEnabled(false);
+            Empleado_rbtn.setEnabled(false);
+            Nombre_txt.setEnabled(false);
+            Apellido_txt.setEnabled(false);
+            Email_txt.setEnabled(false);
+        } else {
+            Admin_rbtn.setEnabled(true);
+            Empleado_rbtn.setEnabled(true);
+            Nombre_txt.setEnabled(true);
+            Apellido_txt.setEnabled(true);
+            Email_txt.setEnabled(true);
+        }
+    }//GEN-LAST:event_Limpiar_btnMouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -568,6 +699,6 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JLabel Usuario_lbl1;
     private javax.swing.JLabel Usuario_lbl2;
     private javax.swing.JTextField Usuario_txt;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel pnlFondo;
     // End of variables declaration//GEN-END:variables
 }

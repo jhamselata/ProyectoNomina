@@ -147,7 +147,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
         pnlFormularioLogin.add(pwdContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 240, 40));
-        pnlFormularioLogin.add(sdrCampoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 63, 290, 10));
+        pnlFormularioLogin.add(sdrCampoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 63, 240, 10));
 
         txtUsuario.setBackground(new java.awt.Color(255, 204, 102));
         txtUsuario.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
@@ -168,7 +168,7 @@ public class Login extends javax.swing.JFrame {
                 txtUsuarioKeyTyped(evt);
             }
         });
-        pnlFormularioLogin.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 290, 40));
+        pnlFormularioLogin.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 240, 40));
 
         btnMostrarContrasenia.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         btnMostrarContrasenia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/visibility_off.png"))); // NOI18N

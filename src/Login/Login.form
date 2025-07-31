@@ -133,7 +133,7 @@
             <Component class="javax.swing.JSeparator" name="sdrCampoUsuario">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="63" width="290" height="10"/>
+                  <AbsoluteConstraints x="60" y="63" width="240" height="10"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -163,7 +163,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="30" width="290" height="40"/>
+                  <AbsoluteConstraints x="60" y="30" width="240" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
