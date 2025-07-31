@@ -104,11 +104,34 @@ public class Usuarios extends javax.swing.JFrame {
 
         Nombre_lbl.setText("Nombre");
 
+        Nombre_txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Nombre_txtKeyPressed(evt);
+            }
+        });
+
         Apellidos_lbl.setText("Apellidos");
+
+        Apellido_txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Apellido_txtKeyPressed(evt);
+            }
+        });
 
         Email_lbl.setText("Email");
 
         Email_txt.setToolTipText("JhonDoe@gmail.example");
+        Email_txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Email_txtKeyPressed(evt);
+            }
+        });
+
+        Contrasena_pwd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Contrasena_pwdKeyPressed(evt);
+            }
+        });
 
         RolGroup.add(Admin_rbtn);
         Admin_rbtn.setText("Admin");
@@ -117,9 +140,19 @@ public class Usuarios extends javax.swing.JFrame {
                 Admin_rbtnActionPerformed(evt);
             }
         });
+        Admin_rbtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Admin_rbtnKeyPressed(evt);
+            }
+        });
 
         RolGroup.add(Empleado_rbtn);
         Empleado_rbtn.setText("Empleado");
+        Empleado_rbtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Empleado_rbtnKeyPressed(evt);
+            }
+        });
 
         Limpiar_btn.setText("Limpiar");
         Limpiar_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -331,8 +364,13 @@ public class Usuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_Limpiar_btnActionPerformed
 
     private void Usuario_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Usuario_txtKeyPressed
-        // TODO add your handling code here:
+        
+        if (!encontrado && Estado_txt.getText().equals("Creando")) {
+            return;
+        }
+        
        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        Contrasena_pwd.requestFocus();
         String usuarioBuscado = Usuario_txt.getText().trim();
         String lineaEncontrada = buscar(usuarioBuscado);
 
@@ -356,6 +394,7 @@ public class Usuarios extends javax.swing.JFrame {
             encontrado = true;
             cadenaAnterior = lineaEncontrada;
         } else {
+            if(!encontrado) {
             // Limpiar excepto Usuario_txt
             Contrasena_pwd.setText("");
             Nombre_txt.setText("");
@@ -365,7 +404,8 @@ public class Usuarios extends javax.swing.JFrame {
 
             Estado_txt.setText("Creando");
             encontrado = false;
-            cadenaAnterior = "";
+            cadenaAnterior = "";}
+            
         }
     }
     
@@ -375,6 +415,102 @@ public class Usuarios extends javax.swing.JFrame {
     private void Salir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btnActionPerformed
         this.dispose();
     }//GEN-LAST:event_Salir_btnActionPerformed
+
+    private void Email_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Email_txtKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            // TODO add your handling code here:
+            
+        // Al inicio de Anadir_btnActionPerformed
+        String usuario = Usuario_txt.getText().trim();
+        String lineaExistente = buscar(usuario);
+
+        // Verifica si el usuario ya existe y no estamos modificando
+        if (lineaExistente != null && !encontrado) {
+            JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
+        return;
+        }
+        
+      
+        String contrasena = Contrasena_pwd.getText().trim();
+        String nombres = Nombre_txt.getText().trim();
+        String apellidos = Apellido_txt.getText().trim();
+        String email = Email_txt.getText().trim();
+        String rol = "";
+
+        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+            return;
+        }
+
+        if (Admin_rbtn.isSelected()) {
+            rol = "0";
+        } else if (Empleado_rbtn.isSelected()) {
+            rol = "1";
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un rol.");
+            return;
+        }
+
+        String nuevaLinea = usuario + ";" + contrasena + ";" + rol + ";" + nombres + ";" + apellidos + ";" + email;
+
+        ManejoArchivos manejo = new ManejoArchivos();
+
+        try {
+            if (!encontrado) {
+            // Guardar nuevo
+                manejo.GuardarDatos(nuevaLinea, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
+            } else {
+                // Modificar usuario existente usando tu método Modificar
+                manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
+            }
+
+            // Resetear formulario
+            encontrado = false;
+            Usuario_txt.setText("");
+            Contrasena_pwd.setText("");
+            Nombre_txt.setText("");
+            Apellido_txt.setText("");
+            Email_txt.setText("");
+            Estado_txt.setText("");
+            RolGroup.clearSelection();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
+        }
+        }
+    }//GEN-LAST:event_Email_txtKeyPressed
+
+    private void Apellido_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Apellido_txtKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Email_txt.requestFocus();
+        }
+    }//GEN-LAST:event_Apellido_txtKeyPressed
+
+    private void Nombre_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Nombre_txtKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Apellido_txt.requestFocus();
+        }
+    }//GEN-LAST:event_Nombre_txtKeyPressed
+
+    private void Contrasena_pwdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Contrasena_pwdKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Admin_rbtn.requestFocus();
+        }
+    }//GEN-LAST:event_Contrasena_pwdKeyPressed
+
+    private void Admin_rbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Admin_rbtnKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Nombre_txt.requestFocus();
+        }
+    }//GEN-LAST:event_Admin_rbtnKeyPressed
+
+    private void Empleado_rbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Empleado_rbtnKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Nombre_txt.requestFocus();
+        }
+    }//GEN-LAST:event_Empleado_rbtnKeyPressed
 
     /**
      * @param args the command line arguments

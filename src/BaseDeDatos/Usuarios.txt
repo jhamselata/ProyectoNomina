@@ -1,1 +1,1 @@
-admin;1234;0;Administrador;Principal;admin@example.comDuanel;123456;0;Duanel;Ureña;duanel@gmail.comTestUsuario;test;1;Test;Test;test@gmail.comTestUsuario2;test2;0;Test2;Test2;test2@gmail.com
+admin;1234;0;Administrador;Sistema;admin@gmail.comDuanel;123456;0;Duanel;Ureña;duanel@gmail.com
