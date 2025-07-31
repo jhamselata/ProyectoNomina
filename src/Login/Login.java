@@ -30,7 +30,14 @@ public class Login extends javax.swing.JFrame {
     ImageIcon iconoNormal = new ImageIcon(Login.class.getResource("/Iconos/visibility_off.png"));
     ImageIcon iconoPresionado = new ImageIcon(Login.class.getResource("/Iconos/visibility.png"));
 
-    int xMouse, yMouse;
+    private int xMouse, yMouse;
+    
+    private String rolUsuarioActual = "";
+    
+    public String obtenerRolUsuarioActual() {
+        return rolUsuarioActual;
+    }
+    
 
     private void SetImageLabel(JLabel labelName, String root) {
         ImageIcon image = new ImageIcon(root);
@@ -63,7 +70,7 @@ public class Login extends javax.swing.JFrame {
         SetImageLabel(txtUserAcc, "src/Iconos/account_user.png");
         SetImageLabel(txtUserPwd, "src/Iconos/pwd_Ico.png");
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -319,12 +326,14 @@ public class Login extends javax.swing.JFrame {
 
                     String usuarioGuardado = s1.next();
                     String contraseniaGuardada = s1.next();
+                    String rolUsuario = s1.next();
 
                     if (usuario.equals(usuarioGuardado)) {
                         encontrado = true;
                         if (contrasenia.equals(contraseniaGuardada)) {
+                            rolUsuarioActual = rolUsuario;
                             this.dispose();
-                            Inicio MenuPrincipal = new Inicio();
+                            Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
                             MenuPrincipal.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(rootPane, "Contraseña incorrecta");
@@ -371,7 +380,7 @@ public class Login extends javax.swing.JFrame {
         if (iniciarSesion()) {
             this.dispose();
 
-            Inicio MenuPrincipal = new Inicio();
+            Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
             MenuPrincipal.setVisible(true);
         }
     }//GEN-LAST:event_btnInicioSesionActionPerformed
@@ -400,7 +409,7 @@ public class Login extends javax.swing.JFrame {
             if (iniciarSesion()) {
                 this.dispose();
 
-                Inicio MenuPrincipal = new Inicio();
+                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
                 MenuPrincipal.setVisible(true);
             }
         }
@@ -429,7 +438,7 @@ public class Login extends javax.swing.JFrame {
             if (iniciarSesion()) {
                 this.dispose();
 
-                Inicio MenuPrincipal = new Inicio();
+                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
                 MenuPrincipal.setVisible(true);
             }
         }

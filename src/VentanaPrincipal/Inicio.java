@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import Mantenimientos.Usuarios;
 import VentanaPrincipal.TestDialog;
+import Login.Login;
 
 /**
  *
@@ -15,15 +16,25 @@ import VentanaPrincipal.TestDialog;
  */
 public class Inicio extends javax.swing.JFrame {
 
+    private String rolUsuario;
+
     /**
      * Creates new form Menu
      */
-    public Inicio() {
+    public Inicio(String rol) {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); // Coloca todo en pantalla completa
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/group.png"));
         this.setIconImage(icono.getImage());
 
+        this.rolUsuario = rol;
+        System.out.println(rolUsuario);
+
+        if ("1".equals(rolUsuario)) {
+            mniMantUsuarios.setEnabled(false);
+        } else {
+            mniMantUsuarios.setEnabled(true);
+        }
     }
 
     /**
@@ -167,7 +178,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void mniMantDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantDepartamentosActionPerformed
         TestDialog dialog = new TestDialog(Inicio.this, true);
-                dialog.setVisible(true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_mniMantDepartamentosActionPerformed
 
     private void mnMantenimientosMenuDragMouseEntered(javax.swing.event.MenuDragMouseEvent evt) {//GEN-FIRST:event_mnMantenimientosMenuDragMouseEntered
@@ -176,7 +187,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void mniMantUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantUsuariosActionPerformed
         Usuarios Mant_Usuarios = new Usuarios();
-            Mant_Usuarios.setVisible(true);
+        Mant_Usuarios.setVisible(true);
     }//GEN-LAST:event_mniMantUsuariosActionPerformed
 
     /**
@@ -208,11 +219,11 @@ public class Inicio extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+ /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Inicio().setVisible(true);
             }
-        });
+        }); */
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
