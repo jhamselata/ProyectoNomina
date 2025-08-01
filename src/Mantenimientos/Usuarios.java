@@ -117,6 +117,11 @@ public class Usuarios extends javax.swing.JFrame {
         Usuario_lbl.setText("Usuario");
 
         Usuario_txt.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        Usuario_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Usuario_txtActionPerformed(evt);
+            }
+        });
         Usuario_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Usuario_txtKeyPressed(evt);
@@ -152,6 +157,9 @@ public class Usuarios extends javax.swing.JFrame {
         Apellido_txt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Apellido_txtKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                Apellido_txtKeyReleased(evt);
             }
         });
 
@@ -251,20 +259,6 @@ public class Usuarios extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFondoLayout.createSequentialGroup()
-                        .addComponent(Usuario_lbl2)
-                        .addGap(73, 73, 73)
-                        .addComponent(Admin_rbtn)
-                        .addGap(51, 51, 51)
-                        .addComponent(Empleado_rbtn))
-                    .addGroup(pnlFondoLayout.createSequentialGroup()
-                        .addComponent(Nombre_lbl)
-                        .addGap(46, 46, 46)
-                        .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFondoLayout.createSequentialGroup()
-                        .addComponent(Apellidos_lbl)
-                        .addGap(41, 41, 41)
-                        .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(Email_lbl)
                         .addGap(61, 61, 61)
                         .addComponent(Email_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -277,12 +271,28 @@ public class Usuarios extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addComponent(Usuario_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlFondoLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFondoLayout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(Anadir_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(Limpiar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlFondoLayout.createSequentialGroup()
+                                .addComponent(Usuario_lbl2)
+                                .addGap(73, 73, 73)
+                                .addComponent(Admin_rbtn)
+                                .addGap(51, 51, 51)
+                                .addComponent(Empleado_rbtn))
+                            .addGroup(pnlFondoLayout.createSequentialGroup()
+                                .addComponent(Nombre_lbl)
+                                .addGap(46, 46, 46)
+                                .addComponent(Nombre_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlFondoLayout.createSequentialGroup()
+                                .addComponent(Apellidos_lbl)
+                                .addGap(41, 41, 41)
+                                .addComponent(Apellido_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Salir_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(46, Short.MAX_VALUE))
@@ -355,6 +365,11 @@ public class Usuarios extends javax.swing.JFrame {
     private void Anadir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Anadir_btnActionPerformed
         // TODO add your handling code here:
 
+        if (!Apellido_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$") || !Nombre_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
+        JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
+} else {
+        
+        
         // Al inicio de Anadir_btnActionPerformed
         String usuario = Usuario_txt.getText().trim();
         String lineaExistente = buscar(usuario);
@@ -421,8 +436,8 @@ public class Usuarios extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
         }
-
-
+        
+        }
     }//GEN-LAST:event_Anadir_btnActionPerformed
 
     private void Limpiar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Limpiar_btnActionPerformed
@@ -490,7 +505,9 @@ public class Usuarios extends javax.swing.JFrame {
                     encontrado = false;
                     cadenaAnterior = "";
                 }
-
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    Contrasena_pwd.requestFocus();
+                }
             }
 
             String usuario = Usuario_txt.getText().trim();
@@ -575,6 +592,9 @@ public class Usuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_Eliminar_btnActionPerformed
 
     private void Email_txtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Email_txtKeyPressed
+        if (!Apellido_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$") || !Nombre_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
+        JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
+} else {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             // TODO add your handling code here:
 
@@ -594,7 +614,7 @@ public class Usuarios extends javax.swing.JFrame {
             String email = Email_txt.getText().trim();
             String rol = "";
 
-            if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+            if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
                 return;
             }
@@ -636,6 +656,7 @@ public class Usuarios extends javax.swing.JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
             }
+        }
         }
     }//GEN-LAST:event_Email_txtKeyPressed
 
@@ -710,9 +731,9 @@ public class Usuarios extends javax.swing.JFrame {
                 cadenaAnterior = lineaEncontrada;
 
             } else {
-                
+
                 if (!Estado_txt.getText().equals("Creando")) {
-                    
+
                     Contrasena_pwd.setText("");
                     Nombre_txt.setText("");
                     Apellido_txt.setText("");
@@ -725,7 +746,7 @@ public class Usuarios extends javax.swing.JFrame {
                 }
             }
         } else {
-            
+
             Contrasena_pwd.setText("");
             Nombre_txt.setText("");
             Apellido_txt.setText("");
@@ -794,6 +815,14 @@ public class Usuarios extends javax.swing.JFrame {
     private void Salir_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Salir_btn1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_Salir_btn1ActionPerformed
+
+    private void Usuario_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Usuario_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Usuario_txtActionPerformed
+
+    private void Apellido_txtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Apellido_txtKeyReleased
+
+    }//GEN-LAST:event_Apellido_txtKeyReleased
 
     /**
      * @param args the command line arguments
