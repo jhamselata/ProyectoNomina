@@ -28,6 +28,7 @@ public class Usuarios extends javax.swing.JFrame {
     public Usuarios() {
         initComponents();
         setTitle("Mantenimiento de Usuario");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
 
         // Establecer estado inicial

@@ -189,9 +189,16 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here
     }//GEN-LAST:event_mnMantenimientosMenuDragMouseEntered
 
+    private Usuarios ventanaUsuarios = null;
+    
     private void mniMantUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantUsuariosActionPerformed
-        Usuarios Mant_Usuarios = new Usuarios();
-        Mant_Usuarios.setVisible(true);
+        if (ventanaUsuarios == null || !ventanaUsuarios.isDisplayable()) {
+        ventanaUsuarios = new Usuarios();
+        ventanaUsuarios.setVisible(true);
+    } else {
+        ventanaUsuarios.toFront(); // Trae la ventana al frente
+        ventanaUsuarios.requestFocus(); // Le da el foco
+    }
     }//GEN-LAST:event_mniMantUsuariosActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
