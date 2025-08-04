@@ -88,21 +88,6 @@
                 <Property name="text" type="java.lang.String" value="Empleados"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mniConsEmpleadosXDep">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Empleados por Departamento"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mniConsEmpleadosXPue">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Empleados por Puesto"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mniConsEmpleadosXFI">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Empleados por Fecha de Ingreso"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mniConsNominaXF">
               <Properties>
                 <Property name="text" type="java.lang.String" value="N&#xf3;mina por Fecha"/>
@@ -120,6 +105,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="undecorated" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="mnbMenu"/>

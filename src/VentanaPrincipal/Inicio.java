@@ -4,11 +4,10 @@
  */
 package VentanaPrincipal;
 
+import Login.Login;
+import Mantenimientos.Usuarios;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import Mantenimientos.Usuarios;
-import VentanaPrincipal.TestDialog;
-import Login.Login;
 
 /**
  *
@@ -24,7 +23,7 @@ public class Inicio extends javax.swing.JFrame {
     public Inicio(String rol) {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); // Coloca todo en pantalla completa
-        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/group.png"));
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
         this.setIconImage(icono.getImage());
 
         this.rolUsuario = rol;
@@ -63,13 +62,11 @@ public class Inicio extends javax.swing.JFrame {
         mniConsDepartamentos = new javax.swing.JMenuItem();
         mniConsPuestos = new javax.swing.JMenuItem();
         mniConsEmpleados = new javax.swing.JMenuItem();
-        mniConsEmpleadosXDep = new javax.swing.JMenuItem();
-        mniConsEmpleadosXPue = new javax.swing.JMenuItem();
-        mniConsEmpleadosXFI = new javax.swing.JMenuItem();
         mniConsNominaXF = new javax.swing.JMenuItem();
         mniConsNominaXIDEmp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         panelesBordesRedondeados1.setBackground(new java.awt.Color(46, 52, 64));
 
@@ -158,15 +155,6 @@ public class Inicio extends javax.swing.JFrame {
 
         mniConsEmpleados.setText("Empleados");
         mnConsultas.add(mniConsEmpleados);
-
-        mniConsEmpleadosXDep.setText("Empleados por Departamento");
-        mnConsultas.add(mniConsEmpleadosXDep);
-
-        mniConsEmpleadosXPue.setText("Empleados por Puesto");
-        mnConsultas.add(mniConsEmpleadosXPue);
-
-        mniConsEmpleadosXFI.setText("Empleados por Fecha de Ingreso");
-        mnConsultas.add(mniConsEmpleadosXFI);
 
         mniConsNominaXF.setText("Nómina por Fecha");
         mnConsultas.add(mniConsNominaXF);
@@ -257,9 +245,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenuBar mnbMenu;
     private javax.swing.JMenuItem mniConsDepartamentos;
     private javax.swing.JMenuItem mniConsEmpleados;
-    private javax.swing.JMenuItem mniConsEmpleadosXDep;
-    private javax.swing.JMenuItem mniConsEmpleadosXFI;
-    private javax.swing.JMenuItem mniConsEmpleadosXPue;
     private javax.swing.JMenuItem mniConsNominaXF;
     private javax.swing.JMenuItem mniConsNominaXIDEmp;
     private javax.swing.JMenuItem mniConsPuestos;

@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import Utilidades.PanelesBordesRedondeados;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -69,6 +68,9 @@ public class Login extends javax.swing.JFrame {
         SetImageLabel(txtImagenFondo, "src/Imágenes/ImagenFondo.png");
         SetImageLabel(txtUserAcc, "src/Iconos/account_user.png");
         SetImageLabel(txtUserPwd, "src/Iconos/pwd_Ico.png");
+        
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
     }
     
     /**
