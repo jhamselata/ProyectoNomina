@@ -5,6 +5,7 @@
 package VentanaPrincipal;
 
 import Login.Login;
+import Mantenimientos.Departamentos;
 import Mantenimientos.Usuarios;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -180,9 +181,16 @@ public class Inicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private Departamentos ventanaDepartamentos = null;
+    
     private void mniMantDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniMantDepartamentosActionPerformed
-        TestDialog dialog = new TestDialog(Inicio.this, true);
-        dialog.setVisible(true);
+        if (ventanaDepartamentos == null || !ventanaDepartamentos.isDisplayable()) {
+        ventanaDepartamentos = new Departamentos();
+        ventanaDepartamentos.setVisible(true);
+    } else {
+        ventanaDepartamentos.toFront(); // Trae la ventana al frente
+        ventanaDepartamentos.requestFocus(); // Le da el foco
+    }
     }//GEN-LAST:event_mniMantDepartamentosActionPerformed
 
     private void mnMantenimientosMenuDragMouseEntered(javax.swing.event.MenuDragMouseEvent evt) {//GEN-FIRST:event_mnMantenimientosMenuDragMouseEntered

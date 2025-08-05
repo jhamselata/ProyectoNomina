@@ -50,6 +50,8 @@ public class Usuarios extends javax.swing.JFrame {
             Apellido_txt.setEnabled(true);
             Email_txt.setEnabled(true);
         }
+        
+        Eliminar_btn.setEnabled(false);
     }
 
     public String buscar(String usuarioBuscado) {
@@ -494,6 +496,7 @@ public class Usuarios extends javax.swing.JFrame {
                 Email_txt.setText(datos[5]);
 
                 Estado_txt.setText("Modificando");
+                Eliminar_btn.setEnabled(true);
                 encontrado = true;
                 cadenaAnterior = lineaEncontrada;
             } else {
@@ -508,6 +511,7 @@ public class Usuarios extends javax.swing.JFrame {
                     Estado_txt.setText("Creando");
                     encontrado = false;
                     cadenaAnterior = "";
+                    Eliminar_btn.setEnabled(false);
                 }
                 if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
                     Contrasena_pwd.requestFocus();
@@ -731,6 +735,7 @@ public class Usuarios extends javax.swing.JFrame {
 
                 // Cambiar estado a "Modificando"
                 Estado_txt.setText("Modificando");
+                Eliminar_btn.setEnabled(true);
                 encontrado = true;
                 cadenaAnterior = lineaEncontrada;
 
@@ -747,6 +752,7 @@ public class Usuarios extends javax.swing.JFrame {
                     Estado_txt.setText("Creando");
                     encontrado = false;
                     cadenaAnterior = "";
+                    Eliminar_btn.setEnabled(false);
                 }
             }
         } else {

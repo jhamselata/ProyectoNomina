@@ -5,17 +5,17 @@
 package Login;
 
 import VentanaPrincipal.Inicio;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Image;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
