@@ -365,27 +365,34 @@ public class Usuarios extends javax.swing.JFrame {
 
     private void Anadir_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Anadir_btnActionPerformed
         // TODO add your handling code here:
-
-        if (!Apellido_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$") || !Nombre_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
-        JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
-} else {
         
-        
-        // Al inicio de Anadir_btnActionPerformed
         String usuario = Usuario_txt.getText().trim();
         String lineaExistente = buscar(usuario);
-
-        // Verifica si el usuario ya existe y no estamos modificando
-        if (lineaExistente != null && !encontrado) {
-            JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
-            return;
-        }
 
         String contrasena = Contrasena_pwd.getText().trim();
         String nombres = Nombre_txt.getText().trim();
         String apellidos = Apellido_txt.getText().trim();
 
         String email = "";
+        
+        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+            return;
+        } else {
+        
+        if (!Apellido_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$") || !Nombre_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
+        JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
+} else {
+        
+        
+        // Al inicio de Anadir_btnActionPerformed
+        
+
+        // Verifica si el usuario ya existe y no estamos modificando
+        if (lineaExistente != null && !encontrado) {
+            JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
+            return;
+        }
 
         if (email.isEmpty()) {
             email = "example@gmail.com";
@@ -394,11 +401,6 @@ public class Usuarios extends javax.swing.JFrame {
         }
 
         String rol = "";
-
-        if (usuario.isEmpty() || contrasena.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
-            return;
-        }
 
         if (Admin_rbtn.isSelected()) {
             rol = "0";
@@ -438,6 +440,7 @@ public class Usuarios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
         }
         
+        }
         }
     }//GEN-LAST:event_Anadir_btnActionPerformed
 
