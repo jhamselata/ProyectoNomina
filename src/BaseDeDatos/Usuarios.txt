@@ -1,1 +1,1 @@
-admin;1234;0;Administrador;Principal;example@gmail.comuser;1234;1;Usuario;Secundario;example@gmail.comfmj;123;1;Fausto;Martinez Jimenez;example@gmail.com
+admin;1234;0;Administrador;Principal;example@gmail.comuser;1234;1;Usuario;Secundario;example@gmail.comfmj;123;1;Fausto;Martinez Jimenez;example@gmail.com

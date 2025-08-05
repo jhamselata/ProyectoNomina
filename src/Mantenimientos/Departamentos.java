@@ -4,7 +4,13 @@
  */
 package Mantenimientos;
 
+import ManejoDeArchivos.ManejoArchivos;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,16 +23,52 @@ public class Departamentos extends javax.swing.JFrame {
      */
     public Departamentos() {
         initComponents();
-        
+
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30)); //Redondea Bordes de la ventana Jframe
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Permite que solo se cierre la ventana
-        
+
         //Colores Transparentes para los campos
         txtIDDep.setBackground(new Color(0, 0, 0, 0));
         txtDescDep.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
+
+        /*if (txtIDDep.getText().isEmpty()) {
+            txtDescDep.setEnabled(false);
+        } else {
+            txtDescDep.setEnabled(true);
+        } */
     }
+
+    public String buscar(String DepartamentoBuscado) {
+        String lineaEncontrada = null;
+
+        try {
+            File archivo = new File("src/BaseDeDatos/Departamentos.txt");
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length >= 1 && partes[0].equalsIgnoreCase(DepartamentoBuscado.trim())) {
+                    lineaEncontrada = linea;
+                    br.close();
+                    return lineaEncontrada;
+                }
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar el usuario: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    boolean encontrado = false;
+    String cadenaAnterior = "";
+    File archivo = new File("src/BaseDeDatos/Departamentos.txt");
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,15 +85,15 @@ public class Departamentos extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         lblDescDep = new javax.swing.JLabel();
         sdrCampoDescDep = new javax.swing.JSeparator();
-        txtDescDep = new javax.swing.JPasswordField();
         lblIDDep = new javax.swing.JLabel();
         lblBotonRegistrar = new Utilidades.PanelesBordesRedondeados();
-        btnInicioSesion2 = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
         lblBotonEliminar = new Utilidades.PanelesBordesRedondeados();
-        btnInicioSesion1 = new javax.swing.JButton();
-        txtIDDep = new javax.swing.JTextField();
+        btnEliminar = new javax.swing.JButton();
+        txtDescDep = new javax.swing.JTextField();
         lblBtnSalir = new Utilidades.PanelesBordesRedondeados();
         btnSalir = new javax.swing.JButton();
+        txtIDDep = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -99,10 +141,115 @@ public class Departamentos extends javax.swing.JFrame {
         panelesBordesRedondeados1.add(lblDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, -1, -1));
         panelesBordesRedondeados1.add(sdrCampoDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 240, 10));
 
-        txtDescDep.setBackground(new java.awt.Color(255, 0, 102));
+        lblIDDep.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        lblIDDep.setForeground(new java.awt.Color(236, 239, 244));
+        lblIDDep.setText("ID del departamento");
+        panelesBordesRedondeados1.add(lblIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
+
+        lblBotonRegistrar.setBackground(new java.awt.Color(59, 66, 82));
+        lblBotonRegistrar.setPreferredSize(new java.awt.Dimension(132, 40));
+        lblBotonRegistrar.setRoundBottomLeft(20);
+        lblBotonRegistrar.setRoundBottomRight(20);
+        lblBotonRegistrar.setRoundTopLeft(20);
+        lblBotonRegistrar.setRoundTopRight(20);
+
+        btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        btnRegistrar.setForeground(new java.awt.Color(204, 204, 204));
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnRegistrarMousePressed(evt);
+            }
+        });
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+        btnRegistrar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                btnRegistrarKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout lblBotonRegistrarLayout = new javax.swing.GroupLayout(lblBotonRegistrar);
+        lblBotonRegistrar.setLayout(lblBotonRegistrarLayout);
+        lblBotonRegistrarLayout.setHorizontalGroup(
+            lblBotonRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonRegistrarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        lblBotonRegistrarLayout.setVerticalGroup(
+            lblBotonRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonRegistrarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
+
+        lblBotonEliminar.setBackground(new java.awt.Color(59, 66, 82));
+        lblBotonEliminar.setPreferredSize(new java.awt.Dimension(132, 40));
+        lblBotonEliminar.setRoundBottomLeft(20);
+        lblBotonEliminar.setRoundBottomRight(20);
+        lblBotonEliminar.setRoundTopLeft(20);
+        lblBotonEliminar.setRoundTopRight(20);
+
+        btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(204, 204, 204));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setBorder(null);
+        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnEliminarMousePressed(evt);
+            }
+        });
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        btnEliminar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                btnEliminarKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout lblBotonEliminarLayout = new javax.swing.GroupLayout(lblBotonEliminar);
+        lblBotonEliminar.setLayout(lblBotonEliminarLayout);
+        lblBotonEliminarLayout.setHorizontalGroup(
+            lblBotonEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonEliminarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        lblBotonEliminarLayout.setVerticalGroup(
+            lblBotonEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonEliminarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, -1));
+
+        txtDescDep.setBackground(new java.awt.Color(255, 204, 102));
         txtDescDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         txtDescDep.setForeground(new java.awt.Color(236, 239, 244));
         txtDescDep.setBorder(null);
+        txtDescDep.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtDescDep.setName(""); // NOI18N
         txtDescDep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDescDepActionPerformed(evt);
@@ -117,130 +264,6 @@ public class Departamentos extends javax.swing.JFrame {
             }
         });
         panelesBordesRedondeados1.add(txtDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 240, 40));
-
-        lblIDDep.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
-        lblIDDep.setForeground(new java.awt.Color(236, 239, 244));
-        lblIDDep.setText("ID del departamento");
-        panelesBordesRedondeados1.add(lblIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
-
-        lblBotonRegistrar.setBackground(new java.awt.Color(59, 66, 82));
-        lblBotonRegistrar.setPreferredSize(new java.awt.Dimension(132, 40));
-        lblBotonRegistrar.setRoundBottomLeft(20);
-        lblBotonRegistrar.setRoundBottomRight(20);
-        lblBotonRegistrar.setRoundTopLeft(20);
-        lblBotonRegistrar.setRoundTopRight(20);
-
-        btnInicioSesion2.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnInicioSesion2.setForeground(new java.awt.Color(204, 204, 204));
-        btnInicioSesion2.setText("Registrar");
-        btnInicioSesion2.setBorder(null);
-        btnInicioSesion2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInicioSesion2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnInicioSesion2MouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnInicioSesion2MousePressed(evt);
-            }
-        });
-        btnInicioSesion2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInicioSesion2ActionPerformed(evt);
-            }
-        });
-        btnInicioSesion2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                btnInicioSesion2KeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout lblBotonRegistrarLayout = new javax.swing.GroupLayout(lblBotonRegistrar);
-        lblBotonRegistrar.setLayout(lblBotonRegistrarLayout);
-        lblBotonRegistrarLayout.setHorizontalGroup(
-            lblBotonRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonRegistrarLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnInicioSesion2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        lblBotonRegistrarLayout.setVerticalGroup(
-            lblBotonRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonRegistrarLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnInicioSesion2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
-
-        lblBotonEliminar.setBackground(new java.awt.Color(59, 66, 82));
-        lblBotonEliminar.setPreferredSize(new java.awt.Dimension(132, 40));
-        lblBotonEliminar.setRoundBottomLeft(20);
-        lblBotonEliminar.setRoundBottomRight(20);
-        lblBotonEliminar.setRoundTopLeft(20);
-        lblBotonEliminar.setRoundTopRight(20);
-
-        btnInicioSesion1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnInicioSesion1.setForeground(new java.awt.Color(204, 204, 204));
-        btnInicioSesion1.setText("Eliminar");
-        btnInicioSesion1.setBorder(null);
-        btnInicioSesion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInicioSesion1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnInicioSesion1MouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnInicioSesion1MousePressed(evt);
-            }
-        });
-        btnInicioSesion1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInicioSesion1ActionPerformed(evt);
-            }
-        });
-        btnInicioSesion1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                btnInicioSesion1KeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout lblBotonEliminarLayout = new javax.swing.GroupLayout(lblBotonEliminar);
-        lblBotonEliminar.setLayout(lblBotonEliminarLayout);
-        lblBotonEliminarLayout.setHorizontalGroup(
-            lblBotonEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonEliminarLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnInicioSesion1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        lblBotonEliminarLayout.setVerticalGroup(
-            lblBotonEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lblBotonEliminarLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnInicioSesion1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, -1));
-
-        txtIDDep.setBackground(new java.awt.Color(255, 204, 102));
-        txtIDDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        txtIDDep.setForeground(new java.awt.Color(236, 239, 244));
-        txtIDDep.setBorder(null);
-        txtIDDep.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        txtIDDep.setName(""); // NOI18N
-        txtIDDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDDepActionPerformed(evt);
-            }
-        });
-        txtIDDep.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtIDDepKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtIDDepKeyTyped(evt);
-            }
-        });
-        panelesBordesRedondeados1.add(txtIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 100, 40));
 
         lblBtnSalir.setBackground(new java.awt.Color(59, 66, 82));
         lblBtnSalir.setPreferredSize(new java.awt.Dimension(132, 40));
@@ -291,6 +314,30 @@ public class Departamentos extends javax.swing.JFrame {
 
         panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, -1));
 
+        txtIDDep.setBackground(new java.awt.Color(255, 204, 102));
+        txtIDDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtIDDep.setForeground(new java.awt.Color(236, 239, 244));
+        txtIDDep.setBorder(null);
+        txtIDDep.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtIDDep.setName(""); // NOI18N
+        txtIDDep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDDepActionPerformed(evt);
+            }
+        });
+        txtIDDep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIDDepKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIDDepKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIDDepKeyTyped(evt);
+            }
+        });
+        panelesBordesRedondeados1.add(txtIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 100, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -320,49 +367,172 @@ public class Departamentos extends javax.swing.JFrame {
         txtDescDep.setEnabled(!txtEstado.getText().isEmpty());
     }//GEN-LAST:event_txtEstadoKeyTyped
 
-    private void txtDescDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescDepActionPerformed
+    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarMouseClicked
 
+    private void btnEliminarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarMousePressed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String IDDepartamento = txtIDDep.getText().trim();
+        
+        // Verificar si hay un usuario ingresado
+        if (IDDepartamento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un usuario para eliminar.");
+            return;
+        }
+
+        // Buscar si el usuario existe
+        String lineaEncontrada = buscar(IDDepartamento);
+        
+        String[] datos = lineaEncontrada.split(";");
+        txtDescDep.setText(datos[1]);
+
+        if (lineaEncontrada == null) {
+            JOptionPane.showMessageDialog(null, "El usuario no existe.");
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(
+                null,
+                "¿Está seguro de que desea eliminar el usuario '" + datos + "'?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            ManejoArchivos manejo = new ManejoArchivos();
+
+            try {
+                // Eliminar el usuario usando el método de ManejoArchivos
+                manejo.Eliminar(lineaEncontrada, archivo);
+                JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente.");
+
+                // Limpiar el formulario después de eliminar
+                txtIDDep.setText("");
+                txtDescDep.setText("");
+                txtEstado.setText("Creando");
+
+                // Resetear variables de control
+                encontrado = false;
+                cadenaAnterior = "";
+
+                // Deshabilitar campos
+                txtDescDep.setEnabled(false);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al eliminar el usuario: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEliminarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnEliminarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarKeyTyped
+
+    private void btnRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarMouseClicked
+
+    private void btnRegistrarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarMousePressed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        String IDDepartamento = txtIDDep.getText().trim();
+        String lineaExistente = buscar(IDDepartamento);
+
+        String DescDepartamento = txtDescDep.getText().trim();
+
+        String email = "";
+
+        if (IDDepartamento.isEmpty() || DescDepartamento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+            return;
+        } else {
+
+            if (!txtIDDep.getText().trim().matches("^\\d+$")) {
+                JOptionPane.showMessageDialog(this, "El ID solo debe contener números.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
+                txtIDDep.requestFocus();
+                return;
+            } else if (!txtDescDep.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
+                JOptionPane.showMessageDialog(this, "La descripción solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
+                txtDescDep.requestFocus();
+                return;
+            } else {
+
+                // Al inicio de Anadir_btnActionPerformed
+                // Verifica si el usuario ya existe y no estamos modificando
+                if (lineaExistente != null && !encontrado) {
+                    JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
+                    return;
+                }
+
+                String rol = "";
+
+                String nuevaLinea = IDDepartamento + ";" + DescDepartamento;
+
+                ManejoArchivos manejo = new ManejoArchivos();
+
+                try {
+                    if (!encontrado) {
+                        // Guardar nuevo
+                        manejo.GuardarDatos(nuevaLinea, archivo);
+                        JOptionPane.showMessageDialog(null, "Departamento guardado correctamente.");
+                    } else {
+                        // Modificar usuario existente usando tu método Modificar
+                        manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
+                        JOptionPane.showMessageDialog(null, "Departamento modificado correctamente.");
+                    }
+
+                    // Resetear formulario
+                    encontrado = false;
+                    txtIDDep.setText("");
+                    txtDescDep.setText("");
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
+                }
+
+            }
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnRegistrarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnRegistrarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarKeyTyped
+
+    private void txtDescDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescDepActionPerformed
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtDescDepActionPerformed
 
     private void txtDescDepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescDepKeyPressed
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtDescDepKeyPressed
 
     private void txtDescDepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescDepKeyTyped
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtDescDepKeyTyped
 
-    private void btnInicioSesion1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesion1MouseClicked
+    private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion1MouseClicked
+    }//GEN-LAST:event_btnSalirMouseClicked
 
-    private void btnInicioSesion1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesion1MousePressed
+    private void btnSalirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion1MousePressed
+    }//GEN-LAST:event_btnSalirMousePressed
 
-    private void btnInicioSesion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesion1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion1ActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnInicioSesion1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnInicioSesion1KeyTyped
+    private void btnSalirKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSalirKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion1KeyTyped
-
-    private void btnInicioSesion2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesion2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion2MouseClicked
-
-    private void btnInicioSesion2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesion2MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion2MousePressed
-
-    private void btnInicioSesion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesion2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion2ActionPerformed
-
-    private void btnInicioSesion2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnInicioSesion2KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInicioSesion2KeyTyped
+    }//GEN-LAST:event_btnSalirKeyTyped
 
     private void txtIDDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDDepActionPerformed
         // TODO add your handling code here:
@@ -376,21 +546,59 @@ public class Departamentos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDDepKeyTyped
 
-    private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirMouseClicked
+    private void txtIDDepKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDDepKeyReleased
+        String IDDepartamento = txtIDDep.getText().trim();
+        String DescDepartamento = txtDescDep.getText().trim();
 
-    private void btnSalirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirMousePressed
+        // Autocompletado: buscar y llenar campos automáticamente
+        if (!IDDepartamento.isEmpty()) {
+            String lineaEncontrada = buscar(IDDepartamento);
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirActionPerformed
+            if (lineaEncontrada != null) {
+                // Usuario encontrado - llenar todos los campos
+                String[] datos = lineaEncontrada.split(";");
 
-    private void btnSalirKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSalirKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirKeyTyped
+                // Solo llenar si los campos están vacíos o si estamos en modo modificación
+                if (txtDescDep.getText().trim().isEmpty() || encontrado) {
+                    txtDescDep.setText(datos[1]);
+                }
+
+                // Llenar campos de información personal
+                txtDescDep.setText(datos[1]);
+                
+                // Cambiar estado a "Modificando"
+                txtEstado.setText("Modificando");
+                btnEliminar.setEnabled(true);
+                encontrado = true;
+                cadenaAnterior = lineaEncontrada;
+
+            } else {
+
+                if (!txtEstado.getText().equals("Creando")) {
+
+                    txtDescDep.setText("");;
+
+                    txtEstado.setText("Creando");
+                    encontrado = false;
+                    cadenaAnterior = "";
+                    btnEliminar.setEnabled(false);
+                }
+            }
+        } else {
+
+            txtDescDep.setText("");
+            txtEstado.setText("Creando");
+            encontrado = false;
+            cadenaAnterior = "";
+        }
+
+        if (IDDepartamento.isEmpty()) {
+            txtDescDep.setEnabled(false);
+        } else {
+            txtDescDep.setEnabled(true);
+            
+        }
+    }//GEN-LAST:event_txtIDDepKeyReleased
 
     /**
      * @param args the command line arguments
@@ -428,8 +636,8 @@ public class Departamentos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnInicioSesion1;
-    private javax.swing.JButton btnInicioSesion2;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
     private Utilidades.PanelesBordesRedondeados lblBotonEliminar;
     private Utilidades.PanelesBordesRedondeados lblBotonRegistrar;
@@ -440,7 +648,7 @@ public class Departamentos extends javax.swing.JFrame {
     private Utilidades.PanelesBordesRedondeados panelesBordesRedondeados1;
     private javax.swing.JSeparator sdrCampoDescDep;
     private javax.swing.JSeparator sdrIDDep;
-    private javax.swing.JPasswordField txtDescDep;
+    private javax.swing.JTextField txtDescDep;
     private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtIDDep;
     // End of variables declaration//GEN-END:variables
