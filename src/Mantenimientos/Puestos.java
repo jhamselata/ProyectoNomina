@@ -40,7 +40,7 @@ public class Puestos extends javax.swing.JFrame {
         } */
     }
 
-    public String buscar(String DepartamentoBuscado) {
+    public String buscar(String PuestosBuscado) {
         String lineaEncontrada = null;
 
         try {
@@ -50,7 +50,7 @@ public class Puestos extends javax.swing.JFrame {
 
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
-                if (partes.length >= 1 && partes[0].equalsIgnoreCase(DepartamentoBuscado.trim())) {
+                if (partes.length >= 1 && partes[0].equalsIgnoreCase(PuestosBuscado.trim())) {
                     lineaEncontrada = linea;
                     br.close();
                     return lineaEncontrada;
@@ -376,28 +376,30 @@ public class Puestos extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String IDPuesto = txtIDPuesto.getText().trim();
-        
-        // Verificar si hay un usuario ingresado
+
+// Verificar si hay un usuario ingresado
         if (IDPuesto.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese un puesto para eliminar.");
             return;
         }
 
-        // Buscar si el usuario existe
+// Buscar si el usuario existe
         String lineaEncontrada = buscar(IDPuesto);
-        
-        String[] datos = lineaEncontrada.split(";");
-        txtDescPuesto.setText(datos[1]);
 
+// Verificar si se encontró
         if (lineaEncontrada == null) {
             JOptionPane.showMessageDialog(null, "El puesto no existe.");
             return;
         }
 
-        // Confirmar eliminación
+// Si existe, proceder a obtener datos
+        String[] datos = lineaEncontrada.split(";");
+        txtDescPuesto.setText(datos[1]);
+
+// Confirmar eliminación
         int confirmacion = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro de que desea eliminar el puesto '" + datos + "'?",
+                "¿Está seguro de que desea eliminar el puesto '" + datos[1] + "'?",
                 "Confirmar eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
@@ -407,11 +409,11 @@ public class Puestos extends javax.swing.JFrame {
             ManejoArchivos manejo = new ManejoArchivos();
 
             try {
-                // Eliminar el usuario usando el método de ManejoArchivos
+                // Eliminar el puesto
                 manejo.Eliminar(lineaEncontrada, archivo);
                 JOptionPane.showMessageDialog(null, "Puesto eliminado correctamente.");
 
-                // Limpiar el formulario después de eliminar
+                // Limpiar el formulario
                 txtIDPuesto.setText("");
                 txtDescPuesto.setText("");
                 txtEstado.setText("Creando");
@@ -427,6 +429,7 @@ public class Puestos extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error al eliminar el puesto: " + ex.getMessage());
             }
         }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEliminarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnEliminarKeyTyped
@@ -447,21 +450,20 @@ public class Puestos extends javax.swing.JFrame {
 
         String DescPuesto = txtDescPuesto.getText().trim();
 
-        String email = "";
 
         if (IDPuesto.isEmpty() || DescPuesto.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
-            return;
+            
         } else {
 
             if (!txtIDPuesto.getText().trim().matches("^\\d+$")) {
                 JOptionPane.showMessageDialog(this, "El ID solo debe contener números.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
                 txtIDPuesto.requestFocus();
-                return;
+               
             } else if (!txtDescPuesto.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
                 JOptionPane.showMessageDialog(this, "La descripción solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
                 txtDescPuesto.requestFocus();
-                return;
+             
             } else {
 
                 // Al inicio de Anadir_btnActionPerformed
@@ -470,9 +472,7 @@ public class Puestos extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "El puesto ya existe. Presione ENTER para modificarlo.");
                     return;
                 }
-
-                String rol = "";
-
+              
                 String nuevaLinea = IDPuesto + ";" + DescPuesto;
 
                 ManejoArchivos manejo = new ManejoArchivos();
@@ -547,7 +547,6 @@ public class Puestos extends javax.swing.JFrame {
 
     private void txtIDPuestoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDPuestoKeyReleased
         String IDPuesto = txtIDPuesto.getText().trim();
-     
 
         // Autocompletado: buscar y llenar campos automáticamente
         if (!IDPuesto.isEmpty()) {
@@ -564,7 +563,7 @@ public class Puestos extends javax.swing.JFrame {
 
                 // Llenar campos de información personal
                 txtDescPuesto.setText(datos[1]);
-                
+
                 // Cambiar estado a "Modificando"
                 txtEstado.setText("Modificando");
                 btnEliminar.setEnabled(true);
@@ -595,7 +594,7 @@ public class Puestos extends javax.swing.JFrame {
             txtDescPuesto.setEnabled(false);
         } else {
             txtDescPuesto.setEnabled(true);
-            
+
         }
     }//GEN-LAST:event_txtIDPuestoKeyReleased
 

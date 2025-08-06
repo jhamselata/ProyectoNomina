@@ -387,13 +387,14 @@ public class Departamentos extends javax.swing.JFrame {
         // Buscar si el usuario existe
         String lineaEncontrada = buscar(IDDepartamento);
         
-        String[] datos = lineaEncontrada.split(";");
-        txtDescDep.setText(datos[1]);
-
+       
         if (lineaEncontrada == null) {
             JOptionPane.showMessageDialog(null, "El departamento no existe.");
             return;
         }
+        
+        String[] datos = lineaEncontrada.split(";");
+        txtDescDep.setText(datos[1]);
 
         // Confirmar eliminación
         int confirmacion = JOptionPane.showConfirmDialog(
