@@ -31,7 +31,7 @@
     <Property name="useNullLayout" type="boolean" value="false"/>
   </Layout>
   <SubComponents>
-    <Container class="Utilidades.PanelesBordesRedondeados" name="pnlFondo">
+    <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlFondo">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="40" green="34" red="2e" type="rgb"/>
@@ -51,7 +51,7 @@
         <Property name="useNullLayout" type="boolean" value="false"/>
       </Layout>
       <SubComponents>
-        <Container class="Utilidades.PanelesBordesRedondeados" name="pnlImagenFondo">
+        <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlImagenFondo">
           <Properties>
             <Property name="roundBottomLeft" type="int" value="20"/>
             <Property name="roundBottomRight" type="int" value="20"/>
@@ -77,7 +77,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="Utilidades.PanelesBordesRedondeados" name="pnlFormularioLogin">
+        <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlFormularioLogin">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="5e" green="4c" red="43" type="rgb"/>
@@ -193,7 +193,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Container class="Utilidades.PanelesBordesRedondeados" name="pnlBotonIniciarSesion">
+            <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlBotonIniciarSesion">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="52" green="42" red="3b" type="rgb"/>
@@ -270,7 +270,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="Utilidades.PanelesBordesRedondeados" name="pntlIconoUsuario">
+        <Container class="org.netbeans.modules.form.InvalidComponent" name="pntlIconoUsuario">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="6a" green="56" red="4c" type="rgb"/>
@@ -302,7 +302,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="Utilidades.PanelesBordesRedondeados" name="pnlBarraTitulo">
+        <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlBarraTitulo">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="52" green="42" red="3b" type="rgb"/>
@@ -310,10 +310,6 @@
             <Property name="roundTopLeft" type="int" value="30"/>
             <Property name="roundTopRight" type="int" value="30"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="pnlBarraTituloMouseDragged"/>
-            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnlBarraTituloMousePressed"/>
-          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="0" y="0" width="910" height="50"/>
@@ -324,7 +320,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Container class="Utilidades.PanelesBordesRedondeados" name="pnlBotonSalir">
+            <Container class="org.netbeans.modules.form.InvalidComponent" name="pnlBotonSalir">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="6a" green="61" red="bf" type="rgb"/>
@@ -337,10 +333,6 @@
                 <Property name="roundTopLeft" type="int" value="20"/>
                 <Property name="roundTopRight" type="int" value="20"/>
               </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnlBotonSalirMouseClicked"/>
-                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnlBotonSalirMouseEntered"/>
-              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="870" y="18" width="-1" height="20"/>

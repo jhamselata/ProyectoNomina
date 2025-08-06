@@ -16,12 +16,12 @@ import javax.swing.JOptionPane;
  *
  * @author Duanel
  */
-public class Departamentos extends javax.swing.JFrame {
+public class Puestos extends javax.swing.JFrame {
 
     /**
      * Creates new form Departamentos
      */
-    public Departamentos() {
+    public Puestos() {
         initComponents();
 
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
@@ -29,8 +29,8 @@ public class Departamentos extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Permite que solo se cierre la ventana
 
         //Colores Transparentes para los campos
-        txtIDDep.setBackground(new Color(0, 0, 0, 0));
-        txtDescDep.setBackground(new Color(0, 0, 0, 0));
+        txtIDPuesto.setBackground(new Color(0, 0, 0, 0));
+        txtDescPuesto.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
 
         /*if (txtIDDep.getText().isEmpty()) {
@@ -44,7 +44,7 @@ public class Departamentos extends javax.swing.JFrame {
         String lineaEncontrada = null;
 
         try {
-            File archivo = new File("src/BaseDeDatos/Departamentos.txt");
+            File archivo = new File("src/BaseDeDatos/Puestos.txt");
             BufferedReader br = new BufferedReader(new FileReader(archivo));
             String linea;
 
@@ -60,7 +60,7 @@ public class Departamentos extends javax.swing.JFrame {
             br.close();
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar el departamento: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar el puesto: " + e.getMessage());
         }
 
         return null;
@@ -68,7 +68,7 @@ public class Departamentos extends javax.swing.JFrame {
 
     boolean encontrado = false;
     String cadenaAnterior = "";
-    File archivo = new File("src/BaseDeDatos/Departamentos.txt");
+    File archivo = new File("src/BaseDeDatos/Puestos.txt");
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,21 +83,20 @@ public class Departamentos extends javax.swing.JFrame {
         sdrIDDep = new javax.swing.JSeparator();
         txtEstado = new javax.swing.JTextField();
         lblUsuario = new javax.swing.JLabel();
-        lblDescDep = new javax.swing.JLabel();
+        lblDescPuesto = new javax.swing.JLabel();
         sdrCampoDescDep = new javax.swing.JSeparator();
-        lblIDDep = new javax.swing.JLabel();
+        lblIDPuesto = new javax.swing.JLabel();
         lblBotonRegistrar = new Utilidades.PanelesBordesRedondeados();
         btnRegistrar = new javax.swing.JButton();
         lblBotonEliminar = new Utilidades.PanelesBordesRedondeados();
         btnEliminar = new javax.swing.JButton();
-        txtDescDep = new javax.swing.JTextField();
+        txtDescPuesto = new javax.swing.JTextField();
         lblBtnSalir = new Utilidades.PanelesBordesRedondeados();
         btnSalir = new javax.swing.JButton();
-        txtIDDep = new javax.swing.JTextField();
+        txtIDPuesto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(588, 450));
         setResizable(false);
 
         panelesBordesRedondeados1.setBackground(new java.awt.Color(76, 86, 106));
@@ -135,16 +134,16 @@ public class Departamentos extends javax.swing.JFrame {
         lblUsuario.setText("Estado:");
         panelesBordesRedondeados1.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, -1, -1));
 
-        lblDescDep.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
-        lblDescDep.setForeground(new java.awt.Color(236, 239, 244));
-        lblDescDep.setText("Desc. del Departamento");
-        panelesBordesRedondeados1.add(lblDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, -1, -1));
+        lblDescPuesto.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        lblDescPuesto.setForeground(new java.awt.Color(236, 239, 244));
+        lblDescPuesto.setText("Desc. del puesto");
+        panelesBordesRedondeados1.add(lblDescPuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, -1, -1));
         panelesBordesRedondeados1.add(sdrCampoDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 240, 10));
 
-        lblIDDep.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
-        lblIDDep.setForeground(new java.awt.Color(236, 239, 244));
-        lblIDDep.setText("ID del departamento");
-        panelesBordesRedondeados1.add(lblIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
+        lblIDPuesto.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        lblIDPuesto.setForeground(new java.awt.Color(236, 239, 244));
+        lblIDPuesto.setText("ID del puesto");
+        panelesBordesRedondeados1.add(lblIDPuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
 
         lblBotonRegistrar.setBackground(new java.awt.Color(59, 66, 82));
         lblBotonRegistrar.setPreferredSize(new java.awt.Dimension(132, 40));
@@ -244,26 +243,26 @@ public class Departamentos extends javax.swing.JFrame {
 
         panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, -1));
 
-        txtDescDep.setBackground(new java.awt.Color(255, 204, 102));
-        txtDescDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        txtDescDep.setForeground(new java.awt.Color(236, 239, 244));
-        txtDescDep.setBorder(null);
-        txtDescDep.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        txtDescDep.setName(""); // NOI18N
-        txtDescDep.addActionListener(new java.awt.event.ActionListener() {
+        txtDescPuesto.setBackground(new java.awt.Color(255, 204, 102));
+        txtDescPuesto.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtDescPuesto.setForeground(new java.awt.Color(236, 239, 244));
+        txtDescPuesto.setBorder(null);
+        txtDescPuesto.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtDescPuesto.setName(""); // NOI18N
+        txtDescPuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescDepActionPerformed(evt);
+                txtDescPuestoActionPerformed(evt);
             }
         });
-        txtDescDep.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDescPuesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescDepKeyPressed(evt);
+                txtDescPuestoKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescDepKeyTyped(evt);
+                txtDescPuestoKeyTyped(evt);
             }
         });
-        panelesBordesRedondeados1.add(txtDescDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 240, 40));
+        panelesBordesRedondeados1.add(txtDescPuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 240, 40));
 
         lblBtnSalir.setBackground(new java.awt.Color(59, 66, 82));
         lblBtnSalir.setPreferredSize(new java.awt.Dimension(132, 40));
@@ -314,29 +313,29 @@ public class Departamentos extends javax.swing.JFrame {
 
         panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, -1));
 
-        txtIDDep.setBackground(new java.awt.Color(255, 204, 102));
-        txtIDDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        txtIDDep.setForeground(new java.awt.Color(236, 239, 244));
-        txtIDDep.setBorder(null);
-        txtIDDep.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        txtIDDep.setName(""); // NOI18N
-        txtIDDep.addActionListener(new java.awt.event.ActionListener() {
+        txtIDPuesto.setBackground(new java.awt.Color(255, 204, 102));
+        txtIDPuesto.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtIDPuesto.setForeground(new java.awt.Color(236, 239, 244));
+        txtIDPuesto.setBorder(null);
+        txtIDPuesto.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtIDPuesto.setName(""); // NOI18N
+        txtIDPuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDDepActionPerformed(evt);
+                txtIDPuestoActionPerformed(evt);
             }
         });
-        txtIDDep.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtIDPuesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtIDDepKeyPressed(evt);
+                txtIDPuestoKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtIDDepKeyReleased(evt);
+                txtIDPuestoKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtIDDepKeyTyped(evt);
+                txtIDPuestoKeyTyped(evt);
             }
         });
-        panelesBordesRedondeados1.add(txtIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 100, 40));
+        panelesBordesRedondeados1.add(txtIDPuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 100, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -358,13 +357,13 @@ public class Departamentos extends javax.swing.JFrame {
 
     private void txtEstadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !txtEstado.getText().isEmpty()) {
-            txtDescDep.requestFocus();
+            txtDescPuesto.requestFocus();
         }
     }//GEN-LAST:event_txtEstadoKeyPressed
 
     private void txtEstadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoKeyTyped
 
-        txtDescDep.setEnabled(!txtEstado.getText().isEmpty());
+        txtDescPuesto.setEnabled(!txtEstado.getText().isEmpty());
     }//GEN-LAST:event_txtEstadoKeyTyped
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
@@ -376,29 +375,29 @@ public class Departamentos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarMousePressed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String IDDepartamento = txtIDDep.getText().trim();
+        String IDPuesto = txtIDPuesto.getText().trim();
         
         // Verificar si hay un usuario ingresado
-        if (IDDepartamento.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Ingrese un departamento para eliminar.");
+        if (IDPuesto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un puesto para eliminar.");
             return;
         }
 
         // Buscar si el usuario existe
-        String lineaEncontrada = buscar(IDDepartamento);
+        String lineaEncontrada = buscar(IDPuesto);
         
         String[] datos = lineaEncontrada.split(";");
-        txtDescDep.setText(datos[1]);
+        txtDescPuesto.setText(datos[1]);
 
         if (lineaEncontrada == null) {
-            JOptionPane.showMessageDialog(null, "El departamento no existe.");
+            JOptionPane.showMessageDialog(null, "El puesto no existe.");
             return;
         }
 
         // Confirmar eliminación
         int confirmacion = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro de que desea eliminar el departamento '" + datos + "'?",
+                "¿Está seguro de que desea eliminar el puesto '" + datos + "'?",
                 "Confirmar eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
@@ -410,11 +409,11 @@ public class Departamentos extends javax.swing.JFrame {
             try {
                 // Eliminar el usuario usando el método de ManejoArchivos
                 manejo.Eliminar(lineaEncontrada, archivo);
-                JOptionPane.showMessageDialog(null, "Departamento eliminado correctamente.");
+                JOptionPane.showMessageDialog(null, "Puesto eliminado correctamente.");
 
                 // Limpiar el formulario después de eliminar
-                txtIDDep.setText("");
-                txtDescDep.setText("");
+                txtIDPuesto.setText("");
+                txtDescPuesto.setText("");
                 txtEstado.setText("Creando");
 
                 // Resetear variables de control
@@ -422,10 +421,10 @@ public class Departamentos extends javax.swing.JFrame {
                 cadenaAnterior = "";
 
                 // Deshabilitar campos
-                txtDescDep.setEnabled(false);
+                txtDescPuesto.setEnabled(false);
 
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al eliminar el departamento: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al eliminar el puesto: " + ex.getMessage());
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -443,38 +442,38 @@ public class Departamentos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        String IDDepartamento = txtIDDep.getText().trim();
-        String lineaExistente = buscar(IDDepartamento);
+        String IDPuesto = txtIDPuesto.getText().trim();
+        String lineaExistente = buscar(IDPuesto);
 
-        String DescDepartamento = txtDescDep.getText().trim();
+        String DescPuesto = txtDescPuesto.getText().trim();
 
         String email = "";
 
-        if (IDDepartamento.isEmpty() || DescDepartamento.isEmpty()) {
+        if (IDPuesto.isEmpty() || DescPuesto.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
             return;
         } else {
 
-            if (!txtIDDep.getText().trim().matches("^\\d+$")) {
+            if (!txtIDPuesto.getText().trim().matches("^\\d+$")) {
                 JOptionPane.showMessageDialog(this, "El ID solo debe contener números.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
-                txtIDDep.requestFocus();
+                txtIDPuesto.requestFocus();
                 return;
-            } else if (!txtDescDep.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
+            } else if (!txtDescPuesto.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
                 JOptionPane.showMessageDialog(this, "La descripción solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
-                txtDescDep.requestFocus();
+                txtDescPuesto.requestFocus();
                 return;
             } else {
 
                 // Al inicio de Anadir_btnActionPerformed
                 // Verifica si el usuario ya existe y no estamos modificando
                 if (lineaExistente != null && !encontrado) {
-                    JOptionPane.showMessageDialog(null, "El departamento ya existe. Presione ENTER para modificarlo.");
+                    JOptionPane.showMessageDialog(null, "El puesto ya existe. Presione ENTER para modificarlo.");
                     return;
                 }
 
                 String rol = "";
 
-                String nuevaLinea = IDDepartamento + ";" + DescDepartamento;
+                String nuevaLinea = IDPuesto + ";" + DescPuesto;
 
                 ManejoArchivos manejo = new ManejoArchivos();
 
@@ -482,17 +481,17 @@ public class Departamentos extends javax.swing.JFrame {
                     if (!encontrado) {
                         // Guardar nuevo
                         manejo.GuardarDatos(nuevaLinea, archivo);
-                        JOptionPane.showMessageDialog(null, "Departamento guardado correctamente.");
+                        JOptionPane.showMessageDialog(null, "Puesto guardado correctamente.");
                     } else {
                         // Modificar usuario existente usando tu método Modificar
                         manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
-                        JOptionPane.showMessageDialog(null, "Departamento modificado correctamente.");
+                        JOptionPane.showMessageDialog(null, "Puesto modificado correctamente.");
                     }
 
                     // Resetear formulario
                     encontrado = false;
-                    txtIDDep.setText("");
-                    txtDescDep.setText("");
+                    txtIDPuesto.setText("");
+                    txtDescPuesto.setText("");
 
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar: " + ex.getMessage());
@@ -506,17 +505,17 @@ public class Departamentos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegistrarKeyTyped
 
-    private void txtDescDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescDepActionPerformed
+    private void txtDescPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescPuestoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescDepActionPerformed
+    }//GEN-LAST:event_txtDescPuestoActionPerformed
 
-    private void txtDescDepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescDepKeyPressed
+    private void txtDescPuestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescPuestoKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescDepKeyPressed
+    }//GEN-LAST:event_txtDescPuestoKeyPressed
 
-    private void txtDescDepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescDepKeyTyped
+    private void txtDescPuestoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescPuestoKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescDepKeyTyped
+    }//GEN-LAST:event_txtDescPuestoKeyTyped
 
     private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
         // TODO add your handling code here:
@@ -534,37 +533,37 @@ public class Departamentos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirKeyTyped
 
-    private void txtIDDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDDepActionPerformed
+    private void txtIDPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDPuestoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDDepActionPerformed
+    }//GEN-LAST:event_txtIDPuestoActionPerformed
 
-    private void txtIDDepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDDepKeyPressed
+    private void txtIDPuestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDPuestoKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDDepKeyPressed
+    }//GEN-LAST:event_txtIDPuestoKeyPressed
 
-    private void txtIDDepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDDepKeyTyped
+    private void txtIDPuestoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDPuestoKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDDepKeyTyped
+    }//GEN-LAST:event_txtIDPuestoKeyTyped
 
-    private void txtIDDepKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDDepKeyReleased
-        String IDDepartamento = txtIDDep.getText().trim();
-        String DescDepartamento = txtDescDep.getText().trim();
+    private void txtIDPuestoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDPuestoKeyReleased
+        String IDPuesto = txtIDPuesto.getText().trim();
+     
 
         // Autocompletado: buscar y llenar campos automáticamente
-        if (!IDDepartamento.isEmpty()) {
-            String lineaEncontrada = buscar(IDDepartamento);
+        if (!IDPuesto.isEmpty()) {
+            String lineaEncontrada = buscar(IDPuesto);
 
             if (lineaEncontrada != null) {
                 // Usuario encontrado - llenar todos los campos
                 String[] datos = lineaEncontrada.split(";");
 
                 // Solo llenar si los campos están vacíos o si estamos en modo modificación
-                if (txtDescDep.getText().trim().isEmpty() || encontrado) {
-                    txtDescDep.setText(datos[1]);
+                if (txtDescPuesto.getText().trim().isEmpty() || encontrado) {
+                    txtDescPuesto.setText(datos[1]);
                 }
 
                 // Llenar campos de información personal
-                txtDescDep.setText(datos[1]);
+                txtDescPuesto.setText(datos[1]);
                 
                 // Cambiar estado a "Modificando"
                 txtEstado.setText("Modificando");
@@ -576,7 +575,7 @@ public class Departamentos extends javax.swing.JFrame {
 
                 if (!txtEstado.getText().equals("Creando")) {
 
-                    txtDescDep.setText("");;
+                    txtDescPuesto.setText("");;
 
                     txtEstado.setText("Creando");
                     encontrado = false;
@@ -586,19 +585,19 @@ public class Departamentos extends javax.swing.JFrame {
             }
         } else {
 
-            txtDescDep.setText("");
+            txtDescPuesto.setText("");
             txtEstado.setText("Creando");
             encontrado = false;
             cadenaAnterior = "";
         }
 
-        if (IDDepartamento.isEmpty()) {
-            txtDescDep.setEnabled(false);
+        if (IDPuesto.isEmpty()) {
+            txtDescPuesto.setEnabled(false);
         } else {
-            txtDescDep.setEnabled(true);
+            txtDescPuesto.setEnabled(true);
             
         }
-    }//GEN-LAST:event_txtIDDepKeyReleased
+    }//GEN-LAST:event_txtIDPuestoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -617,20 +616,21 @@ public class Departamentos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Departamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Puestos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Departamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Puestos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Departamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Puestos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Departamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Puestos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Departamentos().setVisible(true);
+                new Puestos().setVisible(true);
             }
         });
     }
@@ -642,14 +642,14 @@ public class Departamentos extends javax.swing.JFrame {
     private Utilidades.PanelesBordesRedondeados lblBotonEliminar;
     private Utilidades.PanelesBordesRedondeados lblBotonRegistrar;
     private Utilidades.PanelesBordesRedondeados lblBtnSalir;
-    private javax.swing.JLabel lblDescDep;
-    private javax.swing.JLabel lblIDDep;
+    private javax.swing.JLabel lblDescPuesto;
+    private javax.swing.JLabel lblIDPuesto;
     private javax.swing.JLabel lblUsuario;
     private Utilidades.PanelesBordesRedondeados panelesBordesRedondeados1;
     private javax.swing.JSeparator sdrCampoDescDep;
     private javax.swing.JSeparator sdrIDDep;
-    private javax.swing.JTextField txtDescDep;
+    private javax.swing.JTextField txtDescPuesto;
     private javax.swing.JTextField txtEstado;
-    private javax.swing.JTextField txtIDDep;
+    private javax.swing.JTextField txtIDPuesto;
     // End of variables declaration//GEN-END:variables
 }
