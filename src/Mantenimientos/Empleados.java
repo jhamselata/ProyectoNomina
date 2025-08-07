@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -41,24 +42,96 @@ public class Empleados extends javax.swing.JFrame {
         configurarCamposTransparentes();
         cargarComboBoxes();
         configurarValidaciones();
-        
-         // Ocultar los botones al inicio
+        configurarListenersCooperativa();
+
+        // Ocultar los botones al inicio
         btnRegistrar.setVisible(false);
         btnEliminar.setVisible(false);
         lblBotonRegistrar.setVisible(false);
         lblBotonEliminar.setVisible(false);
         txtFechaIngreEmpleado.setEditable(false);
-        
+
         establecerFechaActual();
     }
 
     /**
      * Configura la apariencia de la ventana
      */
+    private boolean validarCambioCooperativa() {
+        // Si está marcando "No" en cooperativa, verificar balance
+        if (rbtnNo.isSelected()) {
+            String idEmpleado = txtIDEmpleado.getText().trim();
+            if (!idEmpleado.isEmpty()) {
+                BigDecimal balance = CooperativaDialog.obtenerBalanceEmpleado(idEmpleado);
+                if (balance.compareTo(BigDecimal.ZERO) > 0) {
+                    JOptionPane.showMessageDialog(this,
+                            String.format("No se puede quitar al empleado de la cooperativa.\n"
+                                    + "Tiene un balance acumulado de $%.2f", balance.doubleValue()),
+                            "Operación no permitida", JOptionPane.WARNING_MESSAGE);
+                    rbtnSi.setSelected(true); // Forzar a "Si"
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Abre la ventana de gestión de cooperativa
+     */
+    private void gestionarCooperativa() {
+        // Validar que haya salario ingresado
+        String salarioText = txtSalario.getText().trim();
+        if (salarioText.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar un salario antes de configurar la cooperativa.",
+                    "Salario requerido", JOptionPane.WARNING_MESSAGE);
+            txtSalario.requestFocus();
+            return;
+        }
+
+        try {
+            BigDecimal salario = new BigDecimal(salarioText);
+            String idEmpleado = txtIDEmpleado.getText().trim();
+
+            CooperativaDialog dialog = new CooperativaDialog(this, idEmpleado, salario);
+            dialog.setVisible(true);
+
+            // Si no completó el proceso, desmarcar cooperativa
+            if (!dialog.isProcesoCompletado()) {
+                rbtnNo.setSelected(true);
+                JOptionPane.showMessageDialog(this,
+                        "Se canceló el proceso de cooperativa. El empleado se guardará sin cooperativa.",
+                        "Proceso cancelado", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "El salario debe ser un número válido para configurar la cooperativa.",
+                    "Salario inválido", JOptionPane.ERROR_MESSAGE);
+            txtSalario.requestFocus();
+        }
+    }
+
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
+    private void configurarListenersCooperativa() {
+        rbtnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnSiActionPerformed(evt);
+            }
+        });
+
+        rbtnNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnNoActionPerformed(evt);
+            }
+        });
     }
 
     /**
@@ -179,7 +252,7 @@ public class Empleados extends javax.swing.JFrame {
     /**
      * Limpia todos los campos del formulario
      */
-     private void limpiarCampos() {
+    private void limpiarCampos() {
         txtIDEmpleado.setText("");
         txtNomEmpleado.setText("");
         txtApePatEmpleado.setText("");
@@ -203,7 +276,7 @@ public class Empleados extends javax.swing.JFrame {
         // Establecer la fecha actual cada vez que se limpian los campos
         establecerFechaActual(); // ¡Nueva llamada aquí!
     }
-     
+
     private void establecerFechaActual() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String fechaActual = sdf.format(new Date());
@@ -261,74 +334,74 @@ public class Empleados extends javax.swing.JFrame {
             }
         }
     }
-    
-     private boolean validarCampos() {
+
+    private boolean validarCampos() {
         // Validar campos vacíos
-        if (txtIDEmpleado.getText().trim().isEmpty() ||
-            txtNomEmpleado.getText().trim().isEmpty() ||
-            txtApePatEmpleado.getText().trim().isEmpty() ||
-            txtApeMatEmpleado.getText().trim().isEmpty() ||
-            txtDirecEmpleado.getText().trim().isEmpty() ||
-            txtTelEmpleado.getText().trim().isEmpty() ||
-            txtFechaIngreEmpleado.getText().trim().isEmpty() ||
-            txtSalario.getText().trim().isEmpty()) {
-            
+        if (txtIDEmpleado.getText().trim().isEmpty()
+                || txtNomEmpleado.getText().trim().isEmpty()
+                || txtApePatEmpleado.getText().trim().isEmpty()
+                || txtApeMatEmpleado.getText().trim().isEmpty()
+                || txtDirecEmpleado.getText().trim().isEmpty()
+                || txtTelEmpleado.getText().trim().isEmpty()
+                || txtFechaIngreEmpleado.getText().trim().isEmpty()
+                || txtSalario.getText().trim().isEmpty()) {
+
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
             return false;
         }
 
         // Validar ID (solo números)
         if (!txtIDEmpleado.getText().trim().matches("^\\d+$")) {
-            JOptionPane.showMessageDialog(this, "El ID solo debe contener números.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El ID solo debe contener números.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtIDEmpleado.requestFocus();
             return false;
         }
 
         // Validar nombres (solo letras, espacios y guiones)
         String patronNombres = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$";
-        
+
         if (!txtNomEmpleado.getText().trim().matches(patronNombres)) {
-            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras, espacios o guiones.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras, espacios o guiones.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtNomEmpleado.requestFocus();
             return false;
         }
 
         if (!txtApePatEmpleado.getText().trim().matches(patronNombres)) {
-            JOptionPane.showMessageDialog(this, "El apellido paterno solo debe contener letras, espacios o guiones.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El apellido paterno solo debe contener letras, espacios o guiones.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtApePatEmpleado.requestFocus();
             return false;
         }
 
         if (!txtApeMatEmpleado.getText().trim().matches(patronNombres)) {
-            JOptionPane.showMessageDialog(this, "El apellido materno solo debe contener letras, espacios o guiones.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El apellido materno solo debe contener letras, espacios o guiones.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtApeMatEmpleado.requestFocus();
             return false;
         }
 
         // Validar teléfono (números, guiones y espacios)
         if (!txtTelEmpleado.getText().trim().matches("^[0-9\\s-]+$")) {
-            JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números, espacios y guiones.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números, espacios y guiones.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtTelEmpleado.requestFocus();
             return false;
         }
 
         // Validar fecha
         if (!validarFecha(txtFechaIngreEmpleado.getText().trim())) {
-            JOptionPane.showMessageDialog(this, "La fecha debe tener el formato DD/MM/YYYY.", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La fecha debe tener el formato DD/MM/YYYY.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtFechaIngreEmpleado.requestFocus();
             return false;
         }
 
         // Validar salario (solo números y punto decimal)
         if (!txtSalario.getText().trim().matches("^\\d+(\\.\\d{1,2})?$")) {
-            JOptionPane.showMessageDialog(this, "El salario debe ser un número válido (puede incluir decimales).", 
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El salario debe ser un número válido (puede incluir decimales).",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtSalario.requestFocus();
             return false;
         }
@@ -356,8 +429,8 @@ public class Empleados extends javax.swing.JFrame {
 
         return true;
     }
-     
-      /**
+
+    /**
      * Valida que la fecha tenga el formato correcto DD/MM/YYYY
      */
     private boolean validarFecha(String fecha) {
@@ -370,40 +443,40 @@ public class Empleados extends javax.swing.JFrame {
             return false;
         }
     }
-    
+
     /**
      * Construye la línea de datos del empleado para guardar
      */
     private String construirLineaEmpleado() {
         StringBuilder linea = new StringBuilder();
-        
+
         linea.append(txtIDEmpleado.getText().trim()).append(";");
         linea.append(txtNomEmpleado.getText().trim()).append(";");
         linea.append(txtApePatEmpleado.getText().trim()).append(";");
         linea.append(txtApeMatEmpleado.getText().trim()).append(";");
         linea.append(txtDirecEmpleado.getText().trim()).append(";");
         linea.append(txtTelEmpleado.getText().trim()).append(";");
-        
+
         // Sexo
         linea.append(rbtnMasculino.isSelected() ? "M" : "F").append(";");
-        
+
         // Departamento (extraer ID)
         String depSeleccionado = (String) cmbDepEmpleado.getSelectedItem();
         String idDep = depSeleccionado.split(" - ")[0];
         linea.append(idDep).append(";");
-        
+
         linea.append(txtFechaIngreEmpleado.getText().trim()).append(";");
-        
+
         // Puesto (extraer ID)
         String puestoSeleccionado = (String) cmbPuestoEmpleado.getSelectedItem();
         String idPuesto = puestoSeleccionado.split(" - ")[0];
         linea.append(idPuesto).append(";");
-        
+
         // Cooperativa
         linea.append(rbtnSi.isSelected() ? "Si" : "No").append(";");
-        
+
         linea.append(txtSalario.getText().trim());
-        
+
         return linea.toString();
     }
 
@@ -471,7 +544,7 @@ public class Empleados extends javax.swing.JFrame {
         panelesBordesRedondeados1.setFocusable(false);
         panelesBordesRedondeados1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         panelesBordesRedondeados1.add(sdrIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 120, 10));
-        panelesBordesRedondeados1.add(sprCampoSalEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 680, 240, 10));
+        panelesBordesRedondeados1.add(sprCampoSalEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 630, 240, 10));
         panelesBordesRedondeados1.add(sprCampoFechaEmpleado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 530, 240, 10));
         panelesBordesRedondeados1.add(sprCampoNomEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 240, 10));
         panelesBordesRedondeados1.add(sprCampoApeMatEmpleado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 240, 10));
@@ -817,7 +890,7 @@ public class Empleados extends javax.swing.JFrame {
         lblSexEmpleado.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         lblSexEmpleado.setForeground(new java.awt.Color(236, 239, 244));
         lblSexEmpleado.setText("Sexo");
-        panelesBordesRedondeados1.add(lblSexEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, -1, -1));
+        panelesBordesRedondeados1.add(lblSexEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 410, -1, -1));
 
         SexoGroup.add(rbtnMasculino);
         rbtnMasculino.setText("Masculino");
@@ -872,15 +945,25 @@ public class Empleados extends javax.swing.JFrame {
         lblCoopEmpleado.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         lblCoopEmpleado.setForeground(new java.awt.Color(236, 239, 244));
         lblCoopEmpleado.setText("Cooperativa");
-        panelesBordesRedondeados1.add(lblCoopEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 610, -1, -1));
+        panelesBordesRedondeados1.add(lblCoopEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 660, -1, -1));
 
         CooperativaGroup.add(rbtnSi);
         rbtnSi.setText("Si");
-        panelesBordesRedondeados1.add(rbtnSi, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 610, -1, -1));
+        rbtnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnSiActionPerformed(evt);
+            }
+        });
+        panelesBordesRedondeados1.add(rbtnSi, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 660, -1, -1));
 
         CooperativaGroup.add(rbtnNo);
         rbtnNo.setText("No");
-        panelesBordesRedondeados1.add(rbtnNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 610, -1, -1));
+        rbtnNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnNoActionPerformed(evt);
+            }
+        });
+        panelesBordesRedondeados1.add(rbtnNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 660, -1, -1));
 
         txtSalario.setBackground(new java.awt.Color(255, 204, 102));
         txtSalario.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
@@ -901,12 +984,12 @@ public class Empleados extends javax.swing.JFrame {
                 txtSalarioKeyTyped(evt);
             }
         });
-        panelesBordesRedondeados1.add(txtSalario, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 650, 240, 40));
+        panelesBordesRedondeados1.add(txtSalario, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 600, 240, 40));
 
         lblSalarioEmpleado.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         lblSalarioEmpleado.setForeground(new java.awt.Color(236, 239, 244));
         lblSalarioEmpleado.setText("Salario");
-        panelesBordesRedondeados1.add(lblSalarioEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 660, -1, -1));
+        panelesBordesRedondeados1.add(lblSalarioEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 610, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -946,7 +1029,7 @@ public class Empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarMousePressed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-         String idEmpleado = txtIDEmpleado.getText().trim();
+        String idEmpleado = txtIDEmpleado.getText().trim();
 
         if (idEmpleado.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese un ID de empleado para eliminar.");
@@ -1000,7 +1083,12 @@ public class Empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-         if (!validarCampos()) {
+        if (!validarCampos()) {
+            return; // Si la validación falla, salir del método
+        }
+
+        // Validar cambio de cooperativa antes de proceder
+        if (!validarCambioCooperativa()) {
             return;
         }
 
@@ -1011,6 +1099,15 @@ public class Empleados extends javax.swing.JFrame {
         if (lineaExistente != null && !encontrado) {
             JOptionPane.showMessageDialog(null, "El empleado ya existe. Use el autocompletado para modificarlo.");
             return;
+        }
+
+        // Si selecciona cooperativa "Si", abrir ventana de gestión
+        if (rbtnSi.isSelected()) {
+            gestionarCooperativa();
+            // Si no se completó el proceso de cooperativa, no continuar
+            if (rbtnNo.isSelected()) {
+                return; // El usuario canceló la cooperativa
+            }
         }
 
         String nuevaLinea = construirLineaEmpleado();
@@ -1080,93 +1177,95 @@ public class Empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDEmpleadoKeyTyped
 
     private void txtIDEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDEmpleadoKeyReleased
-         String idEmpleado = txtIDEmpleado.getText().trim();
+        String idEmpleado = txtIDEmpleado.getText().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaActual = sdf.format(new Date());
 
-    if (idEmpleado.isEmpty()) {
-        // Si el campo ID está vacío, deshabilita y limpia todo
-        limpiarCampos();
-        txtEstado.setText(ESTADO_CREANDO); // Asegura que el estado sea "Creando"
-        habilitarCampos(false); // Deshabilita los campos
-        
-        // Ocultar ambos botones y sus contenedores
-        btnRegistrar.setVisible(false);
-        lblBotonRegistrar.setVisible(false); 
-        btnEliminar.setVisible(false);
-        lblBotonEliminar.setVisible(false);
-        
-        encontrado = false;
-        cadenaAnterior = "";
-        return; // Sal del método
-    }
+        if (idEmpleado.isEmpty()) {
+            // Si el campo ID está vacío, deshabilita y limpia todo
+            limpiarCampos();
+            txtEstado.setText(ESTADO_CREANDO); // Asegura que el estado sea "Creando"
+            habilitarCampos(false); // Deshabilita los campos
 
-    // Asegurarse de que el ID solo contenga números para la búsqueda
-    if (!idEmpleado.matches("^\\d+$")) {
-        JOptionPane.showMessageDialog(this, "El ID solo debe contener números.",
-                "Dato inválido", JOptionPane.WARNING_MESSAGE);
-        limpiarCampos();
-        txtIDEmpleado.setText(idEmpleado); // Mantener el ID inválido para que el usuario lo corrija
-        txtEstado.setText(ESTADO_CREANDO);
-        habilitarCampos(false); // Deshabilita los campos hasta que el ID sea válido
-        
-        // Ocultar ambos botones y sus contenedores
-        btnRegistrar.setVisible(false);
-        lblBotonRegistrar.setVisible(false);
-        btnEliminar.setVisible(false);
-        lblBotonEliminar.setVisible(false);
-        
-        encontrado = false;
-        cadenaAnterior = "";
-        return;
-    }
+            // Ocultar ambos botones y sus contenedores
+            btnRegistrar.setVisible(false);
+            lblBotonRegistrar.setVisible(false);
+            btnEliminar.setVisible(false);
+            lblBotonEliminar.setVisible(false);
 
-    // Realiza la búsqueda
-    String lineaEncontrada = buscarEmpleado(idEmpleado);
+            encontrado = false;
+            cadenaAnterior = "";
+            return; // Sal del método
+        }
 
-    if (lineaEncontrada != null) {
-        // Empleado encontrado: Modo Modificación
-        String[] datos = lineaEncontrada.split(";");
-        cargarDatosEmpleado(datos);
-        txtEstado.setText(ESTADO_MODIFICANDO);
-        habilitarCampos(true); // Habilita los campos para edición
-        
-        btnRegistrar.setText("Modificar"); // Cambia el texto del botón
-        btnRegistrar.setVisible(true); // Asegura que el botón de modificar esté visible
-        lblBotonRegistrar.setVisible(true); // Asegura que su contenedor sea visible
-        
-        btnEliminar.setVisible(true);  // Asegura que el botón de eliminar esté visible
-        lblBotonEliminar.setVisible(true);  // Asegura que su contenedor sea visible
-        
-        encontrado = true;
-        cadenaAnterior = lineaEncontrada;
-    } else {
-        // Empleado NO encontrado: Modo Creación
-        // Limpia todos los campos excepto el ID que ya fue ingresado
-        txtNomEmpleado.setText("");
-        txtApePatEmpleado.setText("");
-        txtApeMatEmpleado.setText("");
-        txtDirecEmpleado.setText("");
-        txtTelEmpleado.setText("");
-        txtFechaIngreEmpleado.setText("");
-        txtSalario.setText("");
+        // Asegurarse de que el ID solo contenga números para la búsqueda
+        if (!idEmpleado.matches("^\\d+$")) {
+            JOptionPane.showMessageDialog(this, "El ID solo debe contener números.",
+                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
+            limpiarCampos();
+            txtIDEmpleado.setText(idEmpleado); // Mantener el ID inválido para que el usuario lo corrija
+            txtEstado.setText(ESTADO_CREANDO);
+            habilitarCampos(false); // Deshabilita los campos hasta que el ID sea válido
 
-        SexoGroup.clearSelection();
-        CooperativaGroup.clearSelection();
-        cmbDepEmpleado.setSelectedIndex(0);
-        cmbPuestoEmpleado.setSelectedIndex(0);
+            // Ocultar ambos botones y sus contenedores
+            btnRegistrar.setVisible(false);
+            lblBotonRegistrar.setVisible(false);
+            btnEliminar.setVisible(false);
+            lblBotonEliminar.setVisible(false);
 
-        txtEstado.setText(ESTADO_CREANDO);
-        habilitarCampos(true); // Habilita los campos para ingresar nuevos datos
-        
-        btnRegistrar.setText("Registrar"); // Asegura el texto original del botón
-        btnRegistrar.setVisible(true); // Asegura que el botón de registrar esté visible
-        lblBotonRegistrar.setVisible(true); // Asegura que su contenedor sea visible
-        
-        btnEliminar.setVisible(false); // Oculta el botón de eliminar para un nuevo registro
-        lblBotonEliminar.setVisible(false); // Oculta su contenedor
-        
-        encontrado = false;
-        cadenaAnterior = ""; // No hay cadena anterior para un nuevo registro
-    }
+            encontrado = false;
+            cadenaAnterior = "";
+            return;
+        }
+
+        // Realiza la búsqueda
+        String lineaEncontrada = buscarEmpleado(idEmpleado);
+
+        if (lineaEncontrada != null) {
+            // Empleado encontrado: Modo Modificación
+            String[] datos = lineaEncontrada.split(";");
+            cargarDatosEmpleado(datos);
+            txtEstado.setText(ESTADO_MODIFICANDO);
+            habilitarCampos(true); // Habilita los campos para edición
+
+            btnRegistrar.setText("Modificar"); // Cambia el texto del botón
+            btnRegistrar.setVisible(true); // Asegura que el botón de modificar esté visible
+            lblBotonRegistrar.setVisible(true); // Asegura que su contenedor sea visible
+
+            btnEliminar.setVisible(true);  // Asegura que el botón de eliminar esté visible
+            lblBotonEliminar.setVisible(true);  // Asegura que su contenedor sea visible
+
+            encontrado = true;
+            cadenaAnterior = lineaEncontrada;
+        } else {
+            // Empleado NO encontrado: Modo Creación
+            // Limpia todos los campos excepto el ID que ya fue ingresado
+            txtNomEmpleado.setText("");
+            txtApePatEmpleado.setText("");
+            txtApeMatEmpleado.setText("");
+            txtDirecEmpleado.setText("");
+            txtTelEmpleado.setText("");
+            txtFechaIngreEmpleado.setText(fechaActual);
+            txtSalario.setText("");
+
+            SexoGroup.clearSelection();
+            CooperativaGroup.clearSelection();
+            cmbDepEmpleado.setSelectedIndex(0);
+            cmbPuestoEmpleado.setSelectedIndex(0);
+
+            txtEstado.setText(ESTADO_CREANDO);
+            habilitarCampos(true); // Habilita los campos para ingresar nuevos datos
+
+            btnRegistrar.setText("Registrar"); // Asegura el texto original del botón
+            btnRegistrar.setVisible(true); // Asegura que el botón de registrar esté visible
+            lblBotonRegistrar.setVisible(true); // Asegura que su contenedor sea visible
+
+            btnEliminar.setVisible(false); // Oculta el botón de eliminar para un nuevo registro
+            lblBotonEliminar.setVisible(false); // Oculta su contenedor
+
+            encontrado = false;
+            cadenaAnterior = ""; // No hay cadena anterior para un nuevo registro
+        }
     }//GEN-LAST:event_txtIDEmpleadoKeyReleased
 
     private void txtApePatEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApePatEmpleadoActionPerformed
@@ -1239,7 +1338,37 @@ public class Empleados extends javax.swing.JFrame {
 
     private void txtSalarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSalarioKeyTyped
         // TODO add your handling code here:
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                String salarioText = txtSalario.getText().trim();
+                boolean tieneSalario = !salarioText.isEmpty();
+
+                // Solo permitir seleccionar cooperativa si hay salario
+                if (!tieneSalario && rbtnSi.isSelected()) {
+                    rbtnNo.setSelected(true);
+                }
+            }
+        });
     }//GEN-LAST:event_txtSalarioKeyTyped
+
+    private void rbtnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnSiActionPerformed
+        String salarioText = txtSalario.getText().trim();
+        if (salarioText.isEmpty() && !txtIDEmpleado.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar un salario antes de seleccionar cooperativa.",
+                    "Salario requerido", JOptionPane.WARNING_MESSAGE);
+            rbtnNo.setSelected(true);
+            txtSalario.requestFocus();
+        } else if (!salarioText.isEmpty()) {
+            // Si hay salario, abrir inmediatamente el diálogo
+            gestionarCooperativa();
+        }
+    }//GEN-LAST:event_rbtnSiActionPerformed
+
+    private void rbtnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNoActionPerformed
+        // TODO add your handling code here:
+        validarCambioCooperativa();
+    }//GEN-LAST:event_rbtnNoActionPerformed
 
     /**
      * @param args the command line arguments
