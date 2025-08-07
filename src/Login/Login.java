@@ -82,23 +82,23 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlFondo = new org.netbeans.modules.form.InvalidComponent();
-        pnlImagenFondo = new org.netbeans.modules.form.InvalidComponent();
+        pnlFondo = new Utilidades.PanelesBordesRedondeados();
+        pnlImagenFondo = new Utilidades.PanelesBordesRedondeados();
         txtImagenFondo = new javax.swing.JLabel();
-        pnlFormularioLogin = new org.netbeans.modules.form.InvalidComponent();
+        pnlFormularioLogin = new Utilidades.PanelesBordesRedondeados();
         sdrCampoContrasenia = new javax.swing.JSeparator();
         pwdContrasenia = new javax.swing.JPasswordField();
         sdrCampoUsuario = new javax.swing.JSeparator();
         txtUsuario = new javax.swing.JTextField();
         btnMostrarContrasenia = new javax.swing.JButton();
-        pnlBotonIniciarSesion = new org.netbeans.modules.form.InvalidComponent();
+        pnlBotonIniciarSesion = new Utilidades.PanelesBordesRedondeados();
         btnInicioSesion = new javax.swing.JButton();
         txtUserPwd = new javax.swing.JLabel();
         txtUserAcc = new javax.swing.JLabel();
-        pntlIconoUsuario = new org.netbeans.modules.form.InvalidComponent();
+        pntlIconoUsuario = new Utilidades.PanelesBordesRedondeados();
         txtUserIcon = new javax.swing.JLabel();
-        pnlBarraTitulo = new org.netbeans.modules.form.InvalidComponent();
-        pnlBotonSalir = new org.netbeans.modules.form.InvalidComponent();
+        pnlBarraTitulo = new Utilidades.PanelesBordesRedondeados();
+        pnlBotonSalir = new Utilidades.PanelesBordesRedondeados();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(46, 52, 64));
@@ -107,13 +107,27 @@ public class Login extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        pnlFondo.setBackground(new java.awt.Color(46, 52, 64));
+        pnlFondo.setRoundBottomLeft(30);
+        pnlFondo.setRoundBottomRight(30);
+        pnlFondo.setRoundTopLeft(30);
+        pnlFondo.setRoundTopRight(30);
         pnlFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        pnlImagenFondo.setRoundBottomLeft(20);
+        pnlImagenFondo.setRoundBottomRight(20);
+        pnlImagenFondo.setRoundTopLeft(20);
+        pnlImagenFondo.setRoundTopRight(20);
         pnlImagenFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         pnlImagenFondo.add(txtImagenFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 490));
 
         pnlFondo.add(pnlImagenFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 470, 490));
 
+        pnlFormularioLogin.setBackground(new java.awt.Color(67, 76, 94));
+        pnlFormularioLogin.setRoundBottomLeft(20);
+        pnlFormularioLogin.setRoundBottomRight(20);
+        pnlFormularioLogin.setRoundTopLeft(20);
+        pnlFormularioLogin.setRoundTopRight(20);
         pnlFormularioLogin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         pnlFormularioLogin.add(sdrCampoContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 123, 240, 10));
 
@@ -177,6 +191,12 @@ public class Login extends javax.swing.JFrame {
         });
         pnlFormularioLogin.add(btnMostrarContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 40, 40));
 
+        pnlBotonIniciarSesion.setBackground(new java.awt.Color(59, 66, 82));
+        pnlBotonIniciarSesion.setRoundBottomLeft(20);
+        pnlBotonIniciarSesion.setRoundBottomRight(20);
+        pnlBotonIniciarSesion.setRoundTopLeft(20);
+        pnlBotonIniciarSesion.setRoundTopRight(20);
+
         btnInicioSesion.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         btnInicioSesion.setForeground(new java.awt.Color(204, 204, 204));
         btnInicioSesion.setText("Iniciar Sesión");
@@ -223,12 +243,46 @@ public class Login extends javax.swing.JFrame {
 
         pnlFondo.add(pnlFormularioLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 380, 360));
 
+        pntlIconoUsuario.setBackground(new java.awt.Color(76, 86, 106));
+        pntlIconoUsuario.setPreferredSize(new java.awt.Dimension(125, 125));
+        pntlIconoUsuario.setRoundBottomLeft(125);
+        pntlIconoUsuario.setRoundBottomRight(125);
+        pntlIconoUsuario.setRoundTopLeft(125);
+        pntlIconoUsuario.setRoundTopRight(125);
         pntlIconoUsuario.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         pntlIconoUsuario.add(txtUserIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 110));
 
         pnlFondo.add(pntlIconoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 70, 110, 110));
 
+        pnlBarraTitulo.setBackground(new java.awt.Color(59, 66, 82));
+        pnlBarraTitulo.setRoundTopLeft(30);
+        pnlBarraTitulo.setRoundTopRight(30);
+        pnlBarraTitulo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                pnlBarraTituloMouseDragged(evt);
+            }
+        });
+        pnlBarraTitulo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlBarraTituloMousePressed(evt);
+            }
+        });
         pnlBarraTitulo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        pnlBotonSalir.setBackground(new java.awt.Color(191, 97, 106));
+        pnlBotonSalir.setPreferredSize(new java.awt.Dimension(20, 20));
+        pnlBotonSalir.setRoundBottomLeft(20);
+        pnlBotonSalir.setRoundBottomRight(20);
+        pnlBotonSalir.setRoundTopLeft(20);
+        pnlBotonSalir.setRoundTopRight(20);
+        pnlBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBotonSalirMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlBotonSalirMouseEntered(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlBotonSalirLayout = new javax.swing.GroupLayout(pnlBotonSalir);
         pnlBotonSalir.setLayout(pnlBotonSalirLayout);
@@ -307,6 +361,91 @@ public class Login extends javax.swing.JFrame {
         return false;
     }
 
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !txtUsuario.getText().isEmpty()) {
+            pwdContrasenia.requestFocus();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyPressed
+
+    private void pwdContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdContraseniaActionPerformed
+
+    }//GEN-LAST:event_pwdContraseniaActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+
+        pwdContrasenia.setEnabled(!txtUsuario.getText().isEmpty());
+
+        validarCampos();
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
+        if (iniciarSesion()) {
+            this.dispose();
+
+            Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
+            MenuPrincipal.setVisible(true);
+        }
+    }//GEN-LAST:event_btnInicioSesionActionPerformed
+
+    private void pwdContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyTyped
+        String contrasenia = new String(pwdContrasenia.getPassword());
+        btnMostrarContrasenia.setEnabled(!contrasenia.isEmpty());
+        
+        if(!contrasenia.isEmpty()) {
+            pnlBotonIniciarSesion.setBackground(new Color(143, 188, 187));
+            btnInicioSesion.setForeground(new Color(236, 239, 244));
+        } else {
+            pnlBotonIniciarSesion.setBackground(new Color(59, 66, 82));
+            btnInicioSesion.setForeground(new Color(204,204,204));
+        }
+
+        validarCampos();
+    }//GEN-LAST:event_pwdContraseniaKeyTyped
+
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
+
+    private void pwdContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
+            if (iniciarSesion()) {
+                this.dispose();
+
+                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
+                MenuPrincipal.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_pwdContraseniaKeyPressed
+
+    private void btnMostrarContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaActionPerformed
+
+
+    }//GEN-LAST:event_btnMostrarContraseniaActionPerformed
+
+    private void btnMostrarContraseniaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMousePressed
+        String contrasenia = new String(pwdContrasenia.getPassword());
+        if(!contrasenia.isEmpty()) {
+            pwdContrasenia.setEchoChar((char) 0);
+            btnMostrarContrasenia.setIcon(iconoPresionado);
+        }
+    }//GEN-LAST:event_btnMostrarContraseniaMousePressed
+
+    private void btnMostrarContraseniaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMouseReleased
+        pwdContrasenia.setEchoChar('•');
+        btnMostrarContrasenia.setIcon(iconoNormal);
+    }//GEN-LAST:event_btnMostrarContraseniaMouseReleased
+
+    private void btnInicioSesionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnInicioSesionKeyTyped
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
+            if (iniciarSesion()) {
+                this.dispose();
+
+                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
+                MenuPrincipal.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnInicioSesionKeyTyped
+
     private void pnlBotonSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonSalirMouseClicked
         System.exit(0);
     }//GEN-LAST:event_pnlBotonSalirMouseClicked
@@ -328,97 +467,13 @@ public class Login extends javax.swing.JFrame {
         yMouse = evt.getY();
     }//GEN-LAST:event_pnlBarraTituloMousePressed
 
-    private void btnMostrarContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaActionPerformed
+    private void btnInicioSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesionMouseClicked
 
-    }//GEN-LAST:event_btnMostrarContraseniaActionPerformed
-
-    private void btnMostrarContraseniaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMouseReleased
-        pwdContrasenia.setEchoChar('•');
-        btnMostrarContrasenia.setIcon(iconoNormal);
-    }//GEN-LAST:event_btnMostrarContraseniaMouseReleased
-
-    private void btnMostrarContraseniaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarContraseniaMousePressed
-        String contrasenia = new String(pwdContrasenia.getPassword());
-        if(!contrasenia.isEmpty()) {
-            pwdContrasenia.setEchoChar((char) 0);
-            btnMostrarContrasenia.setIcon(iconoPresionado);
-        }
-    }//GEN-LAST:event_btnMostrarContraseniaMousePressed
-
-    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
-
-        pwdContrasenia.setEnabled(!txtUsuario.getText().isEmpty());
-
-        validarCampos();
-    }//GEN-LAST:event_txtUsuarioKeyTyped
-
-    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !txtUsuario.getText().isEmpty()) {
-            pwdContrasenia.requestFocus();
-        }
-    }//GEN-LAST:event_txtUsuarioKeyPressed
-
-    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuarioActionPerformed
-
-    private void pwdContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyTyped
-        String contrasenia = new String(pwdContrasenia.getPassword());
-        btnMostrarContrasenia.setEnabled(!contrasenia.isEmpty());
-
-        if(!contrasenia.isEmpty()) {
-            pnlBotonIniciarSesion.setBackground(new Color(143, 188, 187));
-            btnInicioSesion.setForeground(new Color(236, 239, 244));
-        } else {
-            pnlBotonIniciarSesion.setBackground(new Color(59, 66, 82));
-            btnInicioSesion.setForeground(new Color(204,204,204));
-        }
-
-        validarCampos();
-    }//GEN-LAST:event_pwdContraseniaKeyTyped
-
-    private void pwdContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdContraseniaKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
-            if (iniciarSesion()) {
-                this.dispose();
-
-                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
-                MenuPrincipal.setVisible(true);
-            }
-        }
-    }//GEN-LAST:event_pwdContraseniaKeyPressed
-
-    private void pwdContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdContraseniaActionPerformed
-
-    }//GEN-LAST:event_pwdContraseniaActionPerformed
-
-    private void btnInicioSesionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnInicioSesionKeyTyped
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && !pwdContrasenia.getText().isEmpty()) {
-            if (iniciarSesion()) {
-                this.dispose();
-
-                Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
-                MenuPrincipal.setVisible(true);
-            }
-        }
-    }//GEN-LAST:event_btnInicioSesionKeyTyped
-
-    private void btnInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioSesionActionPerformed
-        if (iniciarSesion()) {
-            this.dispose();
-
-            Inicio MenuPrincipal = new Inicio(rolUsuarioActual);
-            MenuPrincipal.setVisible(true);
-        }
-    }//GEN-LAST:event_btnInicioSesionActionPerformed
+    }//GEN-LAST:event_btnInicioSesionMouseClicked
 
     private void btnInicioSesionMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesionMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnInicioSesionMousePressed
-
-    private void btnInicioSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesionMouseClicked
-
-    }//GEN-LAST:event_btnInicioSesionMouseClicked
 
     /**
      * @param args the command line arguments
@@ -473,13 +528,13 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicioSesion;
     private javax.swing.JButton btnMostrarContrasenia;
-    private org.netbeans.modules.form.InvalidComponent pnlBarraTitulo;
-    private org.netbeans.modules.form.InvalidComponent pnlBotonIniciarSesion;
-    private org.netbeans.modules.form.InvalidComponent pnlBotonSalir;
-    private org.netbeans.modules.form.InvalidComponent pnlFondo;
-    private org.netbeans.modules.form.InvalidComponent pnlFormularioLogin;
-    private org.netbeans.modules.form.InvalidComponent pnlImagenFondo;
-    private org.netbeans.modules.form.InvalidComponent pntlIconoUsuario;
+    private Utilidades.PanelesBordesRedondeados pnlBarraTitulo;
+    private Utilidades.PanelesBordesRedondeados pnlBotonIniciarSesion;
+    private Utilidades.PanelesBordesRedondeados pnlBotonSalir;
+    private Utilidades.PanelesBordesRedondeados pnlFondo;
+    private Utilidades.PanelesBordesRedondeados pnlFormularioLogin;
+    private Utilidades.PanelesBordesRedondeados pnlImagenFondo;
+    private Utilidades.PanelesBordesRedondeados pntlIconoUsuario;
     private javax.swing.JPasswordField pwdContrasenia;
     private javax.swing.JSeparator sdrCampoContrasenia;
     private javax.swing.JSeparator sdrCampoUsuario;
