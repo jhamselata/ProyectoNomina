@@ -21,6 +21,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -37,6 +41,26 @@ import javax.swing.JPopupMenu;
  */
 public class Inicio extends javax.swing.JFrame {
 
+private void configurarCalendario() {
+    // Configurar el listener del JDateChooser
+    jdcFecha.addPropertyChangeListener("date", new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            Date fechaSeleccionada = jdcFecha.getDate();
+            if (fechaSeleccionada != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                txtBusquedaEmpleados.setText(sdf.format(fechaSeleccionada));
+            } else {
+                txtBusquedaEmpleados.setText("");
+            }
+        }
+    });
+    
+    // Opcional: Configurar formato de fecha para el calendario
+    jdcFecha.setDateFormatString("MM/dd/yyyy");
+}
+    
+    
     private String rolUsuario;
     
     
@@ -368,6 +392,10 @@ public class Inicio extends javax.swing.JFrame {
         initComponents();
 
         configurarImagenFondo();
+        
+        configurarCalendario();
+        
+        jdcFecha.setEnabled(false);
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
@@ -470,6 +498,8 @@ public class Inicio extends javax.swing.JFrame {
         filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
         cbbxFiltroEmpleados = new javax.swing.JComboBox<>();
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
+        jdcFecha = new com.toedter.calendar.JDateChooser();
         pnlTablaEmpleados = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblEmpleados = new javax.swing.JTable();
@@ -925,12 +955,21 @@ public class Inicio extends javax.swing.JFrame {
         pnlOpcionesConsultaEmpleados.add(filler11);
 
         cbbxFiltroEmpleados.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbbxFiltroEmpleados.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbxFiltroEmpleadosItemStateChanged(evt);
+            }
+        });
         cbbxFiltroEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbxFiltroEmpleadosActionPerformed(evt);
             }
         });
         pnlOpcionesConsultaEmpleados.add(cbbxFiltroEmpleados);
+        pnlOpcionesConsultaEmpleados.add(filler12);
+
+        jdcFecha.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        pnlOpcionesConsultaEmpleados.add(jdcFecha);
 
         pnlBarraopcionesEmpleados.add(pnlOpcionesConsultaEmpleados, java.awt.BorderLayout.CENTER);
 
@@ -1059,7 +1098,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBusquedaEmpleadosKeyTyped
 
     private void cbbxFiltroEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroEmpleadosActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_cbbxFiltroEmpleadosActionPerformed
 
     private void btnProcesosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesosMenuActionPerformed
@@ -1130,6 +1169,22 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_pnlBotonInicioMouseEntered
 
+    private void cbbxFiltroEmpleadosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbxFiltroEmpleadosItemStateChanged
+        String filtroSeleccionado = (String) cbbxFiltroEmpleados.getSelectedItem();
+        
+        if(filtroSeleccionado.equals("Fecha de Ingreso")){
+            jdcFecha.setEnabled(true);
+            txtBusquedaEmpleados.setEditable(false);
+            txtBusquedaEmpleados.setFocusable(false);
+        } else {
+            jdcFecha.setEnabled(false);
+            txtBusquedaEmpleados.setEditable(true);
+            txtBusquedaEmpleados.setFocusable(true);
+            txtBusquedaEmpleados.requestFocus();
+
+        }
+    }//GEN-LAST:event_cbbxFiltroEmpleadosItemStateChanged
+
 
     /**
      * @param args the command line arguments
@@ -1178,6 +1233,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -1189,6 +1245,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private com.toedter.calendar.JDateChooser jdcFecha;
     private javax.swing.JPanel pnlBarraLateralIzq;
     private javax.swing.JPanel pnlBarraSuperior;
     private javax.swing.JPanel pnlBarraopcionesDepartamentos;

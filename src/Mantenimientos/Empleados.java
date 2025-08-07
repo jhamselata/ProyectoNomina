@@ -51,7 +51,6 @@ public class Empleados extends javax.swing.JFrame {
         btnEliminar.setVisible(false);
         lblBotonRegistrar.setVisible(false);
         lblBotonEliminar.setVisible(false);
-        txtFechaIngreEmpleado.setEditable(false);
 
         establecerFechaActual();
         cooperativaConfiguracionCompletada = false; 
@@ -143,10 +142,16 @@ public class Empleados extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void establecerFechaActual() {
+    jdcFecha.setDate(new Date()); // Establece la fecha actual por defecto
+}
 
     /**
      * Configura los campos con fondo transparente
      */
+    
+
     private void configurarCamposTransparentes() {
         Color transparente = new Color(0, 0, 0, 0);
         txtIDEmpleado.setBackground(transparente);
@@ -155,7 +160,6 @@ public class Empleados extends javax.swing.JFrame {
         txtApeMatEmpleado.setBackground(transparente);
         txtDirecEmpleado.setBackground(transparente);
         txtTelEmpleado.setBackground(transparente);
-        txtFechaIngreEmpleado.setBackground(transparente);
         txtSalario.setBackground(transparente);
         txtEstado.setBackground(transparente);
     }
@@ -252,7 +256,7 @@ public class Empleados extends javax.swing.JFrame {
         rbtnMasculino.setEnabled(habilitar);
         rbtnFemenino.setEnabled(habilitar);
         cmbDepEmpleado.setEnabled(habilitar);
-        txtFechaIngreEmpleado.setEnabled(habilitar);
+        jdcFecha.setEnabled(habilitar);
         cmbPuestoEmpleado.setEnabled(habilitar);
         rbtnSi.setEnabled(habilitar);
         rbtnNo.setEnabled(habilitar);
@@ -288,12 +292,6 @@ public class Empleados extends javax.swing.JFrame {
         cooperativaConfiguracionCompletada = false; 
     }
 
-    private void establecerFechaActual() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaActual = sdf.format(new Date());
-        txtFechaIngreEmpleado.setText(fechaActual);
-    }
-
     /**
      * Carga los datos de un empleado en el formulario
      *
@@ -317,7 +315,15 @@ public class Empleados extends javax.swing.JFrame {
             // Departamento - buscar y seleccionar
             seleccionarComboBoxPorId(cmbDepEmpleado, datos[7]);
 
-            txtFechaIngreEmpleado.setText(datos[8]);
+            try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date fecha = sdf.parse(datos[8]);
+            jdcFecha.setDate(fecha);
+        } catch (ParseException e) {
+            // Si hay error al parsear, establecer fecha actual
+            jdcFecha.setDate(new Date());
+            System.err.println("Error al parsear fecha: " + datos[8]);
+        }
 
             // Puesto - buscar y seleccionar
             seleccionarComboBoxPorId(cmbPuestoEmpleado, datos[9]);
@@ -357,7 +363,7 @@ public class Empleados extends javax.swing.JFrame {
                 || txtApeMatEmpleado.getText().trim().isEmpty()
                 || txtDirecEmpleado.getText().trim().isEmpty()
                 || txtTelEmpleado.getText().trim().isEmpty()
-                || txtFechaIngreEmpleado.getText().trim().isEmpty()
+                || jdcFecha.getDate() == null
                 || txtSalario.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
@@ -401,14 +407,6 @@ public class Empleados extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números, espacios y guiones.",
                     "Dato inválido", JOptionPane.WARNING_MESSAGE);
             txtTelEmpleado.requestFocus();
-            return false;
-        }
-
-        // Validar fecha
-        if (!validarFecha(txtFechaIngreEmpleado.getText().trim())) {
-            JOptionPane.showMessageDialog(this, "La fecha debe tener el formato DD/MM/YYYY.",
-                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
-            txtFechaIngreEmpleado.requestFocus();
             return false;
         }
 
@@ -463,6 +461,8 @@ public class Empleados extends javax.swing.JFrame {
      */
     private String construirLineaEmpleado() {
         StringBuilder linea = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = sdf.format(jdcFecha.getDate());
 
         linea.append(txtIDEmpleado.getText().trim()).append(";");
         linea.append(txtNomEmpleado.getText().trim()).append(";");
@@ -479,7 +479,7 @@ public class Empleados extends javax.swing.JFrame {
         String idDep = depSeleccionado.split(" - ")[0];
         linea.append(idDep).append(";");
 
-        linea.append(txtFechaIngreEmpleado.getText().trim()).append(";");
+        linea.append(fechaFormateada).append(";"); // Fecha formateada
 
         // Puesto (extraer ID)
         String puestoSeleccionado = (String) cmbPuestoEmpleado.getSelectedItem();
@@ -508,7 +508,6 @@ public class Empleados extends javax.swing.JFrame {
         panelesBordesRedondeados1 = new Utilidades.PanelesBordesRedondeados();
         sdrIDDep = new javax.swing.JSeparator();
         sprCampoSalEmpleado = new javax.swing.JSeparator();
-        sprCampoFechaEmpleado1 = new javax.swing.JSeparator();
         sprCampoNomEmpleado = new javax.swing.JSeparator();
         sprCampoApeMatEmpleado1 = new javax.swing.JSeparator();
         sprCampoDireEmpleado1 = new javax.swing.JSeparator();
@@ -540,7 +539,6 @@ public class Empleados extends javax.swing.JFrame {
         lblDepEmpleado = new javax.swing.JLabel();
         cmbDepEmpleado = new javax.swing.JComboBox<>();
         lblFechaEmpleado = new javax.swing.JLabel();
-        txtFechaIngreEmpleado = new javax.swing.JTextField();
         lblPuestoEmpleado = new javax.swing.JLabel();
         cmbPuestoEmpleado = new javax.swing.JComboBox<>();
         lblCoopEmpleado = new javax.swing.JLabel();
@@ -548,6 +546,7 @@ public class Empleados extends javax.swing.JFrame {
         rbtnNo = new javax.swing.JRadioButton();
         txtSalario = new javax.swing.JTextField();
         lblSalarioEmpleado = new javax.swing.JLabel();
+        jdcFecha = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -559,7 +558,6 @@ public class Empleados extends javax.swing.JFrame {
         panelesBordesRedondeados1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         panelesBordesRedondeados1.add(sdrIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 120, 10));
         panelesBordesRedondeados1.add(sprCampoSalEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 630, 240, 10));
-        panelesBordesRedondeados1.add(sprCampoFechaEmpleado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 530, 240, 10));
         panelesBordesRedondeados1.add(sprCampoNomEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 240, 10));
         panelesBordesRedondeados1.add(sprCampoApeMatEmpleado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 240, 10));
         panelesBordesRedondeados1.add(sprCampoDireEmpleado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 240, 10));
@@ -927,27 +925,6 @@ public class Empleados extends javax.swing.JFrame {
         lblFechaEmpleado.setText("Fecha de ingreso");
         panelesBordesRedondeados1.add(lblFechaEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 510, -1, -1));
 
-        txtFechaIngreEmpleado.setBackground(new java.awt.Color(255, 204, 102));
-        txtFechaIngreEmpleado.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        txtFechaIngreEmpleado.setForeground(new java.awt.Color(236, 239, 244));
-        txtFechaIngreEmpleado.setBorder(null);
-        txtFechaIngreEmpleado.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        txtFechaIngreEmpleado.setName(""); // NOI18N
-        txtFechaIngreEmpleado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaIngreEmpleadoActionPerformed(evt);
-            }
-        });
-        txtFechaIngreEmpleado.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtFechaIngreEmpleadoKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFechaIngreEmpleadoKeyTyped(evt);
-            }
-        });
-        panelesBordesRedondeados1.add(txtFechaIngreEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 240, 40));
-
         lblPuestoEmpleado.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         lblPuestoEmpleado.setForeground(new java.awt.Color(236, 239, 244));
         lblPuestoEmpleado.setText("Puesto");
@@ -1004,6 +981,9 @@ public class Empleados extends javax.swing.JFrame {
         lblSalarioEmpleado.setForeground(new java.awt.Color(236, 239, 244));
         lblSalarioEmpleado.setText("Salario");
         panelesBordesRedondeados1.add(lblSalarioEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 610, -1, -1));
+
+        jdcFecha.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        panelesBordesRedondeados1.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 240, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1248,7 +1228,6 @@ public class Empleados extends javax.swing.JFrame {
             txtApeMatEmpleado.setText("");
             txtDirecEmpleado.setText("");
             txtTelEmpleado.setText("");
-            txtFechaIngreEmpleado.setText(fechaActual);
             txtSalario.setText("");
 
             SexoGroup.clearSelection();
@@ -1318,18 +1297,6 @@ public class Empleados extends javax.swing.JFrame {
     private void txtTelEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelEmpleadoKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelEmpleadoKeyTyped
-
-    private void txtFechaIngreEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaIngreEmpleadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaIngreEmpleadoActionPerformed
-
-    private void txtFechaIngreEmpleadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaIngreEmpleadoKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaIngreEmpleadoKeyPressed
-
-    private void txtFechaIngreEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaIngreEmpleadoKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaIngreEmpleadoKeyTyped
 
     private void txtSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSalarioActionPerformed
         // TODO add your handling code here:
@@ -1413,6 +1380,7 @@ public class Empleados extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cmbDepEmpleado;
     private javax.swing.JComboBox<String> cmbPuestoEmpleado;
+    private com.toedter.calendar.JDateChooser jdcFecha;
     private javax.swing.JLabel lblApeMatEmpleado;
     private javax.swing.JLabel lblApePatEmpleado;
     private Utilidades.PanelesBordesRedondeados lblBotonEliminar;
@@ -1438,7 +1406,6 @@ public class Empleados extends javax.swing.JFrame {
     private javax.swing.JSeparator sprCampoApeMatEmpleado1;
     private javax.swing.JSeparator sprCampoApePatEmpleado;
     private javax.swing.JSeparator sprCampoDireEmpleado1;
-    private javax.swing.JSeparator sprCampoFechaEmpleado1;
     private javax.swing.JSeparator sprCampoNomEmpleado;
     private javax.swing.JSeparator sprCampoSalEmpleado;
     private javax.swing.JSeparator sprCampoTelEmpleado1;
@@ -1446,7 +1413,6 @@ public class Empleados extends javax.swing.JFrame {
     private javax.swing.JTextField txtApePatEmpleado;
     private javax.swing.JTextField txtDirecEmpleado;
     private javax.swing.JTextField txtEstado;
-    private javax.swing.JTextField txtFechaIngreEmpleado;
     private javax.swing.JTextField txtIDEmpleado;
     private javax.swing.JTextField txtNomEmpleado;
     private javax.swing.JTextField txtSalario;
