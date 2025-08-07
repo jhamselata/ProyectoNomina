@@ -1358,21 +1358,10 @@ public class Empleados extends javax.swing.JFrame {
 
     private void rbtnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnSiActionPerformed
         if (rbtnSi.isSelected()) {
-            // Caso 1: Estás en modo "Creando" O estás en modo "Modificando" y el empleado NO fue cargado como "Si" en cooperativa
-            // En estos casos, siempre queremos abrir el diálogo si se selecciona "Si"
-            if (txtEstado.getText().equals(ESTADO_CREANDO) || !cooperativaConfiguracionCompletada) {
-                gestionarCooperativa();
-                // La bandera cooperativaConfiguracionCompletada se actualiza dentro de gestionarCooperativa()
-                // según si el proceso fue exitoso o cancelado.
-            } // Caso 2: Estás en modo "Modificando" Y el empleado FUE cargado como "Si" en cooperativa
-            // En este caso, si el usuario vuelve a presionar "Si", también queremos que el diálogo se abra.
-            else if (txtEstado.getText().equals(ESTADO_MODIFICANDO) && encontrado && rbtnSi.isSelected()) {
-                // Forzamos la apertura del diálogo si el usuario vuelve a presionar "Si"
-                // Esto permite re-configurar o revisar la información de la cooperativa
-                gestionarCooperativa();
-                // La bandera cooperativaConfiguracionCompletada se actualiza dentro de gestionarCooperativa()
-                // según si el proceso fue exitoso o cancelado.
-            }
+            // Siempre que se seleccione "Si", intentamos gestionar la cooperativa.
+            // La lógica para abrir/no abrir el diálogo si ya está configurado
+            // y las validaciones de salario se manejan dentro de gestionarCooperativa().
+            gestionarCooperativa();
         }
     }//GEN-LAST:event_rbtnSiActionPerformed
 
