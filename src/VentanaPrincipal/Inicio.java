@@ -32,6 +32,9 @@ public class Inicio extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
+    private void UnaVentanaAlaVez() {};
+    
+    
     private void abrirVentanaUsuarios() {
         if (ventanaUsuarios == null || !ventanaUsuarios.isDisplayable()) {
             ventanaUsuarios = new Usuarios();
