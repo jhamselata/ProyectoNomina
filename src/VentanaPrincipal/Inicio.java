@@ -8,19 +8,24 @@ import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
+import static Utilidades.cargarDatosenTabla.activarFiltro;
 import static Utilidades.cargarDatosenTabla.cargarEnTabla;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 /**
@@ -34,11 +39,6 @@ public class Inicio extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-    private void UnaVentanaAlaVez() {
-    }
-
-    ;
-    
     
     private void abrirVentanaUsuarios() {
         if (ventanaUsuarios == null || !ventanaUsuarios.isDisplayable()) {
@@ -113,6 +113,7 @@ public class Inicio extends javax.swing.JFrame {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "DEPARTAMENTOS");
             cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
+            activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
         }));
 
         // Menú para mostrar panel de puestos
@@ -120,10 +121,16 @@ public class Inicio extends javax.swing.JFrame {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "PUESTOS");
             cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
+            activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
         }));
 
         // Si quieres mostrar Empleados en panel o ventana, elige una
-        popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> abrirVentanaEmpleados()));
+        popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "EMPLEADOS");
+            cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
+            activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
+        }));
     }
 
     public void popUpMenu() {
@@ -179,10 +186,55 @@ public class Inicio extends javax.swing.JFrame {
         menu.show(componente, 200, componente.getHeight() - 50);
     }
 
-    public Inicio(String rol) {
+    private void configurarImagenFondo() {
+    // Crear un panel personalizado con imagen de fondo
+    JPanel panelConFondo = new JPanel() {
+        private Image imagenFondo;
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            // Cargar la imagen si no está cargada
+            if (imagenFondo == null) {
+                try {
+                    imagenFondo = new ImageIcon(getClass().getResource("/Imágenes/ImagenFondoPrincipal.png")).getImage();
+                } catch (Exception e) {
+                    System.err.println("No se pudo cargar la imagen de fondo: " + e.getMessage());
+                    return;
+                }
+            }
+            
+            // Dibujar la imagen escalada al tamaño del panel
+            if (imagenFondo != null) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+                g2d.dispose();
+            }
+        }
+    };
+    
+    // Establecer el layout del panel con fondo
+    panelConFondo.setLayout(new BorderLayout());
+    
+    // Reemplazar el contenido de pnlVacio
+    pnlVacio.removeAll();
+    pnlVacio.setLayout(new BorderLayout());
+    pnlVacio.add(panelConFondo, BorderLayout.CENTER);
+    pnlVacio.revalidate();
+    pnlVacio.repaint();
+}
+    
+    
+    public Inicio(String rol) { 
         initComponents();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); // <-- Mover aquí
-        this.setVisible(true); // <-- Mostrar inmediatamente
+        
+        configurarImagenFondo();
+
+        
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setVisible(true);
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
         this.setIconImage(icono.getImage());
 
@@ -194,6 +246,10 @@ public class Inicio extends javax.swing.JFrame {
         btnProcesosMenu.setBackground(new Color(0, 0, 0, 0));
         btnConsultasMenu.setBackground(new Color(0, 0, 0, 0));
         txtBusquedaDepartamentos.setBackground(new Color(0, 0, 0, 0));
+        txtBusquedaPuestos.setBackground(new Color(0, 0, 0, 0));
+        txtBusquedaEmpleados.setBackground(new Color(0, 0, 0, 0));
+        
+        
         popUpMenu();
         popUpMenuConsultas();
 
@@ -236,11 +292,11 @@ public class Inicio extends javax.swing.JFrame {
         pnlBarraopcionesPuestos = new javax.swing.JPanel();
         pnlOpcionesConsultaDep1 = new javax.swing.JPanel();
         pnlBusquedaDepartamentos1 = new Utilidades.PanelesBordesRedondeados();
-        txtBusquedaDepartamentos1 = new javax.swing.JTextField();
+        txtBusquedaPuestos = new javax.swing.JTextField();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
-        cbbxFiltroBusqueda1 = new javax.swing.JComboBox<>();
+        cbbxFiltroPuestos = new javax.swing.JComboBox<>();
         pnlTablaPuestos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPuestos = new javax.swing.JTable();
@@ -256,9 +312,22 @@ public class Inicio extends javax.swing.JFrame {
         pnlTablaDepartamentos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDepartamentos = new javax.swing.JTable();
+        pnlConsultaEmpleados = new javax.swing.JPanel();
+        pnlBarraopcionesEmpleados = new javax.swing.JPanel();
+        pnlOpcionesConsultaEmpleados = new javax.swing.JPanel();
+        pnlBusquedaDepartamentos2 = new Utilidades.PanelesBordesRedondeados();
+        txtBusquedaEmpleados = new javax.swing.JTextField();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        cbbxFiltroEmpleados = new javax.swing.JComboBox<>();
+        pnlTablaEmpleados = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblEmpleados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlBarraSuperior.setBackground(new java.awt.Color(76, 86, 106));
@@ -303,6 +372,8 @@ public class Inicio extends javax.swing.JFrame {
         });
         pnlBotonMatenimientos.setLayout(new java.awt.BorderLayout());
 
+        btnMantenimientosMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        btnMantenimientosMenu.setForeground(new java.awt.Color(236, 239, 244));
         btnMantenimientosMenu.setText("Mantenimientos");
         btnMantenimientosMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -325,6 +396,8 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonConsultas.setRoundTopRight(20);
         pnlBotonConsultas.setLayout(new java.awt.BorderLayout());
 
+        btnConsultasMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        btnConsultasMenu.setForeground(new java.awt.Color(236, 239, 244));
         btnConsultasMenu.setText("Consultas");
         btnConsultasMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,6 +415,8 @@ public class Inicio extends javax.swing.JFrame {
         pnlBtonProcesos.setRoundTopRight(20);
         pnlBtonProcesos.setLayout(new java.awt.BorderLayout());
 
+        btnProcesosMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        btnProcesosMenu.setForeground(new java.awt.Color(236, 239, 244));
         btnProcesosMenu.setText("Procesos");
         pnlBtonProcesos.add(btnProcesosMenu, java.awt.BorderLayout.CENTER);
 
@@ -380,39 +455,39 @@ public class Inicio extends javax.swing.JFrame {
         pnlBusquedaDepartamentos1.setRoundTopRight(40);
         pnlBusquedaDepartamentos1.setLayout(new java.awt.BorderLayout());
 
-        txtBusquedaDepartamentos1.setBackground(new java.awt.Color(236, 239, 244));
-        txtBusquedaDepartamentos1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        txtBusquedaDepartamentos1.setForeground(new java.awt.Color(236, 239, 244));
-        txtBusquedaDepartamentos1.setBorder(null);
-        txtBusquedaDepartamentos1.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        txtBusquedaDepartamentos1.setName(""); // NOI18N
-        txtBusquedaDepartamentos1.addActionListener(new java.awt.event.ActionListener() {
+        txtBusquedaPuestos.setBackground(new java.awt.Color(236, 239, 244));
+        txtBusquedaPuestos.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtBusquedaPuestos.setForeground(new java.awt.Color(236, 239, 244));
+        txtBusquedaPuestos.setBorder(null);
+        txtBusquedaPuestos.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtBusquedaPuestos.setName(""); // NOI18N
+        txtBusquedaPuestos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBusquedaDepartamentos1ActionPerformed(evt);
+                txtBusquedaPuestosActionPerformed(evt);
             }
         });
-        txtBusquedaDepartamentos1.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtBusquedaPuestos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtBusquedaDepartamentos1KeyPressed(evt);
+                txtBusquedaPuestosKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtBusquedaDepartamentos1KeyTyped(evt);
+                txtBusquedaPuestosKeyTyped(evt);
             }
         });
-        pnlBusquedaDepartamentos1.add(txtBusquedaDepartamentos1, java.awt.BorderLayout.CENTER);
+        pnlBusquedaDepartamentos1.add(txtBusquedaPuestos, java.awt.BorderLayout.CENTER);
         pnlBusquedaDepartamentos1.add(filler6, java.awt.BorderLayout.LINE_END);
         pnlBusquedaDepartamentos1.add(filler7, java.awt.BorderLayout.LINE_START);
 
         pnlOpcionesConsultaDep1.add(pnlBusquedaDepartamentos1);
         pnlOpcionesConsultaDep1.add(filler8);
 
-        cbbxFiltroBusqueda1.setPreferredSize(new java.awt.Dimension(200, 40));
-        cbbxFiltroBusqueda1.addActionListener(new java.awt.event.ActionListener() {
+        cbbxFiltroPuestos.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbbxFiltroPuestos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbxFiltroBusqueda1ActionPerformed(evt);
+                cbbxFiltroPuestosActionPerformed(evt);
             }
         });
-        pnlOpcionesConsultaDep1.add(cbbxFiltroBusqueda1);
+        pnlOpcionesConsultaDep1.add(cbbxFiltroPuestos);
 
         pnlBarraopcionesPuestos.add(pnlOpcionesConsultaDep1, java.awt.BorderLayout.CENTER);
 
@@ -442,7 +517,9 @@ public class Inicio extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblPuestos);
         if (tblPuestos.getColumnModel().getColumnCount() > 0) {
             tblPuestos.getColumnModel().getColumn(0).setResizable(false);
+            tblPuestos.getColumnModel().getColumn(0).setHeaderValue("ID del Departamento");
             tblPuestos.getColumnModel().getColumn(1).setResizable(false);
+            tblPuestos.getColumnModel().getColumn(1).setHeaderValue("Descripción del Departamento");
         }
 
         pnlTablaPuestos.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -528,7 +605,9 @@ public class Inicio extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblDepartamentos);
         if (tblDepartamentos.getColumnModel().getColumnCount() > 0) {
             tblDepartamentos.getColumnModel().getColumn(0).setResizable(false);
+            tblDepartamentos.getColumnModel().getColumn(0).setHeaderValue("ID del Departamento");
             tblDepartamentos.getColumnModel().getColumn(1).setResizable(false);
+            tblDepartamentos.getColumnModel().getColumn(1).setHeaderValue("Descripción del Departamento");
         }
 
         pnlTablaDepartamentos.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -536,6 +615,102 @@ public class Inicio extends javax.swing.JFrame {
         pnlConsultaDepartamentos.add(pnlTablaDepartamentos, java.awt.BorderLayout.CENTER);
 
         pnlContenido.add(pnlConsultaDepartamentos, "DEPARTAMENTOS");
+
+        pnlConsultaEmpleados.setLayout(new java.awt.BorderLayout());
+
+        pnlBarraopcionesEmpleados.setBackground(new java.awt.Color(255, 153, 102));
+        pnlBarraopcionesEmpleados.setLayout(new java.awt.BorderLayout());
+
+        pnlOpcionesConsultaEmpleados.setBackground(new java.awt.Color(59, 66, 82));
+
+        pnlBusquedaDepartamentos2.setBackground(new java.awt.Color(76, 86, 106));
+        pnlBusquedaDepartamentos2.setPreferredSize(new java.awt.Dimension(500, 40));
+        pnlBusquedaDepartamentos2.setRoundBottomLeft(40);
+        pnlBusquedaDepartamentos2.setRoundBottomRight(40);
+        pnlBusquedaDepartamentos2.setRoundTopLeft(40);
+        pnlBusquedaDepartamentos2.setRoundTopRight(40);
+        pnlBusquedaDepartamentos2.setLayout(new java.awt.BorderLayout());
+
+        txtBusquedaEmpleados.setBackground(new java.awt.Color(236, 239, 244));
+        txtBusquedaEmpleados.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtBusquedaEmpleados.setForeground(new java.awt.Color(236, 239, 244));
+        txtBusquedaEmpleados.setBorder(null);
+        txtBusquedaEmpleados.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtBusquedaEmpleados.setName(""); // NOI18N
+        txtBusquedaEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBusquedaEmpleadosActionPerformed(evt);
+            }
+        });
+        txtBusquedaEmpleados.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBusquedaEmpleadosKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaEmpleadosKeyTyped(evt);
+            }
+        });
+        pnlBusquedaDepartamentos2.add(txtBusquedaEmpleados, java.awt.BorderLayout.CENTER);
+        pnlBusquedaDepartamentos2.add(filler9, java.awt.BorderLayout.LINE_END);
+        pnlBusquedaDepartamentos2.add(filler10, java.awt.BorderLayout.LINE_START);
+
+        pnlOpcionesConsultaEmpleados.add(pnlBusquedaDepartamentos2);
+        pnlOpcionesConsultaEmpleados.add(filler11);
+
+        cbbxFiltroEmpleados.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbbxFiltroEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbxFiltroEmpleadosActionPerformed(evt);
+            }
+        });
+        pnlOpcionesConsultaEmpleados.add(cbbxFiltroEmpleados);
+
+        pnlBarraopcionesEmpleados.add(pnlOpcionesConsultaEmpleados, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaEmpleados.add(pnlBarraopcionesEmpleados, java.awt.BorderLayout.PAGE_START);
+
+        pnlTablaEmpleados.setLayout(new java.awt.BorderLayout());
+
+        tblEmpleados.setBackground(new java.awt.Color(204, 153, 0));
+        tblEmpleados.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        tblEmpleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Teléfono", "Sexo", "ID Departamento del Empleado", "Fecha de Ingreso", "ID Puesto Empleado", "Cooperativa", "Salario"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblEmpleados.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tblEmpleados);
+        if (tblEmpleados.getColumnModel().getColumnCount() > 0) {
+            tblEmpleados.getColumnModel().getColumn(0).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(1).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(2).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(3).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(4).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(5).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(6).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(7).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(8).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(9).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(10).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(11).setResizable(false);
+        }
+
+        pnlTablaEmpleados.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaEmpleados.add(pnlTablaEmpleados, java.awt.BorderLayout.CENTER);
+
+        pnlContenido.add(pnlConsultaEmpleados, "EMPLEADOS");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -592,24 +767,40 @@ public class Inicio extends javax.swing.JFrame {
         if (popupMenuConsultas == null) {
             popUpMenuConsultas();
         }
-        popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight() + 20);
+        popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight()- 50);
     }//GEN-LAST:event_btnConsultasMenuActionPerformed
 
-    private void txtBusquedaDepartamentos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1ActionPerformed
+    private void txtBusquedaPuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaPuestosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaDepartamentos1ActionPerformed
+    }//GEN-LAST:event_txtBusquedaPuestosActionPerformed
 
-    private void txtBusquedaDepartamentos1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1KeyPressed
+    private void txtBusquedaPuestosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaPuestosKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaDepartamentos1KeyPressed
+    }//GEN-LAST:event_txtBusquedaPuestosKeyPressed
 
-    private void txtBusquedaDepartamentos1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1KeyTyped
+    private void txtBusquedaPuestosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaPuestosKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaDepartamentos1KeyTyped
+    }//GEN-LAST:event_txtBusquedaPuestosKeyTyped
 
-    private void cbbxFiltroBusqueda1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroBusqueda1ActionPerformed
+    private void cbbxFiltroPuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroPuestosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbbxFiltroBusqueda1ActionPerformed
+    }//GEN-LAST:event_cbbxFiltroPuestosActionPerformed
+
+    private void txtBusquedaEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaEmpleadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaEmpleadosActionPerformed
+
+    private void txtBusquedaEmpleadosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaEmpleadosKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaEmpleadosKeyPressed
+
+    private void txtBusquedaEmpleadosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaEmpleadosKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaEmpleadosKeyTyped
+
+    private void cbbxFiltroEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroEmpleadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbbxFiltroEmpleadosActionPerformed
 
     private Departamentos ventanaDepartamentos = null;
 
@@ -655,16 +846,16 @@ public class Inicio extends javax.swing.JFrame {
         }); */
     }
 
-    private javax.swing.JPopupMenu popupMenuProcesos;
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultasMenu;
     private javax.swing.JButton btnMantenimientosMenu;
     private javax.swing.JButton btnProcesosMenu;
     private javax.swing.JComboBox<String> cbbxFiltroBusqueda;
-    private javax.swing.JComboBox<String> cbbxFiltroBusqueda1;
+    private javax.swing.JComboBox<String> cbbxFiltroEmpleados;
+    private javax.swing.JComboBox<String> cbbxFiltroPuestos;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -672,31 +863,40 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel pnlBarraLateralIzq;
     private javax.swing.JPanel pnlBarraSuperior;
     private javax.swing.JPanel pnlBarraopcionesDepartamentos;
+    private javax.swing.JPanel pnlBarraopcionesEmpleados;
     private javax.swing.JPanel pnlBarraopcionesPuestos;
     private Utilidades.PanelesBordesRedondeados pnlBotonConsultas;
     private Utilidades.PanelesBordesRedondeados pnlBotonMatenimientos;
     private Utilidades.PanelesBordesRedondeados pnlBtonProcesos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos1;
+    private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos2;
     private javax.swing.JPanel pnlConsultaDepartamentos;
+    private javax.swing.JPanel pnlConsultaEmpleados;
     private javax.swing.JPanel pnlConsultaPuestos;
     private javax.swing.JPanel pnlContenedorBotonespnlIzq;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JPanel pnlOpcionesConsultaDep;
     private javax.swing.JPanel pnlOpcionesConsultaDep1;
+    private javax.swing.JPanel pnlOpcionesConsultaEmpleados;
     private javax.swing.JPanel pnlTablaDepartamentos;
+    private javax.swing.JPanel pnlTablaEmpleados;
     private javax.swing.JPanel pnlTablaPuestos;
     private javax.swing.JPanel pnlVacio;
     private javax.swing.JPopupMenu popupMenuMantenimientos;
     private javax.swing.JTable tblDepartamentos;
+    private javax.swing.JTable tblEmpleados;
     private javax.swing.JTable tblPuestos;
     private javax.swing.JTextField txtBusquedaDepartamentos;
-    private javax.swing.JTextField txtBusquedaDepartamentos1;
+    private javax.swing.JTextField txtBusquedaEmpleados;
+    private javax.swing.JTextField txtBusquedaPuestos;
     // End of variables declaration//GEN-END:variables
 }
