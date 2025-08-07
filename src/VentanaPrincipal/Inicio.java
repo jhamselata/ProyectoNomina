@@ -8,7 +8,7 @@ import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
-import Utilidades.cargarDatosenTabla;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -33,7 +33,10 @@ public class Inicio extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-    private void UnaVentanaAlaVez() {};
+    private void UnaVentanaAlaVez() {
+    }
+
+    ;
     
     
     private void abrirVentanaUsuarios() {
@@ -53,7 +56,7 @@ public class Inicio extends javax.swing.JFrame {
             ventanaDepartamentos.toFront();
         }
     }
-    
+
     private void abrirVentanaEmpleados() {
         if (ventanaEmpleados == null || !ventanaEmpleados.isDisplayable()) {
             ventanaEmpleados = new Empleados();
@@ -62,7 +65,7 @@ public class Inicio extends javax.swing.JFrame {
             ventanaEmpleados.toFront();
         }
     }
-    
+
     private void abrirVentanaPuestos() {
         if (ventanaPuestos == null || !ventanaPuestos.isDisplayable()) {
             ventanaPuestos = new Puestos();
@@ -97,35 +100,60 @@ public class Inicio extends javax.swing.JFrame {
         return item;
     }
 
-    public void popUpMenu() {
-    popupMenuMantenimientos = new JPopupMenu();
-    popupMenuMantenimientos.setOpaque(false);
-    popupMenuMantenimientos.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+    private JPopupMenu popupMenuConsultas;
 
-    JMenuItem usuariosItem = createStyledMenuItem("Usuarios", e -> {
-        abrirVentanaUsuarios();
-    });
-    //Desactiva la opción de mantenimiento de usuarios si el usuario no es administrador
-    if ("1".equals(rolUsuario)) {
-        usuariosItem.setEnabled(false);
-    }
-    popupMenuMantenimientos.add(usuariosItem);
+    
+    public void popUpMenuConsultas() {
+    popupMenuConsultas = new JPopupMenu();
+    popupMenuConsultas.setOpaque(false);
+    popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-    JMenuItem departamentosItem = createStyledMenuItem("Departamentos", e -> {
-        abrirVentanaDepartamentos();
-    });
-    popupMenuMantenimientos.add(departamentosItem);
+    // Menú para mostrar panel de departamentos
+    popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
+    CardLayout cl = (CardLayout) pnlContenido.getLayout();
+    cl.show(pnlContenido, "DEPARTAMENTOS");
+}));
 
-    JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
-        abrirVentanaPuestos();
-    });
-    popupMenuMantenimientos.add(puestosItem);
+    // Menú para mostrar panel de puestos
+    popupMenuConsultas.add(createStyledMenuItem("Puestos", e -> {
+    CardLayout cl = (CardLayout) pnlContenido.getLayout();
+    cl.show(pnlContenido, "PUESTOS");
+}));
 
-    JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
-        abrirVentanaEmpleados();
-    });
-    popupMenuMantenimientos.add(empleadosItem);
+    // Si quieres mostrar Empleados en panel o ventana, elige una
+    popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> abrirVentanaEmpleados()));
 }
+
+
+    public void popUpMenu() {
+        popupMenuMantenimientos = new JPopupMenu();
+        popupMenuMantenimientos.setOpaque(false);
+        popupMenuMantenimientos.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
+        JMenuItem usuariosItem = createStyledMenuItem("Usuarios", e -> {
+            abrirVentanaUsuarios();
+        });
+        //Desactiva la opción de mantenimiento de usuarios si el usuario no es administrador
+        if ("1".equals(rolUsuario)) {
+            usuariosItem.setEnabled(false);
+        }
+        popupMenuMantenimientos.add(usuariosItem);
+
+        JMenuItem departamentosItem = createStyledMenuItem("Departamentos", e -> {
+            abrirVentanaDepartamentos();
+        });
+        popupMenuMantenimientos.add(departamentosItem);
+
+        JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
+            abrirVentanaPuestos();
+        });
+        popupMenuMantenimientos.add(puestosItem);
+
+        JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
+            abrirVentanaEmpleados();
+        });
+        popupMenuMantenimientos.add(empleadosItem);
+    }
 
     private void mostrarPopupEnComponente(JComponent componente, String[] opciones, ActionListener[] acciones) {
         JPopupMenu menu = new JPopupMenu() {
@@ -147,9 +175,9 @@ public class Inicio extends javax.swing.JFrame {
         }
 
         // Mostrarlo debajo del componente
-        menu.show(componente, 200, componente.getHeight()-50);
+        menu.show(componente, 200, componente.getHeight() - 50);
     }
-    
+
 
     public Inicio(String rol) {
         initComponents();
@@ -160,17 +188,23 @@ public class Inicio extends javax.swing.JFrame {
 
         this.rolUsuario = rol;
         System.out.println(rolUsuario);
-        
+
         //color de botones
         btnMantenimientosMenu.setBackground(new Color(0, 0, 0, 0));
         btnProcesosMenu.setBackground(new Color(0, 0, 0, 0));
         btnConsultasMenu.setBackground(new Color(0, 0, 0, 0));
         txtBusquedaDepartamentos.setBackground(new Color(0, 0, 0, 0));
         popUpMenu();
-        
-        
+        popUpMenuConsultas();
+
         //Oculta paneles por defecto
         pnlConsultaDepartamentos.setVisible(false);
+        pnlConsultaPuestos.setVisible(false);
+
+        if ("1".equals(rolUsuario)) {
+            btnProcesosMenu.setEnabled(false);
+        }
+
     }
 
     /**
@@ -196,10 +230,22 @@ public class Inicio extends javax.swing.JFrame {
         btnConsultasMenu = new javax.swing.JButton();
         pnlBtonProcesos = new Utilidades.PanelesBordesRedondeados();
         btnProcesosMenu = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
+        pnlVacio = new javax.swing.JPanel();
+        pnlConsultaPuestos = new javax.swing.JPanel();
+        pnlBarraopcionesPuestos = new javax.swing.JPanel();
+        pnlOpcionesConsultaDep1 = new javax.swing.JPanel();
+        pnlBusquedaDepartamentos1 = new Utilidades.PanelesBordesRedondeados();
+        txtBusquedaDepartamentos1 = new javax.swing.JTextField();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        cbbxFiltroBusqueda1 = new javax.swing.JComboBox<>();
+        pnlTablaPuestos = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblPuestos = new javax.swing.JTable();
         pnlConsultaDepartamentos = new javax.swing.JPanel();
-        pnlBarraopciones = new javax.swing.JPanel();
+        pnlBarraopcionesDepartamentos = new javax.swing.JPanel();
         pnlOpcionesConsultaDep = new javax.swing.JPanel();
         pnlBusquedaDepartamentos = new Utilidades.PanelesBordesRedondeados();
         txtBusquedaDepartamentos = new javax.swing.JTextField();
@@ -207,11 +253,12 @@ public class Inicio extends javax.swing.JFrame {
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
         cbbxFiltroBusqueda = new javax.swing.JComboBox<>();
-        pnlTablas = new javax.swing.JPanel();
+        pnlTablaDepartamentos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDepartamentos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlBarraSuperior.setBackground(new java.awt.Color(76, 86, 106));
@@ -279,6 +326,11 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonConsultas.setLayout(new java.awt.BorderLayout());
 
         btnConsultasMenu.setText("Consultas");
+        btnConsultasMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultasMenuActionPerformed(evt);
+            }
+        });
         pnlBotonConsultas.add(btnConsultasMenu, java.awt.BorderLayout.CENTER);
 
         pnlContenedorBotonespnlIzq.add(pnlBotonConsultas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 180, 50));
@@ -295,14 +347,6 @@ public class Inicio extends javax.swing.JFrame {
 
         pnlContenedorBotonespnlIzq.add(pnlBtonProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 180, 50));
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        pnlContenedorBotonespnlIzq.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
-
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -315,15 +359,105 @@ public class Inicio extends javax.swing.JFrame {
 
         pnlContenido.setBackground(new java.awt.Color(46, 52, 64));
         pnlContenido.setPreferredSize(new java.awt.Dimension(700, 524));
-        pnlContenido.setLayout(new java.awt.BorderLayout());
+        pnlContenido.setLayout(new java.awt.CardLayout());
+
+        pnlVacio.setLayout(new java.awt.BorderLayout());
+        pnlContenido.add(pnlVacio, "VACIO");
+
+        pnlConsultaPuestos.setLayout(new java.awt.BorderLayout());
+
+        pnlBarraopcionesPuestos.setBackground(new java.awt.Color(255, 153, 102));
+        pnlBarraopcionesPuestos.setLayout(new java.awt.BorderLayout());
+
+        pnlOpcionesConsultaDep1.setBackground(new java.awt.Color(59, 66, 82));
+
+        pnlBusquedaDepartamentos1.setBackground(new java.awt.Color(76, 86, 106));
+        pnlBusquedaDepartamentos1.setPreferredSize(new java.awt.Dimension(500, 40));
+        pnlBusquedaDepartamentos1.setRoundBottomLeft(40);
+        pnlBusquedaDepartamentos1.setRoundBottomRight(40);
+        pnlBusquedaDepartamentos1.setRoundTopLeft(40);
+        pnlBusquedaDepartamentos1.setRoundTopRight(40);
+        pnlBusquedaDepartamentos1.setLayout(new java.awt.BorderLayout());
+
+        txtBusquedaDepartamentos1.setBackground(new java.awt.Color(236, 239, 244));
+        txtBusquedaDepartamentos1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtBusquedaDepartamentos1.setForeground(new java.awt.Color(236, 239, 244));
+        txtBusquedaDepartamentos1.setBorder(null);
+        txtBusquedaDepartamentos1.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtBusquedaDepartamentos1.setName(""); // NOI18N
+        txtBusquedaDepartamentos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBusquedaDepartamentos1ActionPerformed(evt);
+            }
+        });
+        txtBusquedaDepartamentos1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBusquedaDepartamentos1KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaDepartamentos1KeyTyped(evt);
+            }
+        });
+        pnlBusquedaDepartamentos1.add(txtBusquedaDepartamentos1, java.awt.BorderLayout.CENTER);
+        pnlBusquedaDepartamentos1.add(filler6, java.awt.BorderLayout.LINE_END);
+        pnlBusquedaDepartamentos1.add(filler7, java.awt.BorderLayout.LINE_START);
+
+        pnlOpcionesConsultaDep1.add(pnlBusquedaDepartamentos1);
+        pnlOpcionesConsultaDep1.add(filler8);
+
+        cbbxFiltroBusqueda1.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbbxFiltroBusqueda1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbxFiltroBusqueda1ActionPerformed(evt);
+            }
+        });
+        pnlOpcionesConsultaDep1.add(cbbxFiltroBusqueda1);
+
+        pnlBarraopcionesPuestos.add(pnlOpcionesConsultaDep1, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaPuestos.add(pnlBarraopcionesPuestos, java.awt.BorderLayout.PAGE_START);
+
+        pnlTablaPuestos.setLayout(new java.awt.BorderLayout());
+
+        tblPuestos.setBackground(new java.awt.Color(204, 153, 0));
+        tblPuestos.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        tblPuestos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID del Puesto", "Descripción del Puesto"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblPuestos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tblPuestos);
+        if (tblPuestos.getColumnModel().getColumnCount() > 0) {
+            tblPuestos.getColumnModel().getColumn(0).setResizable(false);
+            tblPuestos.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        pnlTablaPuestos.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaPuestos.add(pnlTablaPuestos, java.awt.BorderLayout.CENTER);
+
+        pnlContenido.add(pnlConsultaPuestos, "PUESTOS");
 
         pnlConsultaDepartamentos.setLayout(new java.awt.BorderLayout());
 
-        pnlBarraopciones.setBackground(new java.awt.Color(255, 153, 102));
-        pnlBarraopciones.setLayout(new java.awt.BorderLayout());
+        pnlBarraopcionesDepartamentos.setBackground(new java.awt.Color(255, 153, 102));
+        pnlBarraopcionesDepartamentos.setLayout(new java.awt.BorderLayout());
 
-        pnlOpcionesConsultaDep.setBackground(new java.awt.Color(0, 255, 102));
+        pnlOpcionesConsultaDep.setBackground(new java.awt.Color(59, 66, 82));
 
+        pnlBusquedaDepartamentos.setBackground(new java.awt.Color(76, 86, 106));
         pnlBusquedaDepartamentos.setPreferredSize(new java.awt.Dimension(500, 40));
         pnlBusquedaDepartamentos.setRoundBottomLeft(40);
         pnlBusquedaDepartamentos.setRoundBottomRight(40);
@@ -331,7 +465,7 @@ public class Inicio extends javax.swing.JFrame {
         pnlBusquedaDepartamentos.setRoundTopRight(40);
         pnlBusquedaDepartamentos.setLayout(new java.awt.BorderLayout());
 
-        txtBusquedaDepartamentos.setBackground(new java.awt.Color(255, 204, 102));
+        txtBusquedaDepartamentos.setBackground(new java.awt.Color(236, 239, 244));
         txtBusquedaDepartamentos.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         txtBusquedaDepartamentos.setForeground(new java.awt.Color(236, 239, 244));
         txtBusquedaDepartamentos.setBorder(null);
@@ -365,30 +499,25 @@ public class Inicio extends javax.swing.JFrame {
         });
         pnlOpcionesConsultaDep.add(cbbxFiltroBusqueda);
 
-        pnlBarraopciones.add(pnlOpcionesConsultaDep, java.awt.BorderLayout.CENTER);
+        pnlBarraopcionesDepartamentos.add(pnlOpcionesConsultaDep, java.awt.BorderLayout.CENTER);
 
-        pnlConsultaDepartamentos.add(pnlBarraopciones, java.awt.BorderLayout.PAGE_START);
+        pnlConsultaDepartamentos.add(pnlBarraopcionesDepartamentos, java.awt.BorderLayout.PAGE_START);
 
-        pnlTablas.setLayout(new java.awt.BorderLayout());
+        pnlTablaDepartamentos.setLayout(new java.awt.BorderLayout());
 
+        tblDepartamentos.setBackground(new java.awt.Color(204, 153, 0));
+        tblDepartamentos.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         tblDepartamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID del Departamento", "Descripción del departamento"
+                "ID del Departamento", "Descripción del Departamento"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -401,11 +530,11 @@ public class Inicio extends javax.swing.JFrame {
             tblDepartamentos.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        pnlTablas.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnlTablaDepartamentos.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        pnlConsultaDepartamentos.add(pnlTablas, java.awt.BorderLayout.CENTER);
+        pnlConsultaDepartamentos.add(pnlTablaDepartamentos, java.awt.BorderLayout.CENTER);
 
-        pnlContenido.add(pnlConsultaDepartamentos, java.awt.BorderLayout.CENTER);
+        pnlContenido.add(pnlConsultaDepartamentos, "DEPARTAMENTOS");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -423,7 +552,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void pnlBotonMatenimientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonMatenimientosMouseClicked
-        
+
     }//GEN-LAST:event_pnlBotonMatenimientosMouseClicked
 
     private void btnMantenimientosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuActionPerformed
@@ -435,20 +564,12 @@ public class Inicio extends javax.swing.JFrame {
             e -> abrirVentanaEmpleados()
         };
 
-        popupMenuMantenimientos.show(pnlBotonMatenimientos, 200, pnlBotonMatenimientos.getHeight()-50);
-
+        popupMenuMantenimientos.show(pnlBotonMatenimientos, 200, pnlBotonMatenimientos.getHeight() - 50);
     }//GEN-LAST:event_btnMantenimientosMenuActionPerformed
 
     private void btnMantenimientosMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuMouseEntered
         btnMantenimientosMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_btnMantenimientosMenuMouseEntered
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        cargarDatosenTabla.cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
-        cargarDatosenTabla.activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
-        
-        pnlConsultaDepartamentos.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtBusquedaDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentosActionPerformed
         // TODO add your handling code here:
@@ -466,12 +587,35 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbxFiltroBusquedaActionPerformed
 
+    private void btnConsultasMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultasMenuActionPerformed
+        if (popupMenuConsultas == null) {
+        popUpMenuConsultas();
+    }
+    popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight() + 20);
+    }//GEN-LAST:event_btnConsultasMenuActionPerformed
+
+    private void txtBusquedaDepartamentos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaDepartamentos1ActionPerformed
+
+    private void txtBusquedaDepartamentos1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaDepartamentos1KeyPressed
+
+    private void txtBusquedaDepartamentos1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaDepartamentos1KeyTyped
+
+    private void cbbxFiltroBusqueda1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroBusqueda1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbbxFiltroBusqueda1ActionPerformed
+
     private Departamentos ventanaDepartamentos = null;
 
     private Usuarios ventanaUsuarios = null;
-    
+
     private Empleados ventanaEmpleados = null;
-    
+
     private Puestos ventanaPuestos = null;
 
     /**
@@ -510,33 +654,48 @@ public class Inicio extends javax.swing.JFrame {
         }); */
     }
 
+    private javax.swing.JPopupMenu popupMenuProcesos;
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultasMenu;
     private javax.swing.JButton btnMantenimientosMenu;
     private javax.swing.JButton btnProcesosMenu;
     private javax.swing.JComboBox<String> cbbxFiltroBusqueda;
+    private javax.swing.JComboBox<String> cbbxFiltroBusqueda1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel pnlBarraLateralIzq;
     private javax.swing.JPanel pnlBarraSuperior;
-    private javax.swing.JPanel pnlBarraopciones;
+    private javax.swing.JPanel pnlBarraopcionesDepartamentos;
+    private javax.swing.JPanel pnlBarraopcionesPuestos;
     private Utilidades.PanelesBordesRedondeados pnlBotonConsultas;
     private Utilidades.PanelesBordesRedondeados pnlBotonMatenimientos;
     private Utilidades.PanelesBordesRedondeados pnlBtonProcesos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos;
+    private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos1;
     private javax.swing.JPanel pnlConsultaDepartamentos;
+    private javax.swing.JPanel pnlConsultaPuestos;
     private javax.swing.JPanel pnlContenedorBotonespnlIzq;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JPanel pnlOpcionesConsultaDep;
-    private javax.swing.JPanel pnlTablas;
+    private javax.swing.JPanel pnlOpcionesConsultaDep1;
+    private javax.swing.JPanel pnlTablaDepartamentos;
+    private javax.swing.JPanel pnlTablaPuestos;
+    private javax.swing.JPanel pnlVacio;
     private javax.swing.JPopupMenu popupMenuMantenimientos;
     private javax.swing.JTable tblDepartamentos;
+    private javax.swing.JTable tblPuestos;
     private javax.swing.JTextField txtBusquedaDepartamentos;
+    private javax.swing.JTextField txtBusquedaDepartamentos1;
     // End of variables declaration//GEN-END:variables
 }
