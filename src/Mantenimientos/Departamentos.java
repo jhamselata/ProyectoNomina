@@ -94,10 +94,10 @@ public class Departamentos extends javax.swing.JFrame {
         lblBtnSalir = new Utilidades.PanelesBordesRedondeados();
         btnSalir = new javax.swing.JButton();
         txtIDDep = new javax.swing.JTextField();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(100, 50), new java.awt.Dimension(32767, 20));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(588, 450));
         setResizable(false);
 
         panelesBordesRedondeados1.setBackground(new java.awt.Color(76, 86, 106));
@@ -193,7 +193,7 @@ public class Departamentos extends javax.swing.JFrame {
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
+        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, -1, -1));
 
         lblBotonEliminar.setBackground(new java.awt.Color(59, 66, 82));
         lblBotonEliminar.setPreferredSize(new java.awt.Dimension(132, 40));
@@ -242,7 +242,7 @@ public class Departamentos extends javax.swing.JFrame {
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, -1));
+        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, -1, -1));
 
         txtDescDep.setBackground(new java.awt.Color(255, 204, 102));
         txtDescDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
@@ -312,7 +312,7 @@ public class Departamentos extends javax.swing.JFrame {
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, -1));
+        panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, -1, -1));
 
         txtIDDep.setBackground(new java.awt.Color(255, 204, 102));
         txtIDDep.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
@@ -337,6 +337,7 @@ public class Departamentos extends javax.swing.JFrame {
             }
         });
         panelesBordesRedondeados1.add(txtIDDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 100, 40));
+        panelesBordesRedondeados1.add(filler1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -640,6 +641,7 @@ public class Departamentos extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.Box.Filler filler1;
     private Utilidades.PanelesBordesRedondeados lblBotonEliminar;
     private Utilidades.PanelesBordesRedondeados lblBotonRegistrar;
     private Utilidades.PanelesBordesRedondeados lblBtnSalir;

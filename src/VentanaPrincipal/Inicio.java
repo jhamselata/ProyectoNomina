@@ -4,6 +4,7 @@
  */
 package VentanaPrincipal;
 
+import Login.Login;
 import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
@@ -21,9 +22,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -39,7 +42,42 @@ public class Inicio extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-    
+    private void cambiarEstadoInicio(int caso) {
+        switch (caso) {
+            case 1: {
+                txtEstadoInicio.setText("Mantenimiento de Usuarios");
+                break;
+            }
+            case 2: {
+                txtEstadoInicio.setText("Mantenimiento de Departamentos");
+                break;
+            }
+            case 3: {
+                txtEstadoInicio.setText("Mantenimiento de Puestos");
+                break;
+            }
+            case 4: {
+                txtEstadoInicio.setText("Mantenimiento de Empleados");
+                break;
+            }
+
+            default: {
+                txtEstadoInicio.setText("Menú Principal");
+                break;
+
+            }
+        }
+    }
+
+    private void SetImageLabel(JLabel labelName, String root) {
+        ImageIcon image = new ImageIcon(root);
+        Icon icon = new ImageIcon(
+            image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH)
+        );
+        labelName.setIcon(icon);
+        this.repaint();
+    }
+
     private void abrirVentanaUsuarios() {
         if (ventanaUsuarios == null || !ventanaUsuarios.isDisplayable()) {
             ventanaUsuarios = new Usuarios();
@@ -103,6 +141,8 @@ public class Inicio extends javax.swing.JFrame {
 
     private JPopupMenu popupMenuConsultas;
 
+    private JPopupMenu popupMenuProcesos;
+
     public void popUpMenuConsultas() {
         popupMenuConsultas = new JPopupMenu();
         popupMenuConsultas.setOpaque(false);
@@ -140,6 +180,7 @@ public class Inicio extends javax.swing.JFrame {
 
         JMenuItem usuariosItem = createStyledMenuItem("Usuarios", e -> {
             abrirVentanaUsuarios();
+            cambiarEstadoInicio(1);
         });
         //Desactiva la opción de mantenimiento de usuarios si el usuario no es administrador
         if ("1".equals(rolUsuario)) {
@@ -149,18 +190,43 @@ public class Inicio extends javax.swing.JFrame {
 
         JMenuItem departamentosItem = createStyledMenuItem("Departamentos", e -> {
             abrirVentanaDepartamentos();
+            cambiarEstadoInicio(2);
         });
         popupMenuMantenimientos.add(departamentosItem);
 
         JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
             abrirVentanaPuestos();
+            cambiarEstadoInicio(3);
         });
         popupMenuMantenimientos.add(puestosItem);
 
         JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
             abrirVentanaEmpleados();
+            cambiarEstadoInicio(4);
         });
         popupMenuMantenimientos.add(empleadosItem);
+    }
+
+    public void popUpMenuProcesos() {
+        popupMenuProcesos = new JPopupMenu();
+        popupMenuProcesos.setOpaque(false);
+        popupMenuProcesos.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
+        // Menú para mostrar panel de Crear Nómina
+        popupMenuProcesos.add(createStyledMenuItem("Crear Nómina", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "DEPARTAMENTOS");
+            cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
+            activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
+        }));
+
+        // Menú para mostrar panel de Reversar Nómina
+        popupMenuProcesos.add(createStyledMenuItem("Nómina", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "PUESTOS");
+            cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
+            activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
+        }));
     }
 
     private void mostrarPopupEnComponente(JComponent componente, String[] opciones, ActionListener[] acciones) {
@@ -187,52 +253,50 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     private void configurarImagenFondo() {
-    // Crear un panel personalizado con imagen de fondo
-    JPanel panelConFondo = new JPanel() {
-        private Image imagenFondo;
-        
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            
-            // Cargar la imagen si no está cargada
-            if (imagenFondo == null) {
-                try {
-                    imagenFondo = new ImageIcon(getClass().getResource("/Imágenes/ImagenFondoPrincipal.png")).getImage();
-                } catch (Exception e) {
-                    System.err.println("No se pudo cargar la imagen de fondo: " + e.getMessage());
-                    return;
+        // Crear un panel personalizado con imagen de fondo
+        JPanel panelConFondo = new JPanel() {
+            private Image imagenFondo;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // Cargar la imagen si no está cargada
+                if (imagenFondo == null) {
+                    try {
+                        imagenFondo = new ImageIcon(getClass().getResource("/Imágenes/ImagenFondoPrincipal.png")).getImage();
+                    } catch (Exception e) {
+                        System.err.println("No se pudo cargar la imagen de fondo: " + e.getMessage());
+                        return;
+                    }
+                }
+
+                // Dibujar la imagen escalada al tamaño del panel
+                if (imagenFondo != null) {
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+                    g2d.dispose();
                 }
             }
-            
-            // Dibujar la imagen escalada al tamaño del panel
-            if (imagenFondo != null) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
-                g2d.dispose();
-            }
-        }
-    };
-    
-    // Establecer el layout del panel con fondo
-    panelConFondo.setLayout(new BorderLayout());
-    
-    // Reemplazar el contenido de pnlVacio
-    pnlVacio.removeAll();
-    pnlVacio.setLayout(new BorderLayout());
-    pnlVacio.add(panelConFondo, BorderLayout.CENTER);
-    pnlVacio.revalidate();
-    pnlVacio.repaint();
-}
-    
-    
-    public Inicio(String rol) { 
+        };
+
+        // Establecer el layout del panel con fondo
+        panelConFondo.setLayout(new BorderLayout());
+
+        // Reemplazar el contenido de pnlVacio
+        pnlVacio.removeAll();
+        pnlVacio.setLayout(new BorderLayout());
+        pnlVacio.add(panelConFondo, BorderLayout.CENTER);
+        pnlVacio.revalidate();
+        pnlVacio.repaint();
+    }
+
+    public Inicio(String rol) {
         initComponents();
-        
+
         configurarImagenFondo();
 
-        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
@@ -242,14 +306,20 @@ public class Inicio extends javax.swing.JFrame {
         System.out.println(rolUsuario);
 
         //color de botones
-        btnMantenimientosMenu.setBackground(new Color(0, 0, 0, 0));
+        btnCerrarSesion.setBackground(new Color(0, 0, 0, 0));
         btnProcesosMenu.setBackground(new Color(0, 0, 0, 0));
         btnConsultasMenu.setBackground(new Color(0, 0, 0, 0));
         txtBusquedaDepartamentos.setBackground(new Color(0, 0, 0, 0));
         txtBusquedaPuestos.setBackground(new Color(0, 0, 0, 0));
         txtBusquedaEmpleados.setBackground(new Color(0, 0, 0, 0));
-        
-        
+
+        txtBotoninicioIcono.setBackground(new Color(163, 190, 140));
+        txtEstadoInicio.setBackground(new Color(0, 0, 0, 0));
+        btnMantenimientosMenu.setBackground(new Color(0, 0, 0, 0));
+
+        //Iconos
+        SetImageLabel(txtBotoninicioIcono, "src/Iconos/inicioIcon.png");
+
         popUpMenu();
         popUpMenuConsultas();
 
@@ -260,6 +330,7 @@ public class Inicio extends javax.swing.JFrame {
         if ("1".equals(rolUsuario)) {
             btnProcesosMenu.setEnabled(false);
         }
+        txtEstadoInicio.setText("Menú Principal");
 
     }
 
@@ -275,17 +346,23 @@ public class Inicio extends javax.swing.JFrame {
 
         popupMenuMantenimientos = new javax.swing.JPopupMenu();
         pnlBarraSuperior = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        pnlBotonInicio = new Utilidades.PanelesBordesRedondeados();
+        txtBotoninicioIcono = new javax.swing.JLabel();
+        txtEstadoInicio = new javax.swing.JTextField();
+        pnlBotonSalir = new Utilidades.PanelesBordesRedondeados();
+        txtBotoninicioIcono1 = new javax.swing.JLabel();
         pnlBarraLateralIzq = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 50), new java.awt.Dimension(32767, 10));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 50), new java.awt.Dimension(32767, 10));
         pnlContenedorBotonespnlIzq = new javax.swing.JPanel();
         pnlBotonMatenimientos = new Utilidades.PanelesBordesRedondeados();
-        btnMantenimientosMenu = new javax.swing.JButton();
+        btnCerrarSesion = new javax.swing.JButton();
         pnlBotonConsultas = new Utilidades.PanelesBordesRedondeados();
         btnConsultasMenu = new javax.swing.JButton();
         pnlBtonProcesos = new Utilidades.PanelesBordesRedondeados();
         btnProcesosMenu = new javax.swing.JButton();
+        pnlBotonMatenimientos1 = new Utilidades.PanelesBordesRedondeados();
+        btnMantenimientosMenu = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlVacio = new javax.swing.JPanel();
         pnlConsultaPuestos = new javax.swing.JPanel();
@@ -332,15 +409,98 @@ public class Inicio extends javax.swing.JFrame {
 
         pnlBarraSuperior.setBackground(new java.awt.Color(76, 86, 106));
         pnlBarraSuperior.setPreferredSize(new java.awt.Dimension(20, 50));
-        pnlBarraSuperior.setLayout(new java.awt.BorderLayout());
+        pnlBarraSuperior.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        pnlBotonInicio.setBackground(new java.awt.Color(163, 190, 140));
+        pnlBotonInicio.setForeground(new java.awt.Color(163, 190, 140));
+        pnlBotonInicio.setPreferredSize(new java.awt.Dimension(70, 40));
+        pnlBotonInicio.setRoundBottomLeft(30);
+        pnlBotonInicio.setRoundBottomRight(30);
+        pnlBotonInicio.setRoundTopLeft(30);
+        pnlBotonInicio.setRoundTopRight(30);
+        pnlBotonInicio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBotonInicioMouseClicked(evt);
             }
         });
-        pnlBarraSuperior.add(jButton1, java.awt.BorderLayout.LINE_END);
+        pnlBotonInicio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                pnlBotonInicioKeyPressed(evt);
+            }
+        });
+        pnlBotonInicio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtBotoninicioIcono.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtBotoninicioIconoMouseClicked(evt);
+            }
+        });
+        pnlBotonInicio.add(txtBotoninicioIcono, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 30));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 20);
+        pnlBarraSuperior.add(pnlBotonInicio, gridBagConstraints);
+
+        txtEstadoInicio.setEditable(false);
+        txtEstadoInicio.setBackground(new java.awt.Color(255, 204, 102));
+        txtEstadoInicio.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        txtEstadoInicio.setForeground(new java.awt.Color(236, 239, 244));
+        txtEstadoInicio.setBorder(null);
+        txtEstadoInicio.setFocusable(false);
+        txtEstadoInicio.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtEstadoInicio.setName(""); // NOI18N
+        txtEstadoInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEstadoInicioActionPerformed(evt);
+            }
+        });
+        txtEstadoInicio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEstadoInicioKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEstadoInicioKeyTyped(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        pnlBarraSuperior.add(txtEstadoInicio, gridBagConstraints);
+
+        pnlBotonSalir.setBackground(new java.awt.Color(191, 97, 106));
+        pnlBotonSalir.setForeground(new java.awt.Color(163, 190, 140));
+        pnlBotonSalir.setPreferredSize(new java.awt.Dimension(70, 40));
+        pnlBotonSalir.setRoundBottomLeft(30);
+        pnlBotonSalir.setRoundBottomRight(30);
+        pnlBotonSalir.setRoundTopLeft(30);
+        pnlBotonSalir.setRoundTopRight(30);
+        pnlBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBotonSalirMouseClicked(evt);
+            }
+        });
+        pnlBotonSalir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                pnlBotonSalirKeyPressed(evt);
+            }
+        });
+        pnlBotonSalir.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtBotoninicioIcono1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtBotoninicioIcono1MouseClicked(evt);
+            }
+        });
+        pnlBotonSalir.add(txtBotoninicioIcono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 20));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
+        pnlBarraSuperior.add(pnlBotonSalir, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -372,22 +532,22 @@ public class Inicio extends javax.swing.JFrame {
         });
         pnlBotonMatenimientos.setLayout(new java.awt.BorderLayout());
 
-        btnMantenimientosMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
-        btnMantenimientosMenu.setForeground(new java.awt.Color(236, 239, 244));
-        btnMantenimientosMenu.setText("Mantenimientos");
-        btnMantenimientosMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCerrarSesion.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(236, 239, 244));
+        btnCerrarSesion.setText("Cerrar Sesión");
+        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnMantenimientosMenuMouseEntered(evt);
+                btnCerrarSesionMouseEntered(evt);
             }
         });
-        btnMantenimientosMenu.addActionListener(new java.awt.event.ActionListener() {
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMantenimientosMenuActionPerformed(evt);
+                btnCerrarSesionActionPerformed(evt);
             }
         });
-        pnlBotonMatenimientos.add(btnMantenimientosMenu, java.awt.BorderLayout.CENTER);
+        pnlBotonMatenimientos.add(btnCerrarSesion, java.awt.BorderLayout.CENTER);
 
-        pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
+        pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 300, 130, 50));
 
         pnlBotonConsultas.setBackground(new java.awt.Color(76, 86, 106));
         pnlBotonConsultas.setRoundBottomLeft(20);
@@ -418,9 +578,43 @@ public class Inicio extends javax.swing.JFrame {
         btnProcesosMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         btnProcesosMenu.setForeground(new java.awt.Color(236, 239, 244));
         btnProcesosMenu.setText("Procesos");
+        btnProcesosMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesosMenuActionPerformed(evt);
+            }
+        });
         pnlBtonProcesos.add(btnProcesosMenu, java.awt.BorderLayout.CENTER);
 
         pnlContenedorBotonespnlIzq.add(pnlBtonProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 180, 50));
+
+        pnlBotonMatenimientos1.setBackground(new java.awt.Color(76, 86, 106));
+        pnlBotonMatenimientos1.setRoundBottomLeft(20);
+        pnlBotonMatenimientos1.setRoundBottomRight(20);
+        pnlBotonMatenimientos1.setRoundTopLeft(20);
+        pnlBotonMatenimientos1.setRoundTopRight(20);
+        pnlBotonMatenimientos1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBotonMatenimientos1MouseClicked(evt);
+            }
+        });
+        pnlBotonMatenimientos1.setLayout(new java.awt.BorderLayout());
+
+        btnMantenimientosMenu.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        btnMantenimientosMenu.setForeground(new java.awt.Color(236, 239, 244));
+        btnMantenimientosMenu.setText("Mantenimientos");
+        btnMantenimientosMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnMantenimientosMenuMouseEntered(evt);
+            }
+        });
+        btnMantenimientosMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientosMenuActionPerformed(evt);
+            }
+        });
+        pnlBotonMatenimientos1.add(btnMantenimientosMenu, java.awt.BorderLayout.CENTER);
+
+        pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
 
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
@@ -429,7 +623,6 @@ public class Inicio extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
         getContentPane().add(pnlBarraLateralIzq, gridBagConstraints);
 
         pnlContenido.setBackground(new java.awt.Color(46, 52, 64));
@@ -502,7 +695,7 @@ public class Inicio extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID del Puesto", "Descripción del Puesto"
+                "ID", "Descripción del Puesto"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -517,9 +710,7 @@ public class Inicio extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblPuestos);
         if (tblPuestos.getColumnModel().getColumnCount() > 0) {
             tblPuestos.getColumnModel().getColumn(0).setResizable(false);
-            tblPuestos.getColumnModel().getColumn(0).setHeaderValue("ID del Departamento");
             tblPuestos.getColumnModel().getColumn(1).setResizable(false);
-            tblPuestos.getColumnModel().getColumn(1).setHeaderValue("Descripción del Departamento");
         }
 
         pnlTablaPuestos.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -590,7 +781,7 @@ public class Inicio extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID del Departamento", "Descripción del Departamento"
+                "ID", "Descripción del Departamento"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -605,9 +796,7 @@ public class Inicio extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblDepartamentos);
         if (tblDepartamentos.getColumnModel().getColumnCount() > 0) {
             tblDepartamentos.getColumnModel().getColumn(0).setResizable(false);
-            tblDepartamentos.getColumnModel().getColumn(0).setHeaderValue("ID del Departamento");
             tblDepartamentos.getColumnModel().getColumn(1).setResizable(false);
-            tblDepartamentos.getColumnModel().getColumn(1).setHeaderValue("Descripción del Departamento");
         }
 
         pnlTablaDepartamentos.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -678,7 +867,7 @@ public class Inicio extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Teléfono", "Sexo", "ID Departamento del Empleado", "Fecha de Ingreso", "ID Puesto Empleado", "Cooperativa", "Salario"
+                "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Teléfono", "Sexo", "ID Departamento", "Fecha de Ingreso", "ID Puesto", "Cooperativa", "Salario"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -723,29 +912,20 @@ public class Inicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void pnlBotonMatenimientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonMatenimientosMouseClicked
 
     }//GEN-LAST:event_pnlBotonMatenimientosMouseClicked
 
-    private void btnMantenimientosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuActionPerformed
-        String[] opciones = {"Usuarios", "Departamentos", "Puestos", "Empleados"};
-        ActionListener[] acciones = {
-            e -> abrirVentanaUsuarios(),
-            e -> abrirVentanaDepartamentos(),
-            e -> abrirVentanaPuestos(),
-            e -> abrirVentanaEmpleados()
-        };
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        this.dispose();
+        
+        Login login = new Login();
+            login.setVisible(true);
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
-        popupMenuMantenimientos.show(pnlBotonMatenimientos, 200, pnlBotonMatenimientos.getHeight() - 50);
-    }//GEN-LAST:event_btnMantenimientosMenuActionPerformed
-
-    private void btnMantenimientosMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuMouseEntered
-        btnMantenimientosMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_btnMantenimientosMenuMouseEntered
+    private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
+        btnCerrarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCerrarSesionMouseEntered
 
     private void txtBusquedaDepartamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentosActionPerformed
         // TODO add your handling code here:
@@ -767,7 +947,7 @@ public class Inicio extends javax.swing.JFrame {
         if (popupMenuConsultas == null) {
             popUpMenuConsultas();
         }
-        popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight()- 50);
+        popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight() - 50);
     }//GEN-LAST:event_btnConsultasMenuActionPerformed
 
     private void txtBusquedaPuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaPuestosActionPerformed
@@ -801,6 +981,66 @@ public class Inicio extends javax.swing.JFrame {
     private void cbbxFiltroEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroEmpleadosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbxFiltroEmpleadosActionPerformed
+
+    private void btnProcesosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesosMenuActionPerformed
+        if (popupMenuProcesos == null) {
+            popUpMenuProcesos();
+        }
+        popupMenuProcesos.show(btnProcesosMenu, 200, btnProcesosMenu.getHeight() - 50);
+    }//GEN-LAST:event_btnProcesosMenuActionPerformed
+
+    private void txtEstadoInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstadoInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEstadoInicioActionPerformed
+
+    private void txtEstadoInicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoInicioKeyPressed
+
+    }//GEN-LAST:event_txtEstadoInicioKeyPressed
+
+    private void txtEstadoInicioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoInicioKeyTyped
+
+    }//GEN-LAST:event_txtEstadoInicioKeyTyped
+
+    private void pnlBotonInicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlBotonInicioKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonInicioKeyPressed
+
+    private void pnlBotonInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonInicioMouseClicked
+        CardLayout cl = (CardLayout) pnlContenido.getLayout();
+        cl.show(pnlContenido, "VACIO");
+        txtEstadoInicio.setText("Menú Principal");
+    }//GEN-LAST:event_pnlBotonInicioMouseClicked
+
+    private void txtBotoninicioIconoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBotoninicioIconoMouseClicked
+        CardLayout cl = (CardLayout) pnlContenido.getLayout();
+        cl.show(pnlContenido, "VACIO");
+        txtEstadoInicio.setText("Menú Principal");
+
+    }//GEN-LAST:event_txtBotoninicioIconoMouseClicked
+
+    private void pnlBotonSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonSalirMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonSalirMouseClicked
+
+    private void pnlBotonSalirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlBotonSalirKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonSalirKeyPressed
+
+    private void txtBotoninicioIcono1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBotoninicioIcono1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBotoninicioIcono1MouseClicked
+
+    private void btnMantenimientosMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMantenimientosMenuMouseEntered
+
+    private void btnMantenimientosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuActionPerformed
+        popupMenuMantenimientos.show(btnMantenimientosMenu, 200, btnMantenimientosMenu.getHeight()- 50);
+    }//GEN-LAST:event_btnMantenimientosMenuActionPerformed
+
+    private void pnlBotonMatenimientos1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonMatenimientos1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonMatenimientos1MouseClicked
 
     private Departamentos ventanaDepartamentos = null;
 
@@ -847,6 +1087,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnConsultasMenu;
     private javax.swing.JButton btnMantenimientosMenu;
     private javax.swing.JButton btnProcesosMenu;
@@ -864,7 +1105,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -874,7 +1114,10 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBarraopcionesEmpleados;
     private javax.swing.JPanel pnlBarraopcionesPuestos;
     private Utilidades.PanelesBordesRedondeados pnlBotonConsultas;
+    private Utilidades.PanelesBordesRedondeados pnlBotonInicio;
     private Utilidades.PanelesBordesRedondeados pnlBotonMatenimientos;
+    private Utilidades.PanelesBordesRedondeados pnlBotonMatenimientos1;
+    private Utilidades.PanelesBordesRedondeados pnlBotonSalir;
     private Utilidades.PanelesBordesRedondeados pnlBtonProcesos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos1;
@@ -895,8 +1138,11 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JTable tblDepartamentos;
     private javax.swing.JTable tblEmpleados;
     private javax.swing.JTable tblPuestos;
+    private javax.swing.JLabel txtBotoninicioIcono;
+    private javax.swing.JLabel txtBotoninicioIcono1;
     private javax.swing.JTextField txtBusquedaDepartamentos;
     private javax.swing.JTextField txtBusquedaEmpleados;
     private javax.swing.JTextField txtBusquedaPuestos;
+    private javax.swing.JTextField txtEstadoInicio;
     // End of variables declaration//GEN-END:variables
 }

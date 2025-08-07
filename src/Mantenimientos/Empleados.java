@@ -10,8 +10,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -1202,11 +1202,9 @@ public class Empleados extends javax.swing.JFrame {
             cadenaAnterior = "";
             return; // Sal del método
         }
-
+        
         // Asegurarse de que el ID solo contenga números para la búsqueda
         if (!idEmpleado.matches("^\\d+$")) {
-            JOptionPane.showMessageDialog(this, "El ID solo debe contener números.",
-                    "Dato inválido", JOptionPane.WARNING_MESSAGE);
             limpiarCampos();
             txtIDEmpleado.setText(idEmpleado); // Mantener el ID inválido para que el usuario lo corrija
             txtEstado.setText(ESTADO_CREANDO);
