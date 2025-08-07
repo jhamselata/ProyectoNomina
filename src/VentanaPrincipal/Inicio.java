@@ -8,6 +8,7 @@ import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
+import Utilidades.cargarDatosenTabla;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -202,13 +203,12 @@ public class Inicio extends javax.swing.JFrame {
         pnlConsultas = new javax.swing.JPanel();
         pnlBarraopciones = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 20));
+        jButton2 = new javax.swing.JButton();
         pnlTablas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDepartamentos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlBarraSuperior.setBackground(new java.awt.Color(76, 86, 106));
@@ -314,6 +314,14 @@ public class Inicio extends javax.swing.JFrame {
         pnlBarraopciones.setBackground(new java.awt.Color(255, 153, 102));
         pnlBarraopciones.add(filler3);
 
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        pnlBarraopciones.add(jButton2);
+
         pnlConsultas.add(pnlBarraopciones, java.awt.BorderLayout.PAGE_START);
 
         pnlTablas.setLayout(new java.awt.BorderLayout());
@@ -371,6 +379,10 @@ public class Inicio extends javax.swing.JFrame {
         btnMantenimientosMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_btnMantenimientosMenuMouseEntered
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        cargarDatosenTabla.cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     private Departamentos ventanaDepartamentos = null;
 
     private Usuarios ventanaUsuarios = null;
@@ -422,6 +434,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
