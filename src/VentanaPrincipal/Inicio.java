@@ -8,6 +8,7 @@ import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
+import static Utilidades.cargarDatosenTabla.cargarEnTabla;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -102,28 +103,28 @@ public class Inicio extends javax.swing.JFrame {
 
     private JPopupMenu popupMenuConsultas;
 
-    
     public void popUpMenuConsultas() {
-    popupMenuConsultas = new JPopupMenu();
-    popupMenuConsultas.setOpaque(false);
-    popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        popupMenuConsultas = new JPopupMenu();
+        popupMenuConsultas.setOpaque(false);
+        popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-    // Menú para mostrar panel de departamentos
-    popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
-    CardLayout cl = (CardLayout) pnlContenido.getLayout();
-    cl.show(pnlContenido, "DEPARTAMENTOS");
-}));
+        // Menú para mostrar panel de departamentos
+        popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "DEPARTAMENTOS");
+            cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
+        }));
 
-    // Menú para mostrar panel de puestos
-    popupMenuConsultas.add(createStyledMenuItem("Puestos", e -> {
-    CardLayout cl = (CardLayout) pnlContenido.getLayout();
-    cl.show(pnlContenido, "PUESTOS");
-}));
+        // Menú para mostrar panel de puestos
+        popupMenuConsultas.add(createStyledMenuItem("Puestos", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "PUESTOS");
+            cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
+        }));
 
-    // Si quieres mostrar Empleados en panel o ventana, elige una
-    popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> abrirVentanaEmpleados()));
-}
-
+        // Si quieres mostrar Empleados en panel o ventana, elige una
+        popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> abrirVentanaEmpleados()));
+    }
 
     public void popUpMenu() {
         popupMenuMantenimientos = new JPopupMenu();
@@ -177,7 +178,6 @@ public class Inicio extends javax.swing.JFrame {
         // Mostrarlo debajo del componente
         menu.show(componente, 200, componente.getHeight() - 50);
     }
-
 
     public Inicio(String rol) {
         initComponents();
@@ -361,6 +361,7 @@ public class Inicio extends javax.swing.JFrame {
         pnlContenido.setPreferredSize(new java.awt.Dimension(700, 524));
         pnlContenido.setLayout(new java.awt.CardLayout());
 
+        pnlVacio.setBackground(new java.awt.Color(46, 52, 64));
         pnlVacio.setLayout(new java.awt.BorderLayout());
         pnlContenido.add(pnlVacio, "VACIO");
 
@@ -589,9 +590,9 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnConsultasMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultasMenuActionPerformed
         if (popupMenuConsultas == null) {
-        popUpMenuConsultas();
-    }
-    popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight() + 20);
+            popUpMenuConsultas();
+        }
+        popupMenuConsultas.show(pnlBotonConsultas, 200, pnlBotonConsultas.getHeight() + 20);
     }//GEN-LAST:event_btnConsultasMenuActionPerformed
 
     private void txtBusquedaDepartamentos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaDepartamentos1ActionPerformed
