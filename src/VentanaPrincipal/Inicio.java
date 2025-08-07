@@ -38,6 +38,31 @@ import javax.swing.JPopupMenu;
 public class Inicio extends javax.swing.JFrame {
 
     private String rolUsuario;
+    
+    
+    private Departamentos ventanaDepartamentos = null;
+    private Usuarios ventanaUsuarios = null;
+    private Empleados ventanaEmpleados = null;
+    private Puestos ventanaPuestos = null;
+    
+    private void cerrarTodasLasVentanas() {
+        if (ventanaUsuarios != null && ventanaUsuarios.isDisplayable()) {
+            ventanaUsuarios.dispose();
+            ventanaUsuarios = null;
+        }
+        if (ventanaDepartamentos != null && ventanaDepartamentos.isDisplayable()) {
+            ventanaDepartamentos.dispose();
+            ventanaDepartamentos = null;
+        }
+        if (ventanaEmpleados != null && ventanaEmpleados.isDisplayable()) {
+            ventanaEmpleados.dispose();
+            ventanaEmpleados = null;
+        }
+        if (ventanaPuestos != null && ventanaPuestos.isDisplayable()) {
+            ventanaPuestos.dispose();
+            ventanaPuestos = null;
+        }
+    }
 
     /**
      * Creates new form Menu
@@ -60,6 +85,18 @@ public class Inicio extends javax.swing.JFrame {
                 txtEstadoInicio.setText("Mantenimiento de Empleados");
                 break;
             }
+            case 5: {
+                txtEstadoInicio.setText("Cosulta de Empleados");
+                break;
+            }
+            case 6: {
+                txtEstadoInicio.setText("Cosulta de Puestos");
+                break;
+            }
+            case 7: {
+                txtEstadoInicio.setText("Cosulta de Departamentos");
+                break;
+            }
 
             default: {
                 txtEstadoInicio.setText("Menú Principal");
@@ -79,39 +116,75 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     private void abrirVentanaUsuarios() {
-        if (ventanaUsuarios == null || !ventanaUsuarios.isDisplayable()) {
-            ventanaUsuarios = new Usuarios();
-            ventanaUsuarios.setVisible(true);
-        } else {
-            ventanaUsuarios.toFront();
-        }
+        // Cerrar todas las otras ventanas antes de abrir esta
+        cerrarTodasLasVentanas();
+        
+        // Abrir la ventana de usuarios
+        ventanaUsuarios = new Usuarios();
+        ventanaUsuarios.setVisible(true);
+        
+        // Agregar listener para detectar cuando se cierre la ventana
+        ventanaUsuarios.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaUsuarios = null;
+                cambiarEstadoInicio(0); // Volver al estado principal
+            }
+        });
     }
 
     private void abrirVentanaDepartamentos() {
-        if (ventanaDepartamentos == null || !ventanaDepartamentos.isDisplayable()) {
-            ventanaDepartamentos = new Departamentos();
-            ventanaDepartamentos.setVisible(true);
-        } else {
-            ventanaDepartamentos.toFront();
-        }
+        // Cerrar todas las otras ventanas antes de abrir esta
+        cerrarTodasLasVentanas();
+        
+        // Abrir la ventana de departamentos
+        ventanaDepartamentos = new Departamentos();
+        ventanaDepartamentos.setVisible(true);
+        
+        // Agregar listener para detectar cuando se cierre la ventana
+        ventanaDepartamentos.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaDepartamentos = null;
+                cambiarEstadoInicio(0); // Volver al estado principal
+            }
+        });
     }
 
     private void abrirVentanaEmpleados() {
-        if (ventanaEmpleados == null || !ventanaEmpleados.isDisplayable()) {
-            ventanaEmpleados = new Empleados();
-            ventanaEmpleados.setVisible(true);
-        } else {
-            ventanaEmpleados.toFront();
-        }
+        // Cerrar todas las otras ventanas antes de abrir esta
+        cerrarTodasLasVentanas();
+        
+        // Abrir la ventana de empleados
+        ventanaEmpleados = new Empleados();
+        ventanaEmpleados.setVisible(true);
+        
+        // Agregar listener para detectar cuando se cierre la ventana
+        ventanaEmpleados.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaEmpleados = null;
+                cambiarEstadoInicio(0); // Volver al estado principal
+            }
+        });
     }
 
     private void abrirVentanaPuestos() {
-        if (ventanaPuestos == null || !ventanaPuestos.isDisplayable()) {
-            ventanaPuestos = new Puestos();
-            ventanaPuestos.setVisible(true);
-        } else {
-            ventanaPuestos.toFront();
-        }
+        // Cerrar todas las otras ventanas antes de abrir esta
+        cerrarTodasLasVentanas();
+        
+        // Abrir la ventana de puestos
+        ventanaPuestos = new Puestos();
+        ventanaPuestos.setVisible(true);
+        
+        // Agregar listener para detectar cuando se cierre la ventana
+        ventanaPuestos.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaPuestos = null;
+                cambiarEstadoInicio(0); // Volver al estado principal
+            }
+        });
     }
 
     private JMenuItem createStyledMenuItem(String text, ActionListener action) {
@@ -147,6 +220,15 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuConsultas = new JPopupMenu();
         popupMenuConsultas.setOpaque(false);
         popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        
+        // Empleados
+        popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "EMPLEADOS");
+            cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
+            activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
+            cambiarEstadoInicio(5);
+        }));
 
         // Menú para mostrar panel de departamentos
         popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
@@ -154,6 +236,7 @@ public class Inicio extends javax.swing.JFrame {
             cl.show(pnlContenido, "DEPARTAMENTOS");
             cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
             activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
+            cambiarEstadoInicio(7);
         }));
 
         // Menú para mostrar panel de puestos
@@ -162,14 +245,7 @@ public class Inicio extends javax.swing.JFrame {
             cl.show(pnlContenido, "PUESTOS");
             cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
             activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
-        }));
-
-        // Si quieres mostrar Empleados en panel o ventana, elige una
-        popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
-            CardLayout cl = (CardLayout) pnlContenido.getLayout();
-            cl.show(pnlContenido, "EMPLEADOS");
-            cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
-            activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
+            cambiarEstadoInicio(6);
         }));
     }
 
@@ -187,24 +263,24 @@ public class Inicio extends javax.swing.JFrame {
             usuariosItem.setEnabled(false);
         }
         popupMenuMantenimientos.add(usuariosItem);
+        
+        JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
+            abrirVentanaEmpleados();
+            cambiarEstadoInicio(4);
+        });
+        popupMenuMantenimientos.add(empleadosItem);
 
         JMenuItem departamentosItem = createStyledMenuItem("Departamentos", e -> {
             abrirVentanaDepartamentos();
             cambiarEstadoInicio(2);
         });
         popupMenuMantenimientos.add(departamentosItem);
-
+        
         JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
             abrirVentanaPuestos();
             cambiarEstadoInicio(3);
         });
         popupMenuMantenimientos.add(puestosItem);
-
-        JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
-            abrirVentanaEmpleados();
-            cambiarEstadoInicio(4);
-        });
-        popupMenuMantenimientos.add(empleadosItem);
     }
 
     public void popUpMenuProcesos() {
@@ -214,18 +290,14 @@ public class Inicio extends javax.swing.JFrame {
 
         // Menú para mostrar panel de Crear Nómina
         popupMenuProcesos.add(createStyledMenuItem("Crear Nómina", e -> {
-            CardLayout cl = (CardLayout) pnlContenido.getLayout();
-            cl.show(pnlContenido, "DEPARTAMENTOS");
-            cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
-            activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
+            /*CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "Nómina");*/
         }));
 
         // Menú para mostrar panel de Reversar Nómina
-        popupMenuProcesos.add(createStyledMenuItem("Nómina", e -> {
-            CardLayout cl = (CardLayout) pnlContenido.getLayout();
-            cl.show(pnlContenido, "PUESTOS");
-            cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
-            activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
+        popupMenuProcesos.add(createStyledMenuItem("Reversar Nómina", e -> {
+            /*CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "Nómina");*/
         }));
     }
 
@@ -422,6 +494,9 @@ public class Inicio extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlBotonInicioMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlBotonInicioMouseEntered(evt);
+            }
         });
         pnlBotonInicio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -492,6 +567,9 @@ public class Inicio extends javax.swing.JFrame {
         txtBotoninicioIcono1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtBotoninicioIcono1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtBotoninicioIcono1MouseEntered(evt);
             }
         });
         pnlBotonSalir.add(txtBotoninicioIcono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 20));
@@ -917,6 +995,8 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlBotonMatenimientosMouseClicked
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        cerrarTodasLasVentanas();
+        
         this.dispose();
         
         Login login = new Login();
@@ -1027,7 +1107,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlBotonSalirKeyPressed
 
     private void txtBotoninicioIcono1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBotoninicioIcono1MouseClicked
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_txtBotoninicioIcono1MouseClicked
 
     private void btnMantenimientosMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuMouseEntered
@@ -1042,13 +1122,14 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_pnlBotonMatenimientos1MouseClicked
 
-    private Departamentos ventanaDepartamentos = null;
+    private void txtBotoninicioIcono1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBotoninicioIcono1MouseEntered
+        pnlBotonSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_txtBotoninicioIcono1MouseEntered
 
-    private Usuarios ventanaUsuarios = null;
+    private void pnlBotonInicioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonInicioMouseEntered
+        pnlBotonSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_pnlBotonInicioMouseEntered
 
-    private Empleados ventanaEmpleados = null;
-
-    private Puestos ventanaPuestos = null;
 
     /**
      * @param args the command line arguments
