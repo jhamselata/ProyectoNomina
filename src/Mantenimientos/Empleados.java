@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
  *
  * @author Duanel
  */
+
 public class Empleados extends javax.swing.JFrame {
 
     /**
@@ -35,6 +36,7 @@ public class Empleados extends javax.swing.JFrame {
     private boolean encontrado = false;
     private String cadenaAnterior = "";
     private File archivo = new File(ARCHIVO_EMPLEADOS);
+    private boolean cooperativaConfiguracionCompletada = false;
 
     public Empleados() {
         initComponents();
@@ -52,6 +54,7 @@ public class Empleados extends javax.swing.JFrame {
         txtFechaIngreEmpleado.setEditable(false);
 
         establecerFechaActual();
+        cooperativaConfiguracionCompletada = false; 
     }
 
     /**
@@ -81,12 +84,14 @@ public class Empleados extends javax.swing.JFrame {
      */
     private void gestionarCooperativa() {
         // Validar que haya salario ingresado
-        String salarioText = txtSalario.getText().trim();
+       String salarioText = txtSalario.getText().trim();
         if (salarioText.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Debe ingresar un salario antes de configurar la cooperativa.",
                     "Salario requerido", JOptionPane.WARNING_MESSAGE);
             txtSalario.requestFocus();
+            rbtnNo.setSelected(true); // Si no hay salario, no puede ser de cooperativa
+            cooperativaConfiguracionCompletada = false; // Resetear la bandera
             return;
         }
 
@@ -103,6 +108,9 @@ public class Empleados extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,
                         "Se canceló el proceso de cooperativa. El empleado se guardará sin cooperativa.",
                         "Proceso cancelado", JOptionPane.INFORMATION_MESSAGE);
+                cooperativaConfiguracionCompletada = false; // El proceso no se completó
+            } else {
+                cooperativaConfiguracionCompletada = true; // El proceso se completó exitosamente
             }
 
         } catch (NumberFormatException e) {
@@ -110,6 +118,8 @@ public class Empleados extends javax.swing.JFrame {
                     "El salario debe ser un número válido para configurar la cooperativa.",
                     "Salario inválido", JOptionPane.ERROR_MESSAGE);
             txtSalario.requestFocus();
+            rbtnNo.setSelected(true); // Si el salario es inválido, no puede ser de cooperativa
+            cooperativaConfiguracionCompletada = false; // Resetear la bandera
         }
     }
 
@@ -259,7 +269,6 @@ public class Empleados extends javax.swing.JFrame {
         txtApeMatEmpleado.setText("");
         txtDirecEmpleado.setText("");
         txtTelEmpleado.setText("");
-        // txtFechaIngreEmpleado.setText(""); // Ya no necesitas limpiar manualmente, se establecerá automáticamente
         txtSalario.setText("");
 
         SexoGroup.clearSelection();
@@ -273,8 +282,10 @@ public class Empleados extends javax.swing.JFrame {
         encontrado = false;
         cadenaAnterior = "";
 
-        // Establecer la fecha actual cada vez que se limpian los campos
-        establecerFechaActual(); // ¡Nueva llamada aquí!
+        establecerFechaActual();
+        
+        // ¡Importante! Reiniciar la bandera cuando se limpian los campos para un nuevo registro
+        cooperativaConfiguracionCompletada = false; 
     }
 
     private void establecerFechaActual() {
@@ -314,8 +325,11 @@ public class Empleados extends javax.swing.JFrame {
             // Cooperativa
             if ("Si".equals(datos[10])) {
                 rbtnSi.setSelected(true);
+                // Si el empleado ya tiene cooperativa registrada, se asume que la configuración está completa
+                cooperativaConfiguracionCompletada = true; 
             } else if ("No".equals(datos[10])) {
                 rbtnNo.setSelected(true);
+                cooperativaConfiguracionCompletada = false;
             }
 
             txtSalario.setText(datos[11]);
@@ -1101,15 +1115,6 @@ public class Empleados extends javax.swing.JFrame {
             return;
         }
 
-        // Si selecciona cooperativa "Si", abrir ventana de gestión
-        if (rbtnSi.isSelected()) {
-            gestionarCooperativa();
-            // Si no se completó el proceso de cooperativa, no continuar
-            if (rbtnNo.isSelected()) {
-                return; // El usuario canceló la cooperativa
-            }
-        }
-
         String nuevaLinea = construirLineaEmpleado();
         ManejoArchivos manejo = new ManejoArchivos();
 
@@ -1352,59 +1357,66 @@ public class Empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSalarioKeyTyped
 
     private void rbtnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnSiActionPerformed
-        String salarioText = txtSalario.getText().trim();
-        if (salarioText.isEmpty() && !txtIDEmpleado.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Debe ingresar un salario antes de seleccionar cooperativa.",
-                    "Salario requerido", JOptionPane.WARNING_MESSAGE);
-            rbtnNo.setSelected(true);
-            txtSalario.requestFocus();
-        } else if (!salarioText.isEmpty()) {
-            // Si hay salario, abrir inmediatamente el diálogo
-            gestionarCooperativa();
+        if (rbtnSi.isSelected()) {
+            // Caso 1: Estás en modo "Creando" O estás en modo "Modificando" y el empleado NO fue cargado como "Si" en cooperativa
+            // En estos casos, siempre queremos abrir el diálogo si se selecciona "Si"
+            if (txtEstado.getText().equals(ESTADO_CREANDO) || !cooperativaConfiguracionCompletada) {
+                gestionarCooperativa();
+                // La bandera cooperativaConfiguracionCompletada se actualiza dentro de gestionarCooperativa()
+                // según si el proceso fue exitoso o cancelado.
+            } // Caso 2: Estás en modo "Modificando" Y el empleado FUE cargado como "Si" en cooperativa
+            // En este caso, si el usuario vuelve a presionar "Si", también queremos que el diálogo se abra.
+            else if (txtEstado.getText().equals(ESTADO_MODIFICANDO) && encontrado && rbtnSi.isSelected()) {
+                // Forzamos la apertura del diálogo si el usuario vuelve a presionar "Si"
+                // Esto permite re-configurar o revisar la información de la cooperativa
+                gestionarCooperativa();
+                // La bandera cooperativaConfiguracionCompletada se actualiza dentro de gestionarCooperativa()
+                // según si el proceso fue exitoso o cancelado.
+            }
         }
     }//GEN-LAST:event_rbtnSiActionPerformed
 
     private void rbtnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNoActionPerformed
         // TODO add your handling code here:
         validarCambioCooperativa();
+        cooperativaConfiguracionCompletada = false;
     }//GEN-LAST:event_rbtnNoActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Empleados().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new Empleados().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup CooperativaGroup;
