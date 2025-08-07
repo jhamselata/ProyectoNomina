@@ -78,7 +78,7 @@ public class Inicio extends javax.swing.JFrame {
                 } else {
                     g2.setColor(new Color(60, 63, 65)); // Color normal
                 }
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 0, 0);
                 g2.dispose();
                 setOpaque(false);
                 super.paintComponent(g);
