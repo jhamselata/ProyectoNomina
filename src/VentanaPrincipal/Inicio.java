@@ -158,6 +158,7 @@ public class Inicio extends javax.swing.JFrame {
         // Mostrarlo debajo del componente
         menu.show(componente, 200, componente.getHeight()-50);
     }
+    
 
     public Inicio(String rol) {
         initComponents();
@@ -196,10 +197,14 @@ public class Inicio extends javax.swing.JFrame {
         panelesBordesRedondeados2 = new Utilidades.PanelesBordesRedondeados();
         jLabel2 = new javax.swing.JLabel();
         panelesBordesRedondeados3 = new Utilidades.PanelesBordesRedondeados();
-        jLabel3 = new javax.swing.JLabel();
+        btnProcesosMenu = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlConsultas = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        pnlBarraopciones = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 20));
+        pnlTablas = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDepartamentos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -283,12 +288,10 @@ public class Inicio extends javax.swing.JFrame {
         panelesBordesRedondeados3.setRoundBottomRight(20);
         panelesBordesRedondeados3.setRoundTopLeft(20);
         panelesBordesRedondeados3.setRoundTopRight(20);
-        panelesBordesRedondeados3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelesBordesRedondeados3.setLayout(new java.awt.BorderLayout());
 
-        jLabel3.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(236, 239, 244));
-        jLabel3.setText("Procesos");
-        panelesBordesRedondeados3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, -1, -1));
+        btnProcesosMenu.setText("Procesos");
+        panelesBordesRedondeados3.add(btnProcesosMenu, java.awt.BorderLayout.CENTER);
 
         jPanel4.add(panelesBordesRedondeados3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 180, 50));
 
@@ -306,10 +309,29 @@ public class Inicio extends javax.swing.JFrame {
         pnlContenido.setPreferredSize(new java.awt.Dimension(700, 524));
         pnlContenido.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(236, 239, 244));
-        jLabel1.setText("Mantenimientos");
-        pnlConsultas.add(jLabel1);
+        pnlConsultas.setLayout(new java.awt.BorderLayout());
+
+        pnlBarraopciones.setBackground(new java.awt.Color(255, 153, 102));
+        pnlBarraopciones.add(filler3);
+
+        pnlConsultas.add(pnlBarraopciones, java.awt.BorderLayout.PAGE_START);
+
+        pnlTablas.setLayout(new java.awt.BorderLayout());
+
+        tblDepartamentos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID del Departamento", "Descripción del departamento"
+            }
+        ));
+        tblDepartamentos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblDepartamentos);
+
+        pnlTablas.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        pnlConsultas.add(pnlTablas, java.awt.BorderLayout.CENTER);
 
         pnlContenido.add(pnlConsultas, java.awt.BorderLayout.CENTER);
 
@@ -395,20 +417,24 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMantenimientosMenu;
+    private javax.swing.JButton btnProcesosMenu;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private Utilidades.PanelesBordesRedondeados panelesBordesRedondeados2;
     private Utilidades.PanelesBordesRedondeados panelesBordesRedondeados3;
     private javax.swing.JPanel pnlBarraLateralIzq;
     private javax.swing.JPanel pnlBarraSuperior;
+    private javax.swing.JPanel pnlBarraopciones;
     private Utilidades.PanelesBordesRedondeados pnlBotonMatenimientos;
     private javax.swing.JPanel pnlConsultas;
     private javax.swing.JPanel pnlContenido;
+    private javax.swing.JPanel pnlTablas;
     private javax.swing.JPopupMenu popupMenuMantenimientos;
+    private javax.swing.JTable tblDepartamentos;
     // End of variables declaration//GEN-END:variables
 }
