@@ -60,7 +60,7 @@ public class cargarDatosenTabla {
                 if (texto.trim().length() == 0) {
                     sorter.setRowFilter(null); //Mostrar todo si está vacío
                 } else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, columnaSeleccionada));
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + texto, columnaSeleccionada));
                 }
             }
         });

@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 
 /**
  *
@@ -239,6 +240,12 @@ private void configurarCalendario() {
     private JPopupMenu popupMenuConsultas;
 
     private JPopupMenu popupMenuProcesos;
+    
+    
+    
+    public JTable getTablaEmpleados() {
+    return tblEmpleados;
+}
 
     public void popUpMenuConsultas() {
         popupMenuConsultas = new JPopupMenu();
@@ -252,6 +259,7 @@ private void configurarCalendario() {
             cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
             activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
             cambiarEstadoInicio(5);
+            cerrarTodasLasVentanas();
         }));
 
         // Menú para mostrar panel de departamentos
@@ -261,6 +269,7 @@ private void configurarCalendario() {
             cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
             activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
             cambiarEstadoInicio(7);
+            cerrarTodasLasVentanas();
         }));
 
         // Menú para mostrar panel de puestos
@@ -270,6 +279,7 @@ private void configurarCalendario() {
             cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
             activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
             cambiarEstadoInicio(6);
+            cerrarTodasLasVentanas();
         }));
     }
 
@@ -280,6 +290,8 @@ private void configurarCalendario() {
 
         JMenuItem usuariosItem = createStyledMenuItem("Usuarios", e -> {
             abrirVentanaUsuarios();
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
             cambiarEstadoInicio(1);
         });
         //Desactiva la opción de mantenimiento de usuarios si el usuario no es administrador
@@ -290,18 +302,24 @@ private void configurarCalendario() {
         
         JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
             abrirVentanaEmpleados();
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
             cambiarEstadoInicio(4);
         });
         popupMenuMantenimientos.add(empleadosItem);
 
         JMenuItem departamentosItem = createStyledMenuItem("Departamentos", e -> {
             abrirVentanaDepartamentos();
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
             cambiarEstadoInicio(2);
         });
         popupMenuMantenimientos.add(departamentosItem);
         
         JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
             abrirVentanaPuestos();
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
             cambiarEstadoInicio(3);
         });
         popupMenuMantenimientos.add(puestosItem);
@@ -468,11 +486,13 @@ private void configurarCalendario() {
         pnlConsultaPuestos = new javax.swing.JPanel();
         pnlBarraopcionesPuestos = new javax.swing.JPanel();
         pnlOpcionesConsultaDep1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         pnlBusquedaDepartamentos1 = new Utilidades.PanelesBordesRedondeados();
         txtBusquedaPuestos = new javax.swing.JTextField();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        jLabel1 = new javax.swing.JLabel();
         cbbxFiltroPuestos = new javax.swing.JComboBox<>();
         pnlTablaPuestos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -480,11 +500,13 @@ private void configurarCalendario() {
         pnlConsultaDepartamentos = new javax.swing.JPanel();
         pnlBarraopcionesDepartamentos = new javax.swing.JPanel();
         pnlOpcionesConsultaDep = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         pnlBusquedaDepartamentos = new Utilidades.PanelesBordesRedondeados();
         txtBusquedaDepartamentos = new javax.swing.JTextField();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        jLabel3 = new javax.swing.JLabel();
         cbbxFiltroBusqueda = new javax.swing.JComboBox<>();
         pnlTablaDepartamentos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -492,11 +514,13 @@ private void configurarCalendario() {
         pnlConsultaEmpleados = new javax.swing.JPanel();
         pnlBarraopcionesEmpleados = new javax.swing.JPanel();
         pnlOpcionesConsultaEmpleados = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         pnlBusquedaDepartamentos2 = new Utilidades.PanelesBordesRedondeados();
         txtBusquedaEmpleados = new javax.swing.JTextField();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        jLabel5 = new javax.swing.JLabel();
         cbbxFiltroEmpleados = new javax.swing.JComboBox<>();
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
         jdcFecha = new com.toedter.calendar.JDateChooser();
@@ -748,6 +772,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaDep1.setBackground(new java.awt.Color(59, 66, 82));
 
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Buscar:");
+        pnlOpcionesConsultaDep1.add(jLabel2);
+
         pnlBusquedaDepartamentos1.setBackground(new java.awt.Color(76, 86, 106));
         pnlBusquedaDepartamentos1.setPreferredSize(new java.awt.Dimension(500, 40));
         pnlBusquedaDepartamentos1.setRoundBottomLeft(40);
@@ -781,6 +810,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaDep1.add(pnlBusquedaDepartamentos1);
         pnlOpcionesConsultaDep1.add(filler8);
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Buscar por:");
+        pnlOpcionesConsultaDep1.add(jLabel1);
 
         cbbxFiltroPuestos.setPreferredSize(new java.awt.Dimension(200, 40));
         cbbxFiltroPuestos.addActionListener(new java.awt.event.ActionListener() {
@@ -834,6 +868,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaDep.setBackground(new java.awt.Color(59, 66, 82));
 
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Buscar:");
+        pnlOpcionesConsultaDep.add(jLabel4);
+
         pnlBusquedaDepartamentos.setBackground(new java.awt.Color(76, 86, 106));
         pnlBusquedaDepartamentos.setPreferredSize(new java.awt.Dimension(500, 40));
         pnlBusquedaDepartamentos.setRoundBottomLeft(40);
@@ -867,6 +906,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaDep.add(pnlBusquedaDepartamentos);
         pnlOpcionesConsultaDep.add(filler3);
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Buscar por:");
+        pnlOpcionesConsultaDep.add(jLabel3);
 
         cbbxFiltroBusqueda.setPreferredSize(new java.awt.Dimension(200, 40));
         cbbxFiltroBusqueda.addActionListener(new java.awt.event.ActionListener() {
@@ -920,6 +964,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaEmpleados.setBackground(new java.awt.Color(59, 66, 82));
 
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Buscar:");
+        pnlOpcionesConsultaEmpleados.add(jLabel6);
+
         pnlBusquedaDepartamentos2.setBackground(new java.awt.Color(76, 86, 106));
         pnlBusquedaDepartamentos2.setPreferredSize(new java.awt.Dimension(500, 40));
         pnlBusquedaDepartamentos2.setRoundBottomLeft(40);
@@ -953,6 +1002,11 @@ private void configurarCalendario() {
 
         pnlOpcionesConsultaEmpleados.add(pnlBusquedaDepartamentos2);
         pnlOpcionesConsultaEmpleados.add(filler11);
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Buscar por:");
+        pnlOpcionesConsultaEmpleados.add(jLabel5);
 
         cbbxFiltroEmpleados.setPreferredSize(new java.awt.Dimension(200, 40));
         cbbxFiltroEmpleados.addItemListener(new java.awt.event.ItemListener() {
@@ -1178,6 +1232,7 @@ private void configurarCalendario() {
             txtBusquedaEmpleados.setFocusable(false);
         } else {
             jdcFecha.setEnabled(false);
+            txtBusquedaEmpleados.setText("");
             txtBusquedaEmpleados.setEditable(true);
             txtBusquedaEmpleados.setFocusable(true);
             txtBusquedaEmpleados.requestFocus();
@@ -1242,6 +1297,12 @@ private void configurarCalendario() {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

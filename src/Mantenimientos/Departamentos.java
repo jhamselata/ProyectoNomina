@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-
 /**
  *
  * @author Duanel
@@ -39,6 +38,7 @@ public class Departamentos extends javax.swing.JFrame {
             txtDescDep.setEnabled(true);
         } */
     }
+    
 
     public String buscar(String DepartamentoBuscado) {
         String lineaEncontrada = null;
@@ -154,7 +154,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBotonRegistrar.setRoundTopRight(20);
 
         btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(204, 204, 204));
+        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("Registrar");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -203,7 +203,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBotonEliminar.setRoundTopRight(20);
 
         btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(204, 204, 204));
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("Eliminar");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -273,7 +273,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBtnSalir.setRoundTopRight(20);
 
         btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnSalir.setForeground(new java.awt.Color(204, 204, 204));
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("Salir");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -485,12 +485,12 @@ public class Departamentos extends javax.swing.JFrame {
                         // Guardar nuevo
                         manejo.GuardarDatos(nuevaLinea, archivo);
                         JOptionPane.showMessageDialog(null, "Departamento guardado correctamente.");
+                        
                     } else {
                         // Modificar usuario existente usando tu método Modificar
                         manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
                         JOptionPane.showMessageDialog(null, "Departamento modificado correctamente.");
                     }
-
                     // Resetear formulario
                     encontrado = false;
                     txtIDDep.setText("");

@@ -152,6 +152,7 @@ public class Puestos extends javax.swing.JFrame {
         lblBotonRegistrar.setRoundTopLeft(20);
         lblBotonRegistrar.setRoundTopRight(20);
 
+        btnRegistrar.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(204, 204, 204));
         btnRegistrar.setText("Registrar");
@@ -192,7 +193,7 @@ public class Puestos extends javax.swing.JFrame {
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
+        panelesBordesRedondeados1.add(lblBotonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, -1, -1));
 
         lblBotonEliminar.setBackground(new java.awt.Color(59, 66, 82));
         lblBotonEliminar.setPreferredSize(new java.awt.Dimension(132, 40));
@@ -201,6 +202,7 @@ public class Puestos extends javax.swing.JFrame {
         lblBotonEliminar.setRoundTopLeft(20);
         lblBotonEliminar.setRoundTopRight(20);
 
+        btnEliminar.setBackground(new java.awt.Color(0, 0, 0));
         btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(204, 204, 204));
         btnEliminar.setText("Eliminar");
@@ -241,7 +243,7 @@ public class Puestos extends javax.swing.JFrame {
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, -1));
+        panelesBordesRedondeados1.add(lblBotonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, -1, -1));
 
         txtDescPuesto.setBackground(new java.awt.Color(255, 204, 102));
         txtDescPuesto.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
@@ -271,6 +273,7 @@ public class Puestos extends javax.swing.JFrame {
         lblBtnSalir.setRoundTopLeft(20);
         lblBtnSalir.setRoundTopRight(20);
 
+        btnSalir.setBackground(new java.awt.Color(0, 0, 0));
         btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         btnSalir.setForeground(new java.awt.Color(204, 204, 204));
         btnSalir.setText("Salir");
@@ -311,7 +314,7 @@ public class Puestos extends javax.swing.JFrame {
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, -1));
+        panelesBordesRedondeados1.add(lblBtnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, -1, -1));
 
         txtIDPuesto.setBackground(new java.awt.Color(255, 204, 102));
         txtIDPuesto.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N

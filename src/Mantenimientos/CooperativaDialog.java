@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import javax.swing.JOptionPane;
 
 public class CooperativaDialog extends javax.swing.JDialog {
@@ -86,8 +85,8 @@ public class CooperativaDialog extends javax.swing.JDialog {
         txtSalarioRef.setText(salarioEmpleado.toString());
         
         // Calcular y mostrar máximo permitido
-        BigDecimal maximoPermitido = salarioEmpleado.multiply(new BigDecimal("0.05"));
-        lblMaximoPermitido.setText("Máximo permitido: $" + maximoPermitido.setScale(2, RoundingMode.HALF_UP));
+        lblMaximoPermitido.setText("Máximo permitido: 5% del salario");
+
     }
 
     private void verificarRegistroExistente() {
@@ -144,20 +143,11 @@ public class CooperativaDialog extends javax.swing.JDialog {
         try {
             BigDecimal porcentaje = new BigDecimal(porcentajeText);
             
-            if (porcentaje.compareTo(BigDecimal.ZERO) < 0) {
-                JOptionPane.showMessageDialog(this, "El porcentaje no puede ser negativo.");
-                txtPorcentajeDesc.requestFocus();
-                return false;
-            }
-            
-            BigDecimal maximoPermitido = salarioEmpleado.multiply(new BigDecimal("0.05"));
-            if (porcentaje.compareTo(maximoPermitido) > 0) {
-                JOptionPane.showMessageDialog(this, 
-                    String.format("El porcentaje no puede exceder el 5%% del salario ($%.2f).", 
-                    maximoPermitido.doubleValue()));
-                txtPorcentajeDesc.requestFocus();
-                return false;
-            }
+            if (porcentaje.compareTo(BigDecimal.ZERO) <= 0 || porcentaje.compareTo(new BigDecimal("5")) > 0) {
+    JOptionPane.showMessageDialog(this, "El porcentaje debe estar entre 1% y 5%.");
+    txtPorcentajeDesc.requestFocus();
+    return false;
+}
             
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El porcentaje debe ser un número válido.");
@@ -306,8 +296,10 @@ public class CooperativaDialog extends javax.swing.JDialog {
 
         lblPorcentaje.setFont(new java.awt.Font("Noto Sans", 1, 14));
         lblPorcentaje.setForeground(new java.awt.Color(236, 239, 244));
-        lblPorcentaje.setText("% Descuento:");
+        lblPorcentaje.setText("Descuento (%):");
         panelPrincipal.add(lblPorcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+        txtPorcentajeDesc.setToolTipText("Ingrese un porcentaje entre 1 y 5");
+
 
         txtPorcentajeDesc.setFont(new java.awt.Font("Noto Sans", 0, 14));
         txtPorcentajeDesc.setForeground(new java.awt.Color(236, 239, 244));
