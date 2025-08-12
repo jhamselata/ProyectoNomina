@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -42,34 +43,32 @@ import javax.swing.JTable;
  */
 public class Inicio extends javax.swing.JFrame {
 
-private void configurarCalendario() {
-    // Configurar el listener del JDateChooser
-    jdcFecha.addPropertyChangeListener("date", new PropertyChangeListener() {
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            Date fechaSeleccionada = jdcFecha.getDate();
-            if (fechaSeleccionada != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                txtBusquedaEmpleados.setText(sdf.format(fechaSeleccionada));
-            } else {
-                txtBusquedaEmpleados.setText("");
+    private void configurarCalendario() {
+        // Configurar el listener del JDateChooser
+        jdcFecha.addPropertyChangeListener("date", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                Date fechaSeleccionada = jdcFecha.getDate();
+                if (fechaSeleccionada != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    txtBusquedaEmpleados.setText(sdf.format(fechaSeleccionada));
+                } else {
+                    txtBusquedaEmpleados.setText("");
+                }
             }
-        }
-    });
-    
-    // Opcional: Configurar formato de fecha para el calendario
-    jdcFecha.setDateFormatString("MM/dd/yyyy");
-}
-    
-    
+        });
+
+        // Opcional: Configurar formato de fecha para el calendario
+        jdcFecha.setDateFormatString("MM/dd/yyyy");
+    }
+
     private String rolUsuario;
-    
-    
+
     private Departamentos ventanaDepartamentos = null;
     private Usuarios ventanaUsuarios = null;
     private Empleados ventanaEmpleados = null;
     private Puestos ventanaPuestos = null;
-    
+
     private void cerrarTodasLasVentanas() {
         if (ventanaUsuarios != null && ventanaUsuarios.isDisplayable()) {
             ventanaUsuarios.dispose();
@@ -143,11 +142,11 @@ private void configurarCalendario() {
     private void abrirVentanaUsuarios() {
         // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-        
+
         // Abrir la ventana de usuarios
         ventanaUsuarios = new Usuarios();
         ventanaUsuarios.setVisible(true);
-        
+
         // Agregar listener para detectar cuando se cierre la ventana
         ventanaUsuarios.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -161,11 +160,11 @@ private void configurarCalendario() {
     private void abrirVentanaDepartamentos() {
         // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-        
+
         // Abrir la ventana de departamentos
         ventanaDepartamentos = new Departamentos();
         ventanaDepartamentos.setVisible(true);
-        
+
         // Agregar listener para detectar cuando se cierre la ventana
         ventanaDepartamentos.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -179,11 +178,11 @@ private void configurarCalendario() {
     private void abrirVentanaEmpleados() {
         // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-        
+
         // Abrir la ventana de empleados
         ventanaEmpleados = new Empleados();
         ventanaEmpleados.setVisible(true);
-        
+
         // Agregar listener para detectar cuando se cierre la ventana
         ventanaEmpleados.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -197,11 +196,11 @@ private void configurarCalendario() {
     private void abrirVentanaPuestos() {
         // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-        
+
         // Abrir la ventana de puestos
         ventanaPuestos = new Puestos();
         ventanaPuestos.setVisible(true);
-        
+
         // Agregar listener para detectar cuando se cierre la ventana
         ventanaPuestos.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -240,18 +239,16 @@ private void configurarCalendario() {
     private JPopupMenu popupMenuConsultas;
 
     private JPopupMenu popupMenuProcesos;
-    
-    
-    
+
     public JTable getTablaEmpleados() {
-    return tblEmpleados;
-}
+        return tblEmpleados;
+    }
 
     public void popUpMenuConsultas() {
         popupMenuConsultas = new JPopupMenu();
         popupMenuConsultas.setOpaque(false);
         popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        
+
         // Empleados
         popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
@@ -299,7 +296,7 @@ private void configurarCalendario() {
             usuariosItem.setEnabled(false);
         }
         popupMenuMantenimientos.add(usuariosItem);
-        
+
         JMenuItem empleadosItem = createStyledMenuItem("Empleados", e -> {
             abrirVentanaEmpleados();
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
@@ -315,7 +312,7 @@ private void configurarCalendario() {
             cambiarEstadoInicio(2);
         });
         popupMenuMantenimientos.add(departamentosItem);
-        
+
         JMenuItem puestosItem = createStyledMenuItem("Puestos", e -> {
             abrirVentanaPuestos();
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
@@ -410,9 +407,9 @@ private void configurarCalendario() {
         initComponents();
 
         configurarImagenFondo();
-        
+
         configurarCalendario();
-        
+
         jdcFecha.setEnabled(false);
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -481,6 +478,7 @@ private void configurarCalendario() {
         btnProcesosMenu = new javax.swing.JButton();
         pnlBotonMatenimientos1 = new Utilidades.PanelesBordesRedondeados();
         btnMantenimientosMenu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlVacio = new javax.swing.JPanel();
         pnlConsultaPuestos = new javax.swing.JPanel();
@@ -748,6 +746,14 @@ private void configurarCalendario() {
 
         pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        pnlContenedorBotonespnlIzq.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
+
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -840,9 +846,16 @@ private void configurarCalendario() {
                 "ID", "Descripción del Puesto"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -936,9 +949,16 @@ private void configurarCalendario() {
                 "ID", "Descripción del Departamento"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -1041,9 +1061,16 @@ private void configurarCalendario() {
                 "ID", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Teléfono", "Sexo", "ID Departamento", "Fecha de Ingreso", "ID Puesto", "Cooperativa", "Salario"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -1089,11 +1116,11 @@ private void configurarCalendario() {
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         cerrarTodasLasVentanas();
-        
+
         this.dispose();
-        
+
         Login login = new Login();
-            login.setVisible(true);
+        login.setVisible(true);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
@@ -1208,7 +1235,7 @@ private void configurarCalendario() {
     }//GEN-LAST:event_btnMantenimientosMenuMouseEntered
 
     private void btnMantenimientosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientosMenuActionPerformed
-        popupMenuMantenimientos.show(btnMantenimientosMenu, 200, btnMantenimientosMenu.getHeight()- 50);
+        popupMenuMantenimientos.show(btnMantenimientosMenu, 200, btnMantenimientosMenu.getHeight() - 50);
     }//GEN-LAST:event_btnMantenimientosMenuActionPerformed
 
     private void pnlBotonMatenimientos1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonMatenimientos1MouseClicked
@@ -1225,8 +1252,8 @@ private void configurarCalendario() {
 
     private void cbbxFiltroEmpleadosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbxFiltroEmpleadosItemStateChanged
         String filtroSeleccionado = (String) cbbxFiltroEmpleados.getSelectedItem();
-        
-        if(filtroSeleccionado.equals("Fecha de Ingreso")){
+
+        if (filtroSeleccionado.equals("Fecha de Ingreso")) {
             jdcFecha.setEnabled(true);
             txtBusquedaEmpleados.setEditable(false);
             txtBusquedaEmpleados.setFocusable(false);
@@ -1240,6 +1267,17 @@ private void configurarCalendario() {
         }
     }//GEN-LAST:event_cbbxFiltroEmpleadosItemStateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Dentro de Inicio
+        Departamentos depFrame = new Departamentos(); // tu JFrame existente
+        JDialog dialog = new JDialog(this, "Departamentos", true); // true = modal
+
+        dialog.setContentPane(depFrame.getContentPane()); // mover contenido del JFrame al diálogo
+        dialog.pack();
+        dialog.setLocationRelativeTo(this); // centrar sobre Inicio
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1297,6 +1335,7 @@ private void configurarCalendario() {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
