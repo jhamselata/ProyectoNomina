@@ -322,6 +322,7 @@ public class CooperativaDialog extends javax.swing.JDialog {
         txtBalanceAcumulado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(59, 66, 82)));
         txtBalanceAcumulado.setOpaque(false);
         panelPrincipal.add(txtBalanceAcumulado, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 185, 150, 30));
+        txtBalanceAcumulado.setEditable(false);
 
         lblEstado.setFont(new java.awt.Font("Noto Sans", 2, 12));
         lblEstado.setForeground(new java.awt.Color(255, 204, 102));
