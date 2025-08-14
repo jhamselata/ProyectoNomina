@@ -185,6 +185,6 @@ public class GenerarPDF {
     }
 
     public static void main(String[] args) throws IOException {
-        generarPDF("src/BaseDeDatos/Nominas.txt", "src/BaseDeDatos/Empleados.txt", "src/BaseDeDatos/Nómina.pdf");
+        generarPDF("src/BaseDeDatos/Nominas.txt", "src/BaseDeDatos/Empleados.txt", "src/VolantesDeNómina/Nómina.pdf");
     }
 }
