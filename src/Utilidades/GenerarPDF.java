@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
 package Utilidades;
 
+import java.awt.Color;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -13,105 +9,175 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-/**
- *
- * @author Duanel
- */
-
 public class GenerarPDF {
 
-    public static void generarPDF(String rutaNominas, int idEmpleado, String rutaSalida) throws IOException {
-        List<String> lineas = Files.readAllLines(Paths.get(rutaNominas));
-
-       
-        String[] datos = null;
-        for (String linea : lineas) {
-            String[] partes = linea.split(";");
-            if (Integer.parseInt(partes[1]) == idEmpleado) {
-                datos = partes;
-                break;
-            }
+    public static void generarPDF(String rutaNominas, String rutaEmpleados, String rutaSalida) throws IOException {
+        // Leer empleados
+        List<String[]> empleados = new ArrayList<>();
+        for (String linea : Files.readAllLines(Paths.get(rutaEmpleados))) {
+            empleados.add(linea.split(";"));
         }
 
-        if (datos == null) {
-            throw new RuntimeException("Empleado no encontrado en Nominas.txt");
-        }
-        
-        double salarioBase = Double.parseDouble(datos[3]);
-        double ars = Double.parseDouble(datos[4]);
-        double afp = Double.parseDouble(datos[5]);
-        double coop = Double.parseDouble(datos[6]);
-        double isr = Double.parseDouble(datos[7]);
-        double salarioNeto = Double.parseDouble(datos[8]);
-        
-        
         try (PDDocument doc = new PDDocument()) {
-            PDPage pagina = new PDPage(PDRectangle.A4);
-            doc.addPage(pagina);
 
-            try (PDPageContentStream contenido = new PDPageContentStream(doc, pagina)) {
-                contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
-                contenido.beginText();
-                contenido.newLineAtOffset(200, 780);
-                contenido.showText("SISTEMA DE NÓMINAS");
-                contenido.endText();
+            for (String[] empleado : empleados) {
+                int idEmpleado = Integer.parseInt(empleado[0]);
 
-                contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
-                contenido.beginText();
-                contenido.newLineAtOffset(250, 760);
-                contenido.showText("VOLANTE DE PAGO");
-                contenido.endText();
+                // Buscar nómina del empleado
+                String[] nomina = null;
+                for (String linea : Files.readAllLines(Paths.get(rutaNominas))) {
+                    String[] partes = linea.split(";");
+                    if (Integer.parseInt(partes[1]) == idEmpleado) {
+                        nomina = partes;
+                        break;
+                    }
+                }
+                if (nomina == null) continue; // Salta si no hay nómina
 
-                
-                contenido.beginText();
-                contenido.newLineAtOffset(270, 740);
-                contenido.showText("PERÍODO: " + datos[2].substring(5, 7) + "/" + datos[2].substring(0, 4));
-                contenido.endText();
+                // Datos del empleado y nómina
+                String nombreCompleto = empleado[1] + " " + empleado[2] + " " + empleado[3];
+                String direccion = empleado[4];
+                String telefono = empleado[5];
+                String fechaIngreso = empleado[8];
 
-                
-                contenido.beginText();
-                contenido.newLineAtOffset(50, 700);
-                contenido.showText("ID Empleado: " + datos[1]);
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Nombre Completo: [Nombre desde GenerarNomina.java]");
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Dirección: [Dirección]");
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Teléfono: [Teléfono]");
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Fecha de Ingreso: [Fecha ingreso]");
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Fecha de Generación: " + datos[2]);
-                contenido.endText();
+                String fechaNomina = nomina[2];
+                double salarioBase = Double.parseDouble(nomina[3]);
+                double ars = Double.parseDouble(nomina[4]);
+                double afp = Double.parseDouble(nomina[5]);
+                double coop = Double.parseDouble(nomina[6]);
+                double isr = Double.parseDouble(nomina[7]);
+                double salarioNeto = Double.parseDouble(nomina[8]);
 
-                
-                float y = 600;
-                contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
-                contenido.beginText();
-                contenido.newLineAtOffset(50, y);
-                contenido.showText("Salario Base: RD$ " + String.format("%,.2f", salarioBase));
-                contenido.endText();
+                // Crear página
+                PDPage pagina = new PDPage(PDRectangle.A4);
+                doc.addPage(pagina);
 
-                y -= 20;
-                contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
-                contenido.beginText();
-                contenido.newLineAtOffset(50, y);
-                contenido.showText("Seguro de Salud (ARS): RD$ " + String.format("%,.2f", ars));
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Administradora de Pensiones (AFP): RD$ " + String.format("%,.2f", afp));
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Cooperativa: RD$ " + String.format("%,.2f", coop));
-                contenido.newLineAtOffset(0, -15);
-                contenido.showText("Impuesto Sobre la Renta (ISR): RD$ " + String.format("%,.2f", isr));
-                contenido.endText();
+                try (PDPageContentStream contenido = new PDPageContentStream(doc, pagina)) {
 
-                
-                y -= 70;
-               contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
-                contenido.beginText();
-                contenido.newLineAtOffset(50, y);
-                contenido.showText("SALARIO NETO: RD$ " + String.format("%,.2f", salarioNeto));
-                contenido.endText();
+                    // Encabezado
+                    contenido.beginText();
+                    contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                    contenido.newLineAtOffset(200, 780);
+                    contenido.showText("SISTEMA DE NÓMINAS");
+                    contenido.endText();
+
+                    contenido.beginText();
+                    contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 14);
+                    contenido.newLineAtOffset(250, 760);
+                    contenido.showText("VOLANTE DE PAGO");
+                    contenido.endText();
+
+                    contenido.beginText();
+                    contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), 12);
+                    contenido.newLineAtOffset(270, 740);
+                    contenido.showText("PERÍODO: " + fechaNomina.substring(5, 7) + "/" + fechaNomina.substring(0, 4));
+                    contenido.endText();
+
+                    // Información del empleado
+                    float x = 50;
+                    float y = 700;
+                    float anchoCaja = 500;
+                    float altoCaja = 100;
+
+                    contenido.setLineWidth(1.5f);
+                    contenido.addRect(x, y - altoCaja, anchoCaja, altoCaja);
+                    contenido.stroke();
+
+                    contenido.beginText();
+                    contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                    contenido.newLineAtOffset(x + 10, y - 20);
+                    contenido.showText("ID Empleado: " + idEmpleado);
+                    contenido.newLineAtOffset(0, -15);
+                    contenido.showText("Nombre Completo: " + nombreCompleto);
+                    contenido.newLineAtOffset(0, -15);
+                    contenido.showText("Dirección: " + direccion);
+                    contenido.newLineAtOffset(0, -15);
+                    contenido.showText("Teléfono: " + telefono);
+                    contenido.newLineAtOffset(0, -15);
+                    contenido.showText("Fecha de Ingreso: " + fechaIngreso);
+                    contenido.newLineAtOffset(0, -15);
+                    contenido.showText("Fecha de Generación: " + fechaNomina);
+                    contenido.endText();
+
+                    // Tabla
+                    float tablaX = 50;
+                    float tablaY = 570;
+                    float anchoCol1 = 200; // Concepto
+                    float anchoCol2 = 100; // Porcentaje
+                    float anchoCol3 = 200; // Monto
+                    float altoFila = 20;
+
+                    String[][] filas = {
+                        {"Concepto", "Porcentaje", "Monto (RD$)"},
+                        {"Salario Base", "", String.format("%,.2f", salarioBase)},
+                        {"DESCUENTOS", "", ""},
+                        {"Seguro de Salud (ARS)", "3.04%", String.format("%,.2f", ars)},
+                        {"Administradora de Pensiones (AFP)", "2.87%", String.format("%,.2f", afp)},
+                        {"Cooperativa", "3.8%", String.format("%,.2f", coop)},
+                        {"Impuesto Sobre la Renta (ISR)", "-", String.format("%,.2f", isr)},
+                        {"Salario Neto", "", String.format("%,.2f", salarioNeto)}
+                    };
+
+                    // Fondo gris para cabecera y fila DESCUENTOS
+                    for (int i = 0; i < filas.length; i++) {
+                        if (i == 0 || filas[i][0].equals("DESCUENTOS")) {
+                            contenido.setNonStrokingColor(new Color(220, 220, 220));
+                            contenido.addRect(tablaX, tablaY - i * altoFila - altoFila, anchoCol1 + anchoCol2 + anchoCol3, altoFila);
+                            contenido.fill();
+                            contenido.setNonStrokingColor(Color.BLACK);
+                        }
+                    }
+
+                    // Líneas horizontales
+                    contenido.setLineWidth(1.5f);
+                    for (int i = 0; i <= filas.length; i++) {
+                        contenido.moveTo(tablaX, tablaY - i * altoFila);
+                        contenido.lineTo(tablaX + anchoCol1 + anchoCol2 + anchoCol3, tablaY - i * altoFila);
+                    }
+                    contenido.stroke();
+
+                    // Líneas verticales
+                    contenido.moveTo(tablaX, tablaY);
+                    contenido.lineTo(tablaX, tablaY - filas.length * altoFila);
+                    contenido.stroke();
+
+                    contenido.moveTo(tablaX + anchoCol1, tablaY);
+                    contenido.lineTo(tablaX + anchoCol1, tablaY - filas.length * altoFila);
+                    contenido.stroke();
+
+                    contenido.moveTo(tablaX + anchoCol1 + anchoCol2, tablaY);
+                    contenido.lineTo(tablaX + anchoCol1 + anchoCol2, tablaY - filas.length * altoFila);
+                    contenido.stroke();
+
+                    contenido.moveTo(tablaX + anchoCol1 + anchoCol2 + anchoCol3, tablaY);
+                    contenido.lineTo(tablaX + anchoCol1 + anchoCol2 + anchoCol3, tablaY - filas.length * altoFila);
+                    contenido.stroke();
+
+                    // Escribir contenido de las filas
+                    for (int i = 0; i < filas.length; i++) {
+                        contenido.beginText();
+                        if (i == 0 || filas[i][0].equals("DESCUENTOS")) {
+                            contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                        } else {
+                            contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                        }
+                        contenido.newLineAtOffset(tablaX + 5, tablaY - (i * altoFila) - 15);
+                        contenido.showText(filas[i][0]);
+                        contenido.endText();
+
+                        contenido.beginText();
+                        contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                        contenido.newLineAtOffset(tablaX + anchoCol1 + 5, tablaY - (i * altoFila) - 15);
+                        contenido.showText(filas[i][1]);
+                        contenido.endText();
+
+                        contenido.beginText();
+                        contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                        contenido.newLineAtOffset(tablaX + anchoCol1 + anchoCol2 + 5, tablaY - (i * altoFila) - 15);
+                        contenido.showText(filas[i][2]);
+                        contenido.endText();
+                    }
+                }
             }
 
             doc.save(rutaSalida);
@@ -119,6 +185,6 @@ public class GenerarPDF {
     }
 
     public static void main(String[] args) throws IOException {
-        generarPDF("src/BaseDeDatos/Nominas.txt", 4, "C:\\\\Users\\\\Duanel\\\\Desktop\\\\nomina.pdf");System.out.println("PDF generado con éxito.");
+        generarPDF("src/BaseDeDatos/Nominas.txt", "src/BaseDeDatos/Empleados.txt", "src/BaseDeDatos/Nómina.pdf");
     }
 }
