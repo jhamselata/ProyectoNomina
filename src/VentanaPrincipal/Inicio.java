@@ -509,6 +509,7 @@ public class Inicio extends javax.swing.JFrame {
         btnProcesosMenu = new javax.swing.JButton();
         pnlBotonMatenimientos1 = new Utilidades.PanelesBordesRedondeados();
         btnMantenimientosMenu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlVacio = new javax.swing.JPanel();
         pnlConsultaPuestos = new javax.swing.JPanel();
@@ -775,6 +776,14 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonMatenimientos1.add(btnMantenimientosMenu, java.awt.BorderLayout.CENTER);
 
         pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        pnlContenedorBotonespnlIzq.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
 
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
@@ -1289,6 +1298,10 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbbxFiltroEmpleadosItemStateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+               
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1345,6 +1358,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
