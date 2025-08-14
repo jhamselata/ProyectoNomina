@@ -10,6 +10,7 @@ import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
 import Procesos.GenerarNomina;
+import Utilidades.ConsultaNominas;
 import static Utilidades.cargarDatosenTabla.activarFiltro;
 import static Utilidades.cargarDatosenTabla.cargarEnTabla;
 import java.awt.BorderLayout;
@@ -37,11 +38,13 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+
 /**
  *
  * @author jhams
  */
 public class Inicio extends javax.swing.JFrame {
+    
 
     private void configurarCalendario() {
         // Configurar el listener del JDateChooser
@@ -58,9 +61,26 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
-        // Opcional: Configurar formato de fecha para el calendario
         jdcFecha.setDateFormatString("MM/dd/yyyy");
     }
+    
+    private void configurarFiltroFechaNominas() {
+    jdcFecha1.addPropertyChangeListener("date", new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            Date fechaSeleccionada = jdcFecha1.getDate();
+            if (fechaSeleccionada != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                txtBusquedaNominas.setText(sdf.format(fechaSeleccionada));
+            } else {
+                txtBusquedaNominas.setText("");
+            }
+        }
+    });
+    
+    jdcFecha1.setDateFormatString("dd/MM/yyyy");
+}
+    
 
     private String rolUsuario;
 
@@ -130,6 +150,10 @@ public class Inicio extends javax.swing.JFrame {
                 txtEstadoInicio.setText("Generar Nómina");
                 break;
             }
+            case 9: {
+    txtEstadoInicio.setText("Consulta de Nóminas");
+    break;
+}
 
             default: {
                 txtEstadoInicio.setText("Menú Principal");
@@ -305,6 +329,21 @@ public class Inicio extends javax.swing.JFrame {
             cambiarEstadoInicio(6);
             cerrarTodasLasVentanas();
         }));
+        
+        // Menú para mostrar panel de nomina
+        popupMenuConsultas.add(createStyledMenuItem("Nomina", e -> {
+    CardLayout cl = (CardLayout) pnlContenido.getLayout();
+    cl.show(pnlContenido, "NOMINAS");
+    
+    ConsultaNominas.cargarNominasConEmpleados(tblNominas, 
+        "src/BaseDeDatos/Nominas.txt", 
+        "src/BaseDeDatos/Empleados.txt");
+    
+    ConsultaNominas.configurarFiltrosNominas(tblNominas, txtBusquedaNominas, cbbxFiltroNominas);
+    
+    cambiarEstadoInicio(9);
+    cerrarTodasLasVentanas();
+}));
     }
 
     public void popUpMenu() {
@@ -477,6 +516,9 @@ public class Inicio extends javax.swing.JFrame {
             btnProcesosMenu.setEnabled(false);
         }
         txtEstadoInicio.setText("Menú Principal");
+        
+        configurarFiltroFechaNominas();
+        jdcFecha1.setEnabled(false);
 
     }
 
@@ -509,7 +551,6 @@ public class Inicio extends javax.swing.JFrame {
         btnProcesosMenu = new javax.swing.JButton();
         pnlBotonMatenimientos1 = new Utilidades.PanelesBordesRedondeados();
         btnMantenimientosMenu = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlVacio = new javax.swing.JPanel();
         pnlConsultaPuestos = new javax.swing.JPanel();
@@ -556,6 +597,22 @@ public class Inicio extends javax.swing.JFrame {
         pnlTablaEmpleados = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblEmpleados = new javax.swing.JTable();
+        pnlConsultaNominas = new javax.swing.JPanel();
+        pnlBarraopcionesNominas = new javax.swing.JPanel();
+        pnlOpcionesConsultaNominas = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        pnlBusquedaNominas = new Utilidades.PanelesBordesRedondeados();
+        txtBusquedaNominas = new javax.swing.JTextField();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 150), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
+        jLabel8 = new javax.swing.JLabel();
+        cbbxFiltroNominas = new javax.swing.JComboBox<>();
+        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
+        jdcFecha1 = new com.toedter.calendar.JDateChooser();
+        pnlTablaNominas = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblNominas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -776,14 +833,6 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonMatenimientos1.add(btnMantenimientosMenu, java.awt.BorderLayout.CENTER);
 
         pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        pnlContenedorBotonespnlIzq.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
 
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
@@ -1122,6 +1171,7 @@ public class Inicio extends javax.swing.JFrame {
             tblEmpleados.getColumnModel().getColumn(9).setResizable(false);
             tblEmpleados.getColumnModel().getColumn(10).setResizable(false);
             tblEmpleados.getColumnModel().getColumn(11).setResizable(false);
+            tblEmpleados.getColumnModel().getColumn(11).setHeaderValue("Salario");
         }
 
         pnlTablaEmpleados.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -1129,6 +1179,127 @@ public class Inicio extends javax.swing.JFrame {
         pnlConsultaEmpleados.add(pnlTablaEmpleados, java.awt.BorderLayout.CENTER);
 
         pnlContenido.add(pnlConsultaEmpleados, "EMPLEADOS");
+
+        pnlConsultaNominas.setLayout(new java.awt.BorderLayout());
+
+        pnlBarraopcionesNominas.setBackground(new java.awt.Color(255, 153, 102));
+        pnlBarraopcionesNominas.setLayout(new java.awt.BorderLayout());
+
+        pnlOpcionesConsultaNominas.setBackground(new java.awt.Color(59, 66, 82));
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Buscar:");
+        pnlOpcionesConsultaNominas.add(jLabel7);
+
+        pnlBusquedaNominas.setBackground(new java.awt.Color(76, 86, 106));
+        pnlBusquedaNominas.setPreferredSize(new java.awt.Dimension(500, 40));
+        pnlBusquedaNominas.setRoundBottomLeft(40);
+        pnlBusquedaNominas.setRoundBottomRight(40);
+        pnlBusquedaNominas.setRoundTopLeft(40);
+        pnlBusquedaNominas.setRoundTopRight(40);
+        pnlBusquedaNominas.setLayout(new java.awt.BorderLayout());
+
+        txtBusquedaNominas.setBackground(new java.awt.Color(236, 239, 244));
+        txtBusquedaNominas.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        txtBusquedaNominas.setForeground(new java.awt.Color(236, 239, 244));
+        txtBusquedaNominas.setBorder(null);
+        txtBusquedaNominas.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txtBusquedaNominas.setName(""); // NOI18N
+        txtBusquedaNominas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBusquedaNominasActionPerformed(evt);
+            }
+        });
+        txtBusquedaNominas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBusquedaNominasKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaNominasKeyTyped(evt);
+            }
+        });
+        pnlBusquedaNominas.add(txtBusquedaNominas, java.awt.BorderLayout.CENTER);
+        pnlBusquedaNominas.add(filler13, java.awt.BorderLayout.LINE_END);
+        pnlBusquedaNominas.add(filler14, java.awt.BorderLayout.LINE_START);
+
+        pnlOpcionesConsultaNominas.add(pnlBusquedaNominas);
+        pnlOpcionesConsultaNominas.add(filler15);
+
+        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Buscar por:");
+        pnlOpcionesConsultaNominas.add(jLabel8);
+
+        cbbxFiltroNominas.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbbxFiltroNominas.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbxFiltroNominasItemStateChanged(evt);
+            }
+        });
+        cbbxFiltroNominas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbxFiltroNominasActionPerformed(evt);
+            }
+        });
+        pnlOpcionesConsultaNominas.add(cbbxFiltroNominas);
+        pnlOpcionesConsultaNominas.add(filler16);
+
+        jdcFecha1.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        pnlOpcionesConsultaNominas.add(jdcFecha1);
+
+        pnlBarraopcionesNominas.add(pnlOpcionesConsultaNominas, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaNominas.add(pnlBarraopcionesNominas, java.awt.BorderLayout.PAGE_START);
+
+        pnlTablaNominas.setLayout(new java.awt.BorderLayout());
+
+        tblNominas.setBackground(new java.awt.Color(204, 153, 0));
+        tblNominas.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        tblNominas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "ID Empleado", "Nombre Empleado", "Fecha Nómina", "Salario", "AFP", "ARS", "Cooperativa", "IRS", "Sueldo Neto", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblNominas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tblNominas);
+        if (tblNominas.getColumnModel().getColumnCount() > 0) {
+            tblNominas.getColumnModel().getColumn(0).setResizable(false);
+            tblNominas.getColumnModel().getColumn(1).setResizable(false);
+            tblNominas.getColumnModel().getColumn(2).setResizable(false);
+            tblNominas.getColumnModel().getColumn(3).setResizable(false);
+            tblNominas.getColumnModel().getColumn(4).setResizable(false);
+            tblNominas.getColumnModel().getColumn(5).setResizable(false);
+            tblNominas.getColumnModel().getColumn(6).setResizable(false);
+            tblNominas.getColumnModel().getColumn(7).setResizable(false);
+            tblNominas.getColumnModel().getColumn(8).setResizable(false);
+            tblNominas.getColumnModel().getColumn(9).setResizable(false);
+            tblNominas.getColumnModel().getColumn(10).setResizable(false);
+        }
+
+        pnlTablaNominas.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        pnlConsultaNominas.add(pnlTablaNominas, java.awt.BorderLayout.CENTER);
+
+        pnlContenido.add(pnlConsultaNominas, "NOMINAS");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1298,9 +1469,37 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbbxFiltroEmpleadosItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void txtBusquedaNominasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaNominasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaNominasActionPerformed
+
+    private void txtBusquedaNominasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaNominasKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaNominasKeyPressed
+
+    private void txtBusquedaNominasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaNominasKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaNominasKeyTyped
+
+    private void cbbxFiltroNominasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbxFiltroNominasItemStateChanged
+        String filtroSeleccionado = (String) cbbxFiltroNominas.getSelectedItem();
+    
+    if (filtroSeleccionado != null && filtroSeleccionado.equals("Fecha Nómina")) {
+        jdcFecha1.setEnabled(true);
+        txtBusquedaNominas.setEditable(false);
+        txtBusquedaNominas.setFocusable(false);
+    } else {
+        jdcFecha1.setEnabled(false);
+        txtBusquedaNominas.setText("");
+        txtBusquedaNominas.setEditable(true);
+        txtBusquedaNominas.setFocusable(true);
+        txtBusquedaNominas.requestFocus();
+    }
+    }//GEN-LAST:event_cbbxFiltroNominasItemStateChanged
+
+    private void cbbxFiltroNominasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroNominasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbbxFiltroNominasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1345,11 +1544,16 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton btnProcesosMenu;
     private javax.swing.JComboBox<String> cbbxFiltroBusqueda;
     private javax.swing.JComboBox<String> cbbxFiltroEmpleados;
+    private javax.swing.JComboBox<String> cbbxFiltroNominas;
     private javax.swing.JComboBox<String> cbbxFiltroPuestos;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler13;
+    private javax.swing.Box.Filler filler14;
+    private javax.swing.Box.Filler filler15;
+    private javax.swing.Box.Filler filler16;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -1358,21 +1562,25 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private com.toedter.calendar.JDateChooser jdcFecha;
+    private com.toedter.calendar.JDateChooser jdcFecha1;
     private javax.swing.JPanel pnlBarraLateralIzq;
     private javax.swing.JPanel pnlBarraSuperior;
     private javax.swing.JPanel pnlBarraopcionesDepartamentos;
     private javax.swing.JPanel pnlBarraopcionesEmpleados;
+    private javax.swing.JPanel pnlBarraopcionesNominas;
     private javax.swing.JPanel pnlBarraopcionesPuestos;
     private Utilidades.PanelesBordesRedondeados pnlBotonConsultas;
     private Utilidades.PanelesBordesRedondeados pnlBotonInicio;
@@ -1383,26 +1591,32 @@ public class Inicio extends javax.swing.JFrame {
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos1;
     private Utilidades.PanelesBordesRedondeados pnlBusquedaDepartamentos2;
+    private Utilidades.PanelesBordesRedondeados pnlBusquedaNominas;
     private javax.swing.JPanel pnlConsultaDepartamentos;
     private javax.swing.JPanel pnlConsultaEmpleados;
+    private javax.swing.JPanel pnlConsultaNominas;
     private javax.swing.JPanel pnlConsultaPuestos;
     private javax.swing.JPanel pnlContenedorBotonespnlIzq;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JPanel pnlOpcionesConsultaDep;
     private javax.swing.JPanel pnlOpcionesConsultaDep1;
     private javax.swing.JPanel pnlOpcionesConsultaEmpleados;
+    private javax.swing.JPanel pnlOpcionesConsultaNominas;
     private javax.swing.JPanel pnlTablaDepartamentos;
     private javax.swing.JPanel pnlTablaEmpleados;
+    private javax.swing.JPanel pnlTablaNominas;
     private javax.swing.JPanel pnlTablaPuestos;
     private javax.swing.JPanel pnlVacio;
     private javax.swing.JPopupMenu popupMenuMantenimientos;
     private javax.swing.JTable tblDepartamentos;
     private javax.swing.JTable tblEmpleados;
+    private javax.swing.JTable tblNominas;
     private javax.swing.JTable tblPuestos;
     private javax.swing.JLabel txtBotoninicioIcono;
     private javax.swing.JLabel txtBotoninicioIcono1;
     private javax.swing.JTextField txtBusquedaDepartamentos;
     private javax.swing.JTextField txtBusquedaEmpleados;
+    private javax.swing.JTextField txtBusquedaNominas;
     private javax.swing.JTextField txtBusquedaPuestos;
     private javax.swing.JTextField txtEstadoInicio;
     // End of variables declaration//GEN-END:variables
