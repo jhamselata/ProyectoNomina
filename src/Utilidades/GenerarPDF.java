@@ -22,8 +22,7 @@ public class GenerarPDF {
 
             for (String[] empleado : empleados) {
                 int idEmpleado = Integer.parseInt(empleado[0]);
-
-                // Buscar nómina del empleado
+                
                 String[] nomina = null;
                 for (String linea : Files.readAllLines(Paths.get(rutaNominas))) {
                     String[] partes = linea.split(";");
@@ -32,9 +31,8 @@ public class GenerarPDF {
                         break;
                     }
                 }
-                if (nomina == null) continue; // Salta si no hay nómina
-
-                // Datos del empleado y nómina
+                if (nomina == null) continue;
+                
                 String nombreCompleto = empleado[1] + " " + empleado[2] + " " + empleado[3];
                 String direccion = empleado[4];
                 String telefono = empleado[5];
@@ -47,14 +45,13 @@ public class GenerarPDF {
                 double coop = Double.parseDouble(nomina[6]);
                 double isr = Double.parseDouble(nomina[7]);
                 double salarioNeto = Double.parseDouble(nomina[8]);
-
-                // Crear página
+                
                 PDPage pagina = new PDPage(PDRectangle.A4);
                 doc.addPage(pagina);
 
                 try (PDPageContentStream contenido = new PDPageContentStream(doc, pagina)) {
 
-                    // Encabezado
+                    
                     contenido.beginText();
                     contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
                     contenido.newLineAtOffset(200, 780);
@@ -73,7 +70,7 @@ public class GenerarPDF {
                     contenido.showText("PERÍODO: " + fechaNomina.substring(5, 7) + "/" + fechaNomina.substring(0, 4));
                     contenido.endText();
 
-                    // Información del empleado
+                    
                     float x = 50;
                     float y = 700;
                     float anchoCaja = 500;
@@ -99,12 +96,12 @@ public class GenerarPDF {
                     contenido.showText("Fecha de Generación: " + fechaNomina);
                     contenido.endText();
 
-                    // Tabla
+                    
                     float tablaX = 50;
                     float tablaY = 570;
-                    float anchoCol1 = 200; // Concepto
-                    float anchoCol2 = 100; // Porcentaje
-                    float anchoCol3 = 200; // Monto
+                    float anchoCol1 = 200; 
+                    float anchoCol2 = 100; 
+                    float anchoCol3 = 200; 
                     float altoFila = 20;
 
                     String[][] filas = {
@@ -118,7 +115,7 @@ public class GenerarPDF {
                         {"Salario Neto", "", String.format("%,.2f", salarioNeto)}
                     };
 
-                    // Fondo gris para cabecera y fila DESCUENTOS
+                    
                     for (int i = 0; i < filas.length; i++) {
                         if (i == 0 || filas[i][0].equals("DESCUENTOS")) {
                             contenido.setNonStrokingColor(new Color(220, 220, 220));
@@ -128,7 +125,7 @@ public class GenerarPDF {
                         }
                     }
 
-                    // Líneas horizontales
+                    
                     contenido.setLineWidth(1.5f);
                     for (int i = 0; i <= filas.length; i++) {
                         contenido.moveTo(tablaX, tablaY - i * altoFila);
@@ -136,7 +133,7 @@ public class GenerarPDF {
                     }
                     contenido.stroke();
 
-                    // Líneas verticales
+                    
                     contenido.moveTo(tablaX, tablaY);
                     contenido.lineTo(tablaX, tablaY - filas.length * altoFila);
                     contenido.stroke();
@@ -153,7 +150,7 @@ public class GenerarPDF {
                     contenido.lineTo(tablaX + anchoCol1 + anchoCol2 + anchoCol3, tablaY - filas.length * altoFila);
                     contenido.stroke();
 
-                    // Escribir contenido de las filas
+                    
                     for (int i = 0; i < filas.length; i++) {
                         contenido.beginText();
                         if (i == 0 || filas[i][0].equals("DESCUENTOS")) {
