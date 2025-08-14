@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +24,10 @@ public class Puestos extends javax.swing.JFrame {
      */
     public Puestos() {
         initComponents();
+        
+        setTitle("Mantenimiento de Puestos");
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
 
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30)); //Redondea Bordes de la ventana Jframe

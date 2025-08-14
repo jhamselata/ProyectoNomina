@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,6 +41,11 @@ public class Empleados extends javax.swing.JFrame {
 
     public Empleados() {
         initComponents();
+        
+        setTitle("Mantenimiento de Empleados");
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
+        
         configurarVentana();
         configurarCamposTransparentes();
         cargarComboBoxes();

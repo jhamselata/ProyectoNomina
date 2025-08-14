@@ -9,6 +9,7 @@ import Mantenimientos.Departamentos;
 import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
+import Procesos.GenerarNomina;
 import static Utilidades.cargarDatosenTabla.activarFiltro;
 import static Utilidades.cargarDatosenTabla.cargarEnTabla;
 import java.awt.BorderLayout;
@@ -29,7 +30,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -68,6 +68,7 @@ public class Inicio extends javax.swing.JFrame {
     private Usuarios ventanaUsuarios = null;
     private Empleados ventanaEmpleados = null;
     private Puestos ventanaPuestos = null;
+    private GenerarNomina ventanaGenerarNomina = null;
 
     private void cerrarTodasLasVentanas() {
         if (ventanaUsuarios != null && ventanaUsuarios.isDisplayable()) {
@@ -85,6 +86,10 @@ public class Inicio extends javax.swing.JFrame {
         if (ventanaPuestos != null && ventanaPuestos.isDisplayable()) {
             ventanaPuestos.dispose();
             ventanaPuestos = null;
+        }
+        if (ventanaGenerarNomina != null && ventanaGenerarNomina.isDisplayable()) {
+            ventanaGenerarNomina.dispose();
+            ventanaGenerarNomina = null;
         }
     }
 
@@ -119,6 +124,10 @@ public class Inicio extends javax.swing.JFrame {
             }
             case 7: {
                 txtEstadoInicio.setText("Cosulta de Departamentos");
+                break;
+            }
+            case 8: {
+                txtEstadoInicio.setText("Generar Nómina");
                 break;
             }
 
@@ -206,6 +215,24 @@ public class Inicio extends javax.swing.JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaPuestos = null;
+                cambiarEstadoInicio(0); // Volver al estado principal
+            }
+        });
+    }
+    
+    private void abrirVentanaGenerarNómina() {
+        // Cerrar todas las otras ventanas antes de abrir esta
+        cerrarTodasLasVentanas();
+
+        // Abrir la ventana de puestos
+        ventanaGenerarNomina = new GenerarNomina();
+        ventanaGenerarNomina.setVisible(true);
+
+        // Agregar listener para detectar cuando se cierre la ventana
+        ventanaGenerarNomina.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaGenerarNomina = null;
                 cambiarEstadoInicio(0); // Volver al estado principal
             }
         });
@@ -328,7 +355,9 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuProcesos.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
         // Menú para mostrar panel de Crear Nómina
-        popupMenuProcesos.add(createStyledMenuItem("Crear Nómina", e -> {
+        popupMenuProcesos.add(createStyledMenuItem("Generar Nómina", e -> {
+            abrirVentanaGenerarNómina();
+            cambiarEstadoInicio(8);
             /*CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "Nómina");*/
         }));
@@ -414,6 +443,8 @@ public class Inicio extends javax.swing.JFrame {
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
+        
+        setTitle("Inicio");
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
         this.setIconImage(icono.getImage());
 
@@ -478,7 +509,6 @@ public class Inicio extends javax.swing.JFrame {
         btnProcesosMenu = new javax.swing.JButton();
         pnlBotonMatenimientos1 = new Utilidades.PanelesBordesRedondeados();
         btnMantenimientosMenu = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         pnlContenido = new javax.swing.JPanel();
         pnlVacio = new javax.swing.JPanel();
         pnlConsultaPuestos = new javax.swing.JPanel();
@@ -745,14 +775,6 @@ public class Inicio extends javax.swing.JFrame {
         pnlBotonMatenimientos1.add(btnMantenimientosMenu, java.awt.BorderLayout.CENTER);
 
         pnlContenedorBotonespnlIzq.add(pnlBotonMatenimientos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 180, 50));
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        pnlContenedorBotonespnlIzq.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
 
         pnlBarraLateralIzq.add(pnlContenedorBotonespnlIzq, java.awt.BorderLayout.CENTER);
 
@@ -1267,18 +1289,6 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbbxFiltroEmpleadosItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Dentro de Inicio
-        Departamentos depFrame = new Departamentos(); // tu JFrame existente
-        JDialog dialog = new JDialog(this, "Departamentos", true); // true = modal
-
-        dialog.setContentPane(depFrame.getContentPane()); // mover contenido del JFrame al diálogo
-        dialog.pack();
-        dialog.setLocationRelativeTo(this); // centrar sobre Inicio
-        dialog.setVisible(true);
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -1335,7 +1345,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

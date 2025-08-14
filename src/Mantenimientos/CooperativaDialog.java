@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class CooperativaDialog extends javax.swing.JDialog {
@@ -391,7 +392,11 @@ public class CooperativaDialog extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // CORREGIDO AQUÍ
+        setTitle("Cooperativa");
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

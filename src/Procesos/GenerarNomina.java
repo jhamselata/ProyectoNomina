@@ -4,8 +4,6 @@
  */
 package Procesos;
 
-import Consultas.*;
-import ManejoDeArchivos.ManejoArchivos;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,8 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel; // Asegúrate de importar esto
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -103,6 +102,13 @@ public class GenerarNomina extends javax.swing.JFrame {
 
     public GenerarNomina() {
         initComponents();
+        
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
+        
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla.
+        setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30)); //Redondea Bordes de la ventana Jframe
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Permite que solo se cierre la ventana 
 
         txtEstado.setBackground(new Color(0, 0, 0, 0));
 
@@ -507,6 +513,8 @@ public class GenerarNomina extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
 
         panelesBordesRedondeados1.setBackground(new java.awt.Color(76, 86, 106));
         panelesBordesRedondeados1.setEnabled(false);

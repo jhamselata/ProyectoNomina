@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,6 +28,12 @@ public class Usuarios extends javax.swing.JFrame {
 
     public Usuarios() {
         initComponents();
+        
+        setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30)); //Redondea Bordes de la ventana Jframe
+        
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
+        this.setIconImage(icono.getImage());
+        
         setTitle("Mantenimiento de Usuario");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana en la pantalla.
