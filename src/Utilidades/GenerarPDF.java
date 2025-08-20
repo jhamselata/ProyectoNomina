@@ -1,9 +1,10 @@
 package Utilidades;
-
 import java.awt.Color;
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -11,7 +12,8 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 public class GenerarPDF {
 
-    public static void generarPDF(String rutaNominas, String rutaEmpleados, String rutaSalida) throws IOException {
+    public static void generarPDF(String rutaNominas, String rutaEmpleados, String rutaSalida, String fechaSeleccionada) throws IOException {
+    // ... resto del código ...
         // Leer empleados
         List<String[]> empleados = new ArrayList<>();
         for (String linea : Files.readAllLines(Paths.get(rutaEmpleados))) {
@@ -51,7 +53,6 @@ public class GenerarPDF {
 
                 try (PDPageContentStream contenido = new PDPageContentStream(doc, pagina)) {
 
-                    
                     contenido.beginText();
                     contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
                     contenido.newLineAtOffset(200, 780);
@@ -67,10 +68,9 @@ public class GenerarPDF {
                     contenido.beginText();
                     contenido.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), 12);
                     contenido.newLineAtOffset(270, 740);
-                    contenido.showText("PERÍODO: " + fechaNomina.substring(5, 7) + "/" + fechaNomina.substring(0, 4));
+                    contenido.showText("PERÍODO: " + fechaSeleccionada);
                     contenido.endText();
 
-                    
                     float x = 50;
                     float y = 700;
                     float anchoCaja = 500;
@@ -93,7 +93,7 @@ public class GenerarPDF {
                     contenido.newLineAtOffset(0, -15);
                     contenido.showText("Fecha de Ingreso: " + fechaIngreso);
                     contenido.newLineAtOffset(0, -15);
-                    contenido.showText("Fecha de Generación: " + fechaNomina);
+                    contenido.showText("Fecha de Generación: " + fechaSeleccionada);
                     contenido.endText();
 
                     
@@ -179,9 +179,5 @@ public class GenerarPDF {
 
             doc.save(rutaSalida);
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        generarPDF("src/BaseDeDatos/Nominas.txt", "src/BaseDeDatos/Empleados.txt", "src/VolantesDeNómina/Nómina.pdf");
     }
 }

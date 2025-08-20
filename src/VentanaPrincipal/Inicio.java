@@ -70,7 +70,7 @@ public class Inicio extends javax.swing.JFrame {
         public void propertyChange(PropertyChangeEvent evt) {
             Date fechaSeleccionada = jdcFecha1.getDate();
             if (fechaSeleccionada != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 txtBusquedaNominas.setText(sdf.format(fechaSeleccionada));
             } else {
                 txtBusquedaNominas.setText("");
@@ -151,8 +151,8 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             }
             case 9: {
-    txtEstadoInicio.setText("Consulta de Nóminas");
-    break;
+                txtEstadoInicio.setText("Consulta de Nóminas");
+                break;
 }
 
             default: {
@@ -343,6 +343,7 @@ public class Inicio extends javax.swing.JFrame {
     
     cambiarEstadoInicio(9);
     cerrarTodasLasVentanas();
+    
 }));
     }
 
@@ -397,8 +398,8 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuProcesos.add(createStyledMenuItem("Generar Nómina", e -> {
             abrirVentanaGenerarNómina();
             cambiarEstadoInicio(8);
-            /*CardLayout cl = (CardLayout) pnlContenido.getLayout();
-            cl.show(pnlContenido, "Nómina");*/
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
         }));
 
         // Menú para mostrar panel de Reversar Nómina
@@ -519,6 +520,8 @@ public class Inicio extends javax.swing.JFrame {
         
         configurarFiltroFechaNominas();
         jdcFecha1.setEnabled(false);
+        
+        txtBusquedaNominas.setBackground(new Color(0, 0, 0, 0));
 
     }
 

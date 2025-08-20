@@ -4,6 +4,7 @@
  */
 package Procesos;
 
+import Utilidades.GenerarPDF;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,6 +62,30 @@ public class GenerarNomina extends javax.swing.JFrame {
             this.balanceAcumulado = balanceAcumulado;
         }
     }
+    
+    private boolean validarFechaNomina(Date fecha) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(fecha);
+    
+    int dia = cal.get(Calendar.DAY_OF_MONTH);
+    int mes = cal.get(Calendar.MONTH) + 1; // Enero es 0
+    
+    // Para febrero (mes 2)
+    if (mes == 2) {
+        int anio = cal.get(Calendar.YEAR);
+        // Verificar si es año bisiesto
+        boolean esBisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+        return dia == 28 || (esBisiesto && dia == 29);
+    }
+    // Para meses con 30 días
+    else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+        return dia == 30;
+    }
+    // Para otros meses (31 días)
+    else {
+        return dia == 30; // O podrías cambiar esto a dia == 31 si prefieres
+    }
+}
 
     // Clase para representar un empleado
     private static class Empleado {
@@ -123,6 +148,9 @@ public class GenerarNomina extends javax.swing.JFrame {
 
         // Cargar nómina inicial con la fecha por defecto
         cargarNominaEnTabla();
+        
+        //Seleccionar fecha minima
+        jdcFecha.setMinSelectableDate(new Date());
 
     }
 
@@ -274,222 +302,258 @@ public class GenerarNomina extends javax.swing.JFrame {
      * Carga y muestra la nómina en la tabla cuando se selecciona una fecha
      */
     private void cargarNominaEnTabla() {
-        // Validar fecha
-        if (jdcFecha.getDate() == null) {
-            txtEstado.setText("Seleccione una fecha válida");
-            return;
-        }
-
-        // Usar la fecha exacta seleccionada en el JDateChooser
-        // (ya no forzamos el día 30 aquí, respetamos lo que el usuario seleccione)
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(jdcFecha.getDate());
-        Date fechaNomina = cal.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaStr = sdf.format(fechaNomina);
-
-        // Cargar todos los empleados
-        List<Empleado> empleados = cargarTodosLosEmpleados();
-
-        if (empleados.isEmpty()) {
-            txtEstado.setText("No se encontraron empleados");
-            return;
-        }
-
-        // Limpiar tabla anterior
-        DefaultTableModel modelo = (DefaultTableModel) TableNominas.getModel();
-        modelo.setRowCount(0);
-
-        double totalNomina = 0;
-        int proximoIdNomina = obtenerProximoIdNomina();
-
-        // Procesar cada empleado y mostrar en tabla
-        for (Empleado emp : empleados) {
-            String idNomina = String.valueOf(proximoIdNomina);
-
-            // Cálculos
-            double salario = emp.salario;
-            double afp = salario * (PORCENTAJE_AFP / 100);
-            double ars = salario * (PORCENTAJE_ARS / 100);
-
-            // Cooperativa - solo si el empleado participa
-            double cooperativa = 0;
-            if (emp.tieneCoop && cooperativaMap.containsKey(emp.idEmp)) {
-                CooperativaInfo info = cooperativaMap.get(emp.idEmp);
-                cooperativa = salario * (info.porcentaje / 100);
-            }
-
-            // ISR (base: salario - AFP - ARS)
-            double baseISR = salario - afp - ars;
-            double isr = calcularISR(baseISR);
-
-            // Sueldo neto
-            double sueldoNeto = salario - afp - ars - cooperativa - isr;
-            totalNomina += sueldoNeto;
-
-            // Agregar a la tabla con la fecha seleccionada
-            Object[] fila = {
-                idNomina,
-                emp.idEmp,
-                emp.getNombreCompleto(),
-                fechaStr, // Usar la fecha exacta seleccionada
-                "RD$ " + formatoMoneda.format(salario),
-                "RD$ " + formatoMoneda.format(afp),
-                "RD$ " + formatoMoneda.format(ars),
-                "RD$ " + formatoMoneda.format(cooperativa),
-                "RD$ " + formatoMoneda.format(isr),
-                "RD$ " + formatoMoneda.format(sueldoNeto),
-                "True"
-            };
-            modelo.addRow(fila);
-
-            proximoIdNomina++;
-        }
-
-        // Actualizar estado con información de la fecha seleccionada
-        SimpleDateFormat sdfDisplay = new SimpleDateFormat("dd/MM/yyyy");
-        txtEstado.setText("Nómina para " + sdfDisplay.format(fechaNomina) + ": "
-                + empleados.size() + " empleados. Total: RD$ "
-                + formatoMoneda.format(totalNomina));
+    // Validar fecha
+    if (jdcFecha.getDate() == null) {
+        txtEstado.setText("Seleccione una fecha válida");
+        return;
     }
+
+    // Usar la fecha exacta seleccionada en el JDateChooser
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(jdcFecha.getDate());
+    Date fechaNomina = cal.getTime();
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String fechaStr = sdf.format(fechaNomina);
+
+    // Cargar todos los empleados
+    List<Empleado> empleados = cargarTodosLosEmpleados();
+
+    if (empleados.isEmpty()) {
+        txtEstado.setText("No se encontraron empleados");
+        return;
+    }
+
+    // Limpiar tabla anterior
+    DefaultTableModel modelo = (DefaultTableModel) TableNominas.getModel();
+    modelo.setRowCount(0);
+
+    double totalNomina = 0;
+    // Obtener un solo ID para toda la nómina (grupo)
+    int idNominaGrupo = obtenerProximoIdNomina();
+
+    // Procesar cada empleado y mostrar en tabla
+    for (Empleado emp : empleados) {
+        // Usar el mismo ID de nómina para todos los empleados
+        String idNomina = String.valueOf(idNominaGrupo);
+
+        // Cálculos
+        double salario = emp.salario;
+        double afp = salario * (PORCENTAJE_AFP / 100);
+        double ars = salario * (PORCENTAJE_ARS / 100);
+
+        // Cooperativa - solo si el empleado participa
+        double cooperativa = 0;
+        if (emp.tieneCoop && cooperativaMap.containsKey(emp.idEmp)) {
+            CooperativaInfo info = cooperativaMap.get(emp.idEmp);
+            cooperativa = salario * (info.porcentaje / 100);
+        }
+
+        // ISR (base: salario - AFP - ARS)
+        double baseISR = salario - afp - ars;
+        double isr = calcularISR(baseISR);
+
+        // Sueldo neto
+        double sueldoNeto = salario - afp - ars - cooperativa - isr;
+        totalNomina += sueldoNeto;
+
+        // Agregar a la tabla con la fecha seleccionada
+        Object[] fila = {
+            idNomina,
+            emp.idEmp,
+            emp.getNombreCompleto(),
+            fechaStr, // Usar la fecha exacta seleccionada
+            "RD$ " + formatoMoneda.format(salario),
+            "RD$ " + formatoMoneda.format(afp),
+            "RD$ " + formatoMoneda.format(ars),
+            "RD$ " + formatoMoneda.format(cooperativa),
+            "RD$ " + formatoMoneda.format(isr),
+            "RD$ " + formatoMoneda.format(sueldoNeto),
+            "True"
+        };
+        modelo.addRow(fila);
+    }
+
+    // Actualizar estado con información de la fecha seleccionada
+    SimpleDateFormat sdfDisplay = new SimpleDateFormat("dd/MM/yyyy");
+    txtEstado.setText("Nómina para " + sdfDisplay.format(fechaNomina) + ": "
+            + empleados.size() + " empleados. Total: RD$ "
+            + formatoMoneda.format(totalNomina));
+}
 
     /**
      * Procesa y guarda la nómina que está mostrada en la tabla
      */
-    private void procesarNomina() {
-        DefaultTableModel modelo = (DefaultTableModel) TableNominas.getModel();
+   private void procesarNomina() {
+       
+       if (!validarFechaNomina(jdcFecha.getDate())) {
+        JOptionPane.showMessageDialog(this,
+            "La nómina solo puede generarse los días:\n" +
+            "- 30 de cada mes\n" +
+            "- 28 de febrero (29 en años bisiestos)",
+            "Fecha no válida para nómina",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+       
+    DefaultTableModel modelo = (DefaultTableModel) TableNominas.getModel();
 
-        // Validar que haya datos en la tabla
-        if (modelo.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No hay nómina para procesar. Seleccione una fecha primero.",
-                    "Sin datos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    // Validar que haya datos en la tabla
+    if (modelo.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this,
+                "No hay nómina para procesar. Seleccione una fecha primero.",
+                "Sin datos", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
-        // Obtener mes y año de la fecha seleccionada
-        if (jdcFecha.getDate() == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Seleccione una fecha válida antes de procesar.",
-                    "Fecha no válida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        Calendar calSel = Calendar.getInstance();
-        calSel.setTime(jdcFecha.getDate());
-        int mesSel = calSel.get(Calendar.MONTH); // 0 = Enero
-        int anioSel = calSel.get(Calendar.YEAR);
+    // Obtener mes y año de la fecha seleccionada
+    if (jdcFecha.getDate() == null) {
+        JOptionPane.showMessageDialog(this,
+                "Seleccione una fecha válida antes de procesar.",
+                "Fecha no válida", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    Calendar calSel = Calendar.getInstance();
+    calSel.setTime(jdcFecha.getDate());
+    int mesSel = calSel.get(Calendar.MONTH); // 0 = Enero
+    int anioSel = calSel.get(Calendar.YEAR);
 
-        // Verificar si ya existe nómina para ese mes y año
-        if (archivoNominas.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(archivoNominas))) {
-                String linea;
-                while ((linea = br.readLine()) != null) {
-                    String[] partes = linea.split(";");
-                    if (partes.length >= 3) { // Aseguramos que tiene fecha
-                        String fechaRegistro = partes[2].trim(); // yyyy-MM-dd
-                        try {
-                            Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(fechaRegistro);
-                            Calendar calReg = Calendar.getInstance();
-                            calReg.setTime(fecha);
+    // Verificar si ya existe nómina para ese mes y año
+    if (archivoNominas.exists()) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoNominas))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length >= 3) { // Aseguramos que tiene fecha
+                    String fechaRegistro = partes[2].trim(); // yyyy-MM-dd
+                    try {
+                        Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(fechaRegistro);
+                        Calendar calReg = Calendar.getInstance();
+                        calReg.setTime(fecha);
 
-                            int mesReg = calReg.get(Calendar.MONTH);
-                            int anioReg = calReg.get(Calendar.YEAR);
+                        int mesReg = calReg.get(Calendar.MONTH);
+                        int anioReg = calReg.get(Calendar.YEAR);
 
-                            if (mesReg == mesSel && anioReg == anioSel) {
-                                JOptionPane.showMessageDialog(this,
-                                        "Ya existe una nómina registrada para este mes y año.\n"
-                                        + "No se puede procesar nuevamente.",
-                                        "Nómina Duplicada", JOptionPane.ERROR_MESSAGE);
-                                return; // Cancelar el procesamiento
-                            }
-                        } catch (Exception e) {
-                            // Si hay error de formato de fecha, lo ignoramos y seguimos
+                        if (mesReg == mesSel && anioReg == anioSel) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Ya existe una nómina registrada para este mes y año.\n"
+                                    + "No se puede procesar nuevamente.",
+                                    "Nómina Duplicada", JOptionPane.ERROR_MESSAGE);
+                            return; // Cancelar el procesamiento
                         }
+                    } catch (Exception e) {
+                        // Si hay error de formato de fecha, lo ignoramos y seguimos
                     }
                 }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al verificar nóminas existentes: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        // Si llegamos aquí, significa que no existe nómina en ese mes y año
-        // Confirmar procesamiento
-        int respuesta = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de procesar y guardar esta nómina?\n"
-                + "Se guardarán " + modelo.getRowCount() + " registros.",
-                "Confirmar Procesamiento",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-
-        if (respuesta != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        // ---- Aquí sigue tu código original para guardar la nómina ----
-        List<String> registrosNomina = new ArrayList<>();
-        double totalNomina = 0;
-
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            String idNomina = modelo.getValueAt(i, 0).toString();
-            String idEmpleado = modelo.getValueAt(i, 1).toString();
-            String fecha = modelo.getValueAt(i, 3).toString();
-
-            String salarioStr = modelo.getValueAt(i, 4).toString().replace("RD$ ", "").replace(",", "");
-            String afpStr = modelo.getValueAt(i, 5).toString().replace("RD$ ", "").replace(",", "");
-            String arsStr = modelo.getValueAt(i, 6).toString().replace("RD$ ", "").replace(",", "");
-            String cooperativaStr = modelo.getValueAt(i, 7).toString().replace("RD$ ", "").replace(",", "");
-            String isrStr = modelo.getValueAt(i, 8).toString().replace("RD$ ", "").replace(",", "");
-            String sueldoNetoStr = modelo.getValueAt(i, 9).toString().replace("RD$ ", "").replace(",", "");
-            String status = modelo.getValueAt(i, 10).toString();
-
-            String registro = String.join(";",
-                    idNomina, idEmpleado, fecha,
-                    salarioStr, afpStr, arsStr, cooperativaStr, isrStr, sueldoNetoStr, status);
-            registrosNomina.add(registro);
-
-            try {
-                totalNomina += Double.parseDouble(sueldoNetoStr);
-            } catch (NumberFormatException e) {
-                System.out.println("Error al sumar sueldo neto: " + e.getMessage());
-            }
-
-            if (!cooperativaStr.equals("0.00") && cooperativaMap.containsKey(idEmpleado)) {
-                try {
-                    double montoCooperativa = Double.parseDouble(cooperativaStr);
-                    CooperativaInfo info = cooperativaMap.get(idEmpleado);
-                    info.balanceAcumulado += montoCooperativa;
-                } catch (NumberFormatException e) {
-                    System.out.println("Error al actualizar cooperativa: " + e.getMessage());
-                }
-            }
-        }
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(archivoNominas, true))) {
-            for (String registro : registrosNomina) {
-                pw.println(registro);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al guardar nómina: " + e.getMessage(),
+                    "Error al verificar nóminas existentes: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        actualizarCooperativa();
-
-        txtEstado.setText("¡Nómina procesada! " + modelo.getRowCount() + " empleados. Total: RD$ "
-                + formatoMoneda.format(totalNomina));
-
-        JOptionPane.showMessageDialog(this,
-                "¡Nómina procesada y guardada exitosamente!\n"
-                + "Empleados procesados: " + modelo.getRowCount() + "\n"
-                + "Total nómina: RD$ " + formatoMoneda.format(totalNomina),
-                "Nómina Procesada", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    // Si llegamos aquí, significa que no existe nómina en ese mes y año
+    // Confirmar procesamiento
+    int respuesta = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro de procesar y guardar esta nómina?\n"
+            + "Se guardarán " + modelo.getRowCount() + " registros.",
+            "Confirmar Procesamiento",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+
+    if (respuesta != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    // ---- Guardar la nómina ----
+    List<String> registrosNomina = new ArrayList<>();
+    double totalNomina = 0;
+
+    // Obtener el ID de nómina de la primera fila (todos tienen el mismo)
+    String idNominaGrupo = modelo.getValueAt(0, 0).toString();
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        // Usar el mismo ID de nómina para todos los empleados
+        String idNomina = idNominaGrupo;
+        String idEmpleado = modelo.getValueAt(i, 1).toString();
+        String fecha = modelo.getValueAt(i, 3).toString();
+
+        String salarioStr = modelo.getValueAt(i, 4).toString().replace("RD$ ", "").replace(",", "");
+        String afpStr = modelo.getValueAt(i, 5).toString().replace("RD$ ", "").replace(",", "");
+        String arsStr = modelo.getValueAt(i, 6).toString().replace("RD$ ", "").replace(",", "");
+        String cooperativaStr = modelo.getValueAt(i, 7).toString().replace("RD$ ", "").replace(",", "");
+        String isrStr = modelo.getValueAt(i, 8).toString().replace("RD$ ", "").replace(",", "");
+        String sueldoNetoStr = modelo.getValueAt(i, 9).toString().replace("RD$ ", "").replace(",", "");
+        String status = modelo.getValueAt(i, 10).toString();
+
+        String registro = String.join(";",
+                idNomina, idEmpleado, fecha,
+                salarioStr, afpStr, arsStr, cooperativaStr, isrStr, sueldoNetoStr, status);
+        registrosNomina.add(registro);
+
+        try {
+            totalNomina += Double.parseDouble(sueldoNetoStr);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al sumar sueldo neto: " + e.getMessage());
+        }
+
+        if (!cooperativaStr.equals("0.00") && cooperativaMap.containsKey(idEmpleado)) {
+            try {
+                double montoCooperativa = Double.parseDouble(cooperativaStr);
+                CooperativaInfo info = cooperativaMap.get(idEmpleado);
+                info.balanceAcumulado += montoCooperativa;
+            } catch (NumberFormatException e) {
+                System.out.println("Error al actualizar cooperativa: " + e.getMessage());
+            }
+        }
+    }
+
+    try (PrintWriter pw = new PrintWriter(new FileWriter(archivoNominas, true))) {
+        for (String registro : registrosNomina) {
+            pw.println(registro);
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al guardar nómina: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    actualizarCooperativa();
+
+    txtEstado.setText("¡Nómina procesada! " + modelo.getRowCount() + " empleados. Total: RD$ "
+            + formatoMoneda.format(totalNomina));
+
+    JOptionPane.showMessageDialog(this,
+            "¡Nómina procesada y guardada exitosamente!\n"
+            + "Empleados procesados: " + modelo.getRowCount() + "\n"
+            + "Total nómina: RD$ " + formatoMoneda.format(totalNomina),
+            "Nómina Procesada", JOptionPane.INFORMATION_MESSAGE);
+    
+    try {
+    String rutaNominas = "src/BaseDeDatos/Nominas.txt";
+    String rutaEmpleados = "src/BaseDeDatos/Empleados.txt";
+    String rutaSalida = "src/VolantesDeNómina/Nominas_" + new SimpleDateFormat("yyyyMM").format(jdcFecha.getDate()) + ".pdf";
+    
+    // Formatear la fecha seleccionada para mostrar en el PDF
+    SimpleDateFormat sdfDisplay = new SimpleDateFormat("dd/MM/yyyy");
+    String fechaParaPDF = sdfDisplay.format(jdcFecha.getDate());
+    
+    GenerarPDF.generarPDF(rutaNominas, rutaEmpleados, rutaSalida, fechaParaPDF);
+    
+    JOptionPane.showMessageDialog(this, 
+            "PDF generado exitosamente en: " + rutaSalida,
+            "PDF Generado", JOptionPane.INFORMATION_MESSAGE);
+} catch (IOException e) {
+    JOptionPane.showMessageDialog(this,
+            "Error al generar PDF: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+}
+    
+    
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -602,7 +666,7 @@ public class GenerarNomina extends javax.swing.JFrame {
                 txtEstadoKeyTyped(evt);
             }
         });
-        panelesBordesRedondeados1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 280, 40));
+        panelesBordesRedondeados1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 740, 40));
 
         TableNominas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
