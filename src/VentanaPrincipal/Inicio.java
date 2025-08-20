@@ -10,6 +10,7 @@ import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
 import Procesos.GenerarNomina;
+import Procesos.ReversarNomina;
 import Utilidades.ConsultaGeneral;
 import Utilidades.ConsultaNominas;
 import java.awt.BorderLayout;
@@ -86,6 +87,7 @@ public class Inicio extends javax.swing.JFrame {
     private Empleados ventanaEmpleados = null;
     private Puestos ventanaPuestos = null;
     private GenerarNomina ventanaGenerarNomina = null;
+    private ReversarNomina ventanaReversarNomina = null;
 
     private void cerrarTodasLasVentanas() {
         if (ventanaUsuarios != null && ventanaUsuarios.isDisplayable()) {
@@ -107,6 +109,11 @@ public class Inicio extends javax.swing.JFrame {
         if (ventanaGenerarNomina != null && ventanaGenerarNomina.isDisplayable()) {
             ventanaGenerarNomina.dispose();
             ventanaGenerarNomina = null;
+        }
+        
+        if (ventanaReversarNomina != null && ventanaReversarNomina.isDisplayable()) {
+            ventanaReversarNomina.dispose();
+            ventanaReversarNomina = null;
         }
     }
 
@@ -150,12 +157,16 @@ public class Inicio extends javax.swing.JFrame {
             case 9: {
                 txtEstadoInicio.setText("Consulta de Nóminas");
                 break;
-}
+            }
 
+            case 10: {
+                txtEstadoInicio.setText("Reversar Nómina");
+                break;
+            }
+            
             default: {
                 txtEstadoInicio.setText("Menú Principal");
                 break;
-
             }
         }
     }
@@ -241,6 +252,20 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
     }
+    
+        private void abrirVentanaReversarNomina() {
+        cerrarTodasLasVentanas();
+        
+        ventanaReversarNomina = new ReversarNomina();
+        ventanaReversarNomina.setVisible(true);
+        ventanaReversarNomina.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                ventanaReversarNomina = null;
+                cambiarEstadoInicio(0);
+            }
+        });
+    }
 
     private JMenuItem createStyledMenuItem(String text, ActionListener action) {
         JMenuItem item = new JMenuItem(text) {
@@ -307,7 +332,7 @@ public class Inicio extends javax.swing.JFrame {
             cerrarTodasLasVentanas();
         }));
         
-        popupMenuConsultas.add(createStyledMenuItem("Nomina", e -> {
+        popupMenuConsultas.add(createStyledMenuItem("Nóminas", e -> {
     CardLayout cl = (CardLayout) pnlContenido.getLayout();
     cl.show(pnlContenido, "NOMINAS");
     
@@ -379,8 +404,10 @@ public class Inicio extends javax.swing.JFrame {
 
         // Menú para mostrar panel de Reversar Nómina
         popupMenuProcesos.add(createStyledMenuItem("Reversar Nómina", e -> {
-            /*CardLayout cl = (CardLayout) pnlContenido.getLayout();
-            cl.show(pnlContenido, "Nómina");*/
+            abrirVentanaReversarNomina();
+            cambiarEstadoInicio(10);
+            CardLayout cl = (CardLayout) pnlContenido.getLayout();
+            cl.show(pnlContenido, "VACIO");
         }));
     }
 
