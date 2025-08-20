@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/*
+ /*
  * CooperativaDialog corregido
  */
 package Mantenimientos;
@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class CooperativaDialog extends javax.swing.JDialog {
-    
+
     private static final String ARCHIVO_COOPERATIVA = "src/BaseDeDatos/Cooperativa.txt";
     private String empleadoId;
     private BigDecimal salarioEmpleado;
@@ -26,7 +26,11 @@ public class CooperativaDialog extends javax.swing.JDialog {
     private boolean esModificacion = false;
     private String registroAnterior = "";
     private File archivo = new File(ARCHIVO_COOPERATIVA);
-    
+
+    private boolean procesoCancelado = false;
+    private boolean cooperativaEliminada = false;
+    private boolean modoModificacion;
+
     private javax.swing.JPanel panelPrincipal;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblIdEmpleado;
@@ -41,24 +45,34 @@ public class CooperativaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblEstado;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnCancelar;
-    
-    public CooperativaDialog(java.awt.Frame parent, String empleadoId, BigDecimal salario) {
+    public boolean isProcesoCompletado() { return procesoCompletado; }
+    public boolean isProcesoCancelado() { return procesoCancelado; }
+    public boolean isCooperativaEliminada() { return cooperativaEliminada; }
+
+    public CooperativaDialog(java.awt.Frame parent, String empleadoId, BigDecimal salario, boolean modoModificacion) {
         super(parent, true);
         this.empleadoId = empleadoId;
         this.salarioEmpleado = salario;
+        this.modoModificacion = modoModificacion;
         initComponents();
         personalizarFormulario();
         configurarVentana();
         verificarRegistroExistente();
+        
+
+        // Si es modo modificación, cambiar el texto del botón
+        if (modoModificacion) {
+            btnGuardar.setText("Actualizar");
+        }
     }
-    
+
     public CooperativaDialog() {
         super((java.awt.Frame) null, true);
         initComponents();
         personalizarFormulario();
     }
-    
-    private void configurarVentana() {
+
+     private void configurarVentana() {
         setLocationRelativeTo(getParent());
         setTitle("Gestión de Cooperativa - Empleado ID: " + empleadoId);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -71,17 +85,28 @@ public class CooperativaDialog extends javax.swing.JDialog {
         
         txtIdEmpleado.setEditable(false);
         txtSalarioRef.setEditable(false);
+        txtBalanceAcumulado.setEditable(false);
         
         txtIdEmpleado.setText(empleadoId);
-        txtSalarioRef.setText(salarioEmpleado.toString());
+        txtSalarioRef.setText(String.format("$%.2f", salarioEmpleado.doubleValue()));
         
-        lblMaximoPermitido.setText("Máximo permitido: 5% del salario");
-
+        // Calcular y mostrar máximo permitido
+       
+        
+        // Verificar y mostrar balance existente
+        BigDecimal balanceExistente = obtenerBalanceEmpleado(empleadoId);
+        txtBalanceAcumulado.setText(String.format("$%.2f", balanceExistente.doubleValue()));
+        
+        // Resaltar si hay balance positivo
+        if (balanceExistente.compareTo(BigDecimal.ZERO) > 0) {
+            txtBalanceAcumulado.setForeground(new Color(255, 204, 102)); // Color amarillo/naranja
+            lblBalance.setToolTipText("Balance acumulado positivo - No se puede quitar de cooperativa");
+        }
     }
 
     private void verificarRegistroExistente() {
         String registroExistente = buscarRegistroCooperativa(empleadoId);
-        
+
         if (registroExistente != null) {
             // Es una modificación
             esModificacion = true;
@@ -94,6 +119,31 @@ public class CooperativaDialog extends javax.swing.JDialog {
             txtBalanceAcumulado.setText("0.00");
             lblEstado.setText("Creando nuevo registro");
             btnGuardar.setText("Guardar");
+        }
+    }
+
+    private void eliminarRegistro() {
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar al empleado de la cooperativa?\n"
+                + "Esta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            ManejoArchivos manejo = new ManejoArchivos();
+            try {
+                manejo.Eliminar(registroAnterior, archivo);
+                cooperativaEliminada = true;
+                procesoCompletado = true;
+                JOptionPane.showMessageDialog(this,
+                        "Empleado eliminado de la cooperativa correctamente.");
+                dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -111,7 +161,7 @@ public class CooperativaDialog extends javax.swing.JDialog {
         }
         return null;
     }
-    
+
     private void cargarDatosExistentes(String registro) {
         String[] partes = registro.split(";");
         if (partes.length >= 3) {
@@ -131,13 +181,13 @@ public class CooperativaDialog extends javax.swing.JDialog {
 
         try {
             BigDecimal porcentaje = new BigDecimal(porcentajeText);
-            
+
             if (porcentaje.compareTo(BigDecimal.ZERO) <= 0 || porcentaje.compareTo(new BigDecimal("5")) > 0) {
-    JOptionPane.showMessageDialog(this, "El porcentaje debe estar entre 1% y 5%.");
-    txtPorcentajeDesc.requestFocus();
-    return false;
-}
-            
+                JOptionPane.showMessageDialog(this, "El porcentaje debe estar entre 1% y 5%.");
+                txtPorcentajeDesc.requestFocus();
+                return false;
+            }
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El porcentaje debe ser un número válido.");
             txtPorcentajeDesc.requestFocus();
@@ -168,13 +218,13 @@ public class CooperativaDialog extends javax.swing.JDialog {
         StringBuilder linea = new StringBuilder();
         linea.append(empleadoId).append(";");
         linea.append(txtPorcentajeDesc.getText().trim()).append(";");
-        
+
         String balance = txtBalanceAcumulado.getText().trim();
         if (balance.isEmpty()) {
             balance = "0.00";
         }
         linea.append(balance);
-        
+
         return linea.toString();
     }
 
@@ -194,20 +244,18 @@ public class CooperativaDialog extends javax.swing.JDialog {
                 manejo.GuardarDatos(nuevaLinea, archivo);
                 JOptionPane.showMessageDialog(this, "Registro de cooperativa guardado correctamente.");
             }
-            
+
             procesoCompletado = true;
             dispose();
-            
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al guardar el registro de cooperativa: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar el registro de cooperativa: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public boolean isProcesoCompletado() {
-        return procesoCompletado;
-    }
+    
 
     public static BigDecimal obtenerBalanceEmpleado(String idEmpleado) {
         File archivo = new File(ARCHIVO_COOPERATIVA);
@@ -227,8 +275,8 @@ public class CooperativaDialog extends javax.swing.JDialog {
         }
         return BigDecimal.ZERO;
     }
-    
-    private void personalizarFormulario(){
+
+    private void personalizarFormulario() {
         panelPrincipal = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         lblIdEmpleado = new javax.swing.JLabel();
@@ -243,6 +291,24 @@ public class CooperativaDialog extends javax.swing.JDialog {
         lblEstado = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        
+         if (modoModificacion) {
+            javax.swing.JButton btnEliminar = new javax.swing.JButton();
+            btnEliminar.setBackground(new java.awt.Color(200, 66, 82)); // Color rojizo
+            btnEliminar.setFont(new java.awt.Font("Noto Sans", 1, 14));
+            btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+            btnEliminar.setText("Eliminar");
+            btnEliminar.setBorder(null);
+            btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            btnEliminar.setFocusPainted(false);
+            btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    eliminarRegistro();
+                }
+            });
+            panelPrincipal.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 280, 100, 35));
+        }
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // CORREGIDO AQUÍ
         setTitle("Gestión de Cooperativa");
@@ -285,7 +351,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
         panelPrincipal.add(lblPorcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
         txtPorcentajeDesc.setToolTipText("Ingrese un porcentaje entre 1 y 5");
 
-
         txtPorcentajeDesc.setFont(new java.awt.Font("Noto Sans", 0, 14));
         txtPorcentajeDesc.setForeground(new java.awt.Color(236, 239, 244));
         txtPorcentajeDesc.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(59, 66, 82)));
@@ -294,7 +359,7 @@ public class CooperativaDialog extends javax.swing.JDialog {
 
         lblMaximoPermitido.setFont(new java.awt.Font("Noto Sans", 2, 12));
         lblMaximoPermitido.setForeground(new java.awt.Color(255, 204, 102));
-        lblMaximoPermitido.setText("Máximo permitido: $0.00");
+        lblMaximoPermitido.setText("Máximo permitido: 5%");
         panelPrincipal.add(lblMaximoPermitido, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, -1, -1));
 
         lblBalance.setFont(new java.awt.Font("Noto Sans", 1, 14));
@@ -346,27 +411,27 @@ public class CooperativaDialog extends javax.swing.JDialog {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
         );
 
         pack();
     }
-    
+
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardarRegistro();
     }
-     
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro de cancelar? Los cambios no se guardarán.",
-            "Confirmar cancelación",
-            JOptionPane.YES_NO_OPTION);
-        
+                "¿Está seguro de cancelar? Los cambios no se guardarán.",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION);
+
         if (confirmacion == JOptionPane.YES_OPTION) {
             procesoCompletado = false;
             dispose();
@@ -379,18 +444,18 @@ public class CooperativaDialog extends javax.swing.JDialog {
         setTitle("Cooperativa");
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
         this.setIconImage(icono.getImage());
-        
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -407,7 +472,7 @@ public class CooperativaDialog extends javax.swing.JDialog {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CooperativaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         java.awt.EventQueue.invokeLater(() -> {
             new CooperativaDialog().setVisible(true);
         });

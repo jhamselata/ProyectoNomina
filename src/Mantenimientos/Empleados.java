@@ -5,6 +5,7 @@
 package Mantenimientos;
 
 import ManejoDeArchivos.ManejoArchivos;
+import Mantenimientos.CooperativaDialog;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +22,6 @@ import javax.swing.JOptionPane;
  *
  * @author Duanel
  */
-
 public class Empleados extends javax.swing.JFrame {
 
     /**
@@ -32,36 +32,36 @@ public class Empleados extends javax.swing.JFrame {
     private static final String ARCHIVO_PUESTOS = "src/BaseDeDatos/Puestos.txt";
     private static final String ESTADO_CREANDO = "Creando";
     private static final String ESTADO_MODIFICANDO = "Modificando";
-    
+
     private boolean encontrado = false;
     private String cadenaAnterior = "";
     private File archivo = new File(ARCHIVO_EMPLEADOS);
     private boolean cooperativaConfiguracionCompletada = false;
+    private boolean perteneceCooperativa = false; // Nuevo campo para rastrear el estado
 
     public Empleados() {
         initComponents();
-        
+
         setTitle("Mantenimiento de Empleados");
         ImageIcon icono = new ImageIcon(getClass().getResource("/Iconos/ProgramIcon.png"));
         this.setIconImage(icono.getImage());
-        
+
         configurarVentana();
         configurarCamposTransparentes();
         cargarComboBoxes();
         configurarValidaciones();
-        configurarListenersCooperativa();
-        
+
         btnRegistrar.setVisible(false);
         btnEliminar.setVisible(false);
         lblBotonRegistrar.setVisible(false);
         lblBotonEliminar.setVisible(false);
 
         establecerFechaActual();
-        cooperativaConfiguracionCompletada = false; 
+        cooperativaConfiguracionCompletada = false;
     }
 
     private boolean validarCambioCooperativa() {
-        if (rbtnNo.isSelected()) {
+        if (!perteneceCooperativa) {
             String idEmpleado = txtIDEmpleado.getText().trim();
             if (!idEmpleado.isEmpty()) {
                 BigDecimal balance = CooperativaDialog.obtenerBalanceEmpleado(idEmpleado);
@@ -70,7 +70,8 @@ public class Empleados extends javax.swing.JFrame {
                             String.format("No se puede quitar al empleado de la cooperativa.\n"
                                     + "Tiene un balance acumulado de $%.2f", balance.doubleValue()),
                             "Operación no permitida", JOptionPane.WARNING_MESSAGE);
-                    rbtnSi.setSelected(true); // Forzar a "Si"
+                    perteneceCooperativa = true; // Forzar a pertenecer a cooperativa
+                    actualizarTextoBotonCooperativa();
                     return false;
                 }
             }
@@ -78,16 +79,14 @@ public class Empleados extends javax.swing.JFrame {
         return true;
     }
 
-    private void gestionarCooperativa() {
+     private void gestionarCooperativa() {
         // Validar que haya salario ingresado
-       String salarioText = txtSalario.getText().trim();
+        String salarioText = txtSalario.getText().trim();
         if (salarioText.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Debe ingresar un salario antes de configurar la cooperativa.",
                     "Salario requerido", JOptionPane.WARNING_MESSAGE);
             txtSalario.requestFocus();
-            rbtnNo.setSelected(true);
-            cooperativaConfiguracionCompletada = false;
             return;
         }
 
@@ -95,17 +94,54 @@ public class Empleados extends javax.swing.JFrame {
             BigDecimal salario = new BigDecimal(salarioText);
             String idEmpleado = txtIDEmpleado.getText().trim();
 
-            CooperativaDialog dialog = new CooperativaDialog(this, idEmpleado, salario);
-            dialog.setVisible(true);
-            
-            if (!dialog.isProcesoCompletado()) {
-                rbtnNo.setSelected(true);
-                JOptionPane.showMessageDialog(this,
-                        "Se canceló el proceso de cooperativa. El empleado se guardará sin cooperativa.",
-                        "Proceso cancelado", JOptionPane.INFORMATION_MESSAGE);
-                cooperativaConfiguracionCompletada = false;
+            // Mostrar opciones: Agregar/Modificar o Quitar
+            if (perteneceCooperativa) {
+                // Si ya pertenece, mostrar opción para modificar o quitar
+                Object[] opciones = {"Modificar Configuración", "Quitar de Cooperativa", "Cancelar"};
+                int opcion = JOptionPane.showOptionDialog(this,
+                        "El empleado ya pertenece a la cooperativa. ¿Qué desea hacer?",
+                        "Gestión de Cooperativa",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]);
+
+                if (opcion == 0) {
+                    // Modificar configuración
+                    CooperativaDialog dialog = new CooperativaDialog(this, idEmpleado, salario, true);
+                    dialog.setVisible(true);
+                    
+                    if (dialog.isProcesoCompletado()) {
+                        JOptionPane.showMessageDialog(this,
+                                "Configuración de cooperativa actualizada correctamente.",
+                                "Proceso completado", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if (opcion == 1) {
+                    // Quitar de cooperativa - VALIDAR BALANCE PRIMERO
+                    if (validarQuitarCooperativa(idEmpleado)) {
+                        perteneceCooperativa = false;
+                        actualizarTextoBotonCooperativa();
+                        cooperativaConfiguracionCompletada = false;
+                        JOptionPane.showMessageDialog(this,
+                                "Empleado removido de la cooperativa correctamente.",
+                                "Proceso completado", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                // Si opcion == 2 (Cancelar), no hacer nada
             } else {
-                cooperativaConfiguracionCompletada = true;
+                // Si no pertenece, mostrar diálogo para agregar
+                CooperativaDialog dialog = new CooperativaDialog(this, idEmpleado, salario, false);
+                dialog.setVisible(true);
+                
+                if (dialog.isProcesoCompletado()) {
+                    perteneceCooperativa = true;
+                    actualizarTextoBotonCooperativa();
+                    cooperativaConfiguracionCompletada = true;
+                    JOptionPane.showMessageDialog(this,
+                            "Empleado agregado a la cooperativa correctamente.",
+                            "Proceso completado", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
 
         } catch (NumberFormatException e) {
@@ -113,8 +149,40 @@ public class Empleados extends javax.swing.JFrame {
                     "El salario debe ser un número válido para configurar la cooperativa.",
                     "Salario inválido", JOptionPane.ERROR_MESSAGE);
             txtSalario.requestFocus();
-            rbtnNo.setSelected(true);
-            cooperativaConfiguracionCompletada = false;
+        }
+    }
+     
+     private boolean validarQuitarCooperativa(String idEmpleado) {
+        BigDecimal balance = CooperativaDialog.obtenerBalanceEmpleado(idEmpleado);
+        
+        if (balance.compareTo(BigDecimal.ZERO) > 0) {
+            JOptionPane.showMessageDialog(this,
+                    String.format("No se puede quitar al empleado de la cooperativa.\n"
+                            + "Tiene un balance acumulado de $%.2f\n\n"
+                            + "El empleado debe liquidar su balance antes de salir de la cooperativa.",
+                            balance.doubleValue()),
+                    "Operación no permitida", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        // Confirmar la eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de quitar al empleado de la cooperativa?\n"
+                + "Esta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        return confirmacion == JOptionPane.YES_OPTION;
+    }  
+
+    private void actualizarTextoBotonCooperativa() {
+        if (perteneceCooperativa) {
+            GestionCoopBtn.setText("Gestionar Cooperativa ✓");
+            GestionCoopBtn.setToolTipText("El empleado pertenece a la cooperativa. Click para gestionar");
+        } else {
+            GestionCoopBtn.setText("Gestionar Cooperativa");
+            GestionCoopBtn.setToolTipText("Click para agregar a la cooperativa");
         }
     }
 
@@ -124,23 +192,9 @@ public class Empleados extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    private void configurarListenersCooperativa() {
-        rbtnSi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnSiActionPerformed(evt);
-            }
-        });
-
-        rbtnNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnNoActionPerformed(evt);
-            }
-        });
-    }
-    
     private void establecerFechaActual() {
-    jdcFecha.setDate(new Date());
-}   
+        jdcFecha.setDate(new Date());
+    }
 
     private void configurarCamposTransparentes() {
         Color transparente = new Color(0, 0, 0, 0);
@@ -223,8 +277,7 @@ public class Empleados extends javax.swing.JFrame {
         cmbDepEmpleado.setEnabled(habilitar);
         jdcFecha.setEnabled(habilitar);
         cmbPuestoEmpleado.setEnabled(habilitar);
-        rbtnSi.setEnabled(habilitar);
-        rbtnNo.setEnabled(habilitar);
+        GestionCoopBtn.setEnabled(habilitar && !txtSalario.getText().trim().isEmpty());
         txtSalario.setEnabled(habilitar);
     }
 
@@ -238,7 +291,6 @@ public class Empleados extends javax.swing.JFrame {
         txtSalario.setText("");
 
         SexoGroup.clearSelection();
-        CooperativaGroup.clearSelection();
         cmbDepEmpleado.setSelectedIndex(0);
         cmbPuestoEmpleado.setSelectedIndex(0);
 
@@ -247,10 +299,12 @@ public class Empleados extends javax.swing.JFrame {
 
         encontrado = false;
         cadenaAnterior = "";
+        perteneceCooperativa = false;
+        actualizarTextoBotonCooperativa();
 
         establecerFechaActual();
-        
-        cooperativaConfiguracionCompletada = false; 
+
+        cooperativaConfiguracionCompletada = false;
     }
 
     private void cargarDatosEmpleado(String[] datos) {
@@ -272,27 +326,28 @@ public class Empleados extends javax.swing.JFrame {
             seleccionarComboBoxPorId(cmbDepEmpleado, datos[7]);
 
             try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date fecha = sdf.parse(datos[8]);
-            jdcFecha.setDate(fecha);
-        } catch (ParseException e) {
-            // Si hay error al parsear, establecer fecha actual
-            jdcFecha.setDate(new Date());
-            System.err.println("Error al parsear fecha: " + datos[8]);
-        }
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha = sdf.parse(datos[8]);
+                jdcFecha.setDate(fecha);
+            } catch (ParseException e) {
+                // Si hay error al parsear, establecer fecha actual
+                jdcFecha.setDate(new Date());
+                System.err.println("Error al parsear fecha: " + datos[8]);
+            }
 
             // Puesto - buscar y seleccionar
             seleccionarComboBoxPorId(cmbPuestoEmpleado, datos[9]);
 
             // Cooperativa
             if ("Si".equals(datos[10])) {
-                rbtnSi.setSelected(true);
-                // Si el empleado ya tiene cooperativa registrada, se asume que la configuración está completa
-                cooperativaConfiguracionCompletada = true; 
+                perteneceCooperativa = true;
             } else if ("No".equals(datos[10])) {
-                rbtnNo.setSelected(true);
-                cooperativaConfiguracionCompletada = false;
+                perteneceCooperativa = false;
             }
+            actualizarTextoBotonCooperativa();
+
+            txtSalario.setText(datos[11]);
+            actualizarTextoBotonCooperativa();
 
             txtSalario.setText(datos[11]);
         }
@@ -390,13 +445,9 @@ public class Empleados extends javax.swing.JFrame {
             return false;
         }
 
-        if (!rbtnSi.isSelected() && !rbtnNo.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Debe indicar si pertenece a la cooperativa.");
-            return false;
-        }
-
         return true;
     }
+    
 
     /**
      * Valida que la fecha tenga el formato correcto DD/MM/YYYY
@@ -442,8 +493,8 @@ public class Empleados extends javax.swing.JFrame {
         String idPuesto = puestoSeleccionado.split(" - ")[0];
         linea.append(idPuesto).append(";");
 
-        // Cooperativa
-        linea.append(rbtnSi.isSelected() ? "Si" : "No").append(";");
+        // Cooperativa - ahora solo guarda "Si" o "No" en el archivo de empleados
+        linea.append(perteneceCooperativa ? "Si" : "No").append(";");
 
         linea.append(txtSalario.getText().trim());
 
@@ -498,11 +549,10 @@ public class Empleados extends javax.swing.JFrame {
         lblPuestoEmpleado = new javax.swing.JLabel();
         cmbPuestoEmpleado = new javax.swing.JComboBox<>();
         lblCoopEmpleado = new javax.swing.JLabel();
-        rbtnSi = new javax.swing.JRadioButton();
-        rbtnNo = new javax.swing.JRadioButton();
         txtSalario = new javax.swing.JTextField();
         lblSalarioEmpleado = new javax.swing.JLabel();
         jdcFecha = new com.toedter.calendar.JDateChooser();
+        GestionCoopBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -567,7 +617,6 @@ public class Empleados extends javax.swing.JFrame {
         lblBotonRegistrar.setRoundTopRight(20);
 
         btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("Registrar");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -616,7 +665,6 @@ public class Empleados extends javax.swing.JFrame {
         lblBotonEliminar.setRoundTopRight(20);
 
         btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("Eliminar");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -686,7 +734,6 @@ public class Empleados extends javax.swing.JFrame {
         lblBtnSalir.setRoundTopRight(20);
 
         btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("Salir");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -894,24 +941,6 @@ public class Empleados extends javax.swing.JFrame {
         lblCoopEmpleado.setText("Cooperativa");
         panelesBordesRedondeados1.add(lblCoopEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 660, -1, -1));
 
-        CooperativaGroup.add(rbtnSi);
-        rbtnSi.setText("Si");
-        rbtnSi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnSiActionPerformed(evt);
-            }
-        });
-        panelesBordesRedondeados1.add(rbtnSi, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 660, -1, -1));
-
-        CooperativaGroup.add(rbtnNo);
-        rbtnNo.setText("No");
-        rbtnNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnNoActionPerformed(evt);
-            }
-        });
-        panelesBordesRedondeados1.add(rbtnNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 660, -1, -1));
-
         txtSalario.setBackground(new java.awt.Color(255, 204, 102));
         txtSalario.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         txtSalario.setForeground(new java.awt.Color(236, 239, 244));
@@ -940,6 +969,15 @@ public class Empleados extends javax.swing.JFrame {
 
         jdcFecha.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         panelesBordesRedondeados1.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 240, 40));
+
+        GestionCoopBtn.setText("Gestionar Cooperativa");
+        GestionCoopBtn.setActionCommand("");
+        GestionCoopBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GestionCoopBtnActionPerformed(evt);
+            }
+        });
+        panelesBordesRedondeados1.add(GestionCoopBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 660, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1138,7 +1176,7 @@ public class Empleados extends javax.swing.JFrame {
             cadenaAnterior = "";
             return; // Sal del método
         }
-        
+
         // Asegurarse de que el ID solo contenga números para la búsqueda
         if (!idEmpleado.matches("^\\d+$")) {
             limpiarCampos();
@@ -1264,72 +1302,63 @@ public class Empleados extends javax.swing.JFrame {
 
     private void txtSalarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSalarioKeyTyped
         // TODO add your handling code here:
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                String salarioText = txtSalario.getText().trim();
-                boolean tieneSalario = !salarioText.isEmpty();
+        String salarioText = txtSalario.getText().trim();
+        boolean tieneSalario = !salarioText.isEmpty();
 
-                // Solo permitir seleccionar cooperativa si hay salario
-                if (!tieneSalario && rbtnSi.isSelected()) {
-                    rbtnNo.setSelected(true);
-                }
-            }
-        });
+        // Habilitar o deshabilitar el botón de cooperativa según si hay salario
+        GestionCoopBtn.setEnabled(tieneSalario);
+
     }//GEN-LAST:event_txtSalarioKeyTyped
 
-    private void rbtnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnSiActionPerformed
-        if (rbtnSi.isSelected()) {
-            // Siempre que se seleccione "Si", intentamos gestionar la cooperativa.
-            // La lógica para abrir/no abrir el diálogo si ya está configurado
-            // y las validaciones de salario se manejan dentro de gestionarCooperativa().
-            gestionarCooperativa();
-        }
-    }//GEN-LAST:event_rbtnSiActionPerformed
-
-    private void rbtnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNoActionPerformed
-        // TODO add your handling code here:
-        validarCambioCooperativa();
-        cooperativaConfiguracionCompletada = false;
-    }//GEN-LAST:event_rbtnNoActionPerformed
+    private void GestionCoopBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionCoopBtnActionPerformed
+        gestionarCooperativa();
+    }//GEN-LAST:event_GestionCoopBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
-    //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new Empleados().setVisible(true);
-        }
-    });
-}
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Empleados().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup CooperativaGroup;
+    private javax.swing.JButton GestionCoopBtn;
     private javax.swing.ButtonGroup SexoGroup;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegistrar;
@@ -1356,8 +1385,6 @@ public class Empleados extends javax.swing.JFrame {
     private Utilidades.PanelesBordesRedondeados panelesBordesRedondeados1;
     private javax.swing.JRadioButton rbtnFemenino;
     private javax.swing.JRadioButton rbtnMasculino;
-    private javax.swing.JRadioButton rbtnNo;
-    private javax.swing.JRadioButton rbtnSi;
     private javax.swing.JSeparator sdrIDDep;
     private javax.swing.JSeparator sprCampoApeMatEmpleado1;
     private javax.swing.JSeparator sprCampoApePatEmpleado;
