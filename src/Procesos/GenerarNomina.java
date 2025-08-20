@@ -532,7 +532,7 @@ public class GenerarNomina extends javax.swing.JFrame {
     try {
     String rutaNominas = "src/BaseDeDatos/Nominas.txt";
     String rutaEmpleados = "src/BaseDeDatos/Empleados.txt";
-    String rutaSalida = "src/VolantesDeNómina/Nominas_" + new SimpleDateFormat("yyyyMM").format(jdcFecha.getDate()) + ".pdf";
+    String rutaSalida = "src/VolantesDeNómina/" + new SimpleDateFormat("MM-yyyy").format(jdcFecha.getDate()) + "-Nómina" + ".pdf";
     
     // Formatear la fecha seleccionada para mostrar en el PDF
     SimpleDateFormat sdfDisplay = new SimpleDateFormat("dd/MM/yyyy");

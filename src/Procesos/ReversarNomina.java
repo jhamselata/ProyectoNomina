@@ -19,6 +19,9 @@ import java.util.Locale;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -43,126 +46,180 @@ public class ReversarNomina extends javax.swing.JFrame {
         "src/BaseDeDatos/Nominas.txt", 
         "src/BaseDeDatos/Empleados.txt");
         
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tblNominas.getModel());
+        tblNominas.setRowSorter(sorter);
+        
+        jdcFecha.getDateEditor().addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                Date fecha = jdcFecha.getDate();
+                if (fecha != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormat = sdf.format(fecha);
+                
+                sorter.setRowFilter(RowFilter.regexFilter("^" + fechaFormat + "$", 3));
+                } else {
+                    sorter.setRowFilter(null);
+                }
+            }
+        });
+        
     }
     
     public void ProcesoReversar() {
-        File Coop = new File("src/BaseDeDatos/Cooperativa.txt");
-        File Nomina = new File("src/BaseDeDatos/Nominas.txt");
-        
-        SimpleDateFormat sdfFull = new SimpleDateFormat("dd/MM/yyyy");
-        
-        Date fechaSeleccionada = jdcFecha.getDate();
-        
-        if (fechaSeleccionada == null) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar la fecha a reversar.", "Fecha no seleccionada", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        String fechaString = sdfFull.format(fechaSeleccionada);
-        
-        if (!Nomina.exists()) {
-            JOptionPane.showMessageDialog(null, "El archivo de nómina no se encuentra", "Archivo no encontrado", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro de reversar la nómina con la fecha: " + fechaString + "?", "Confirmar reversión", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
-        if (opcion != JOptionPane.YES_OPTION) {
-            return;
-        }
-        
-        List<String> LineasNuevas = new ArrayList<>();
-        Map<String, Double> descuentosCooperativa = new HashMap<>();
-        
-        boolean encontrado = false;
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(Nomina))) {
-            String linea;
-            
-            while ((linea = br.readLine()) != null) {
-                if (linea.trim().isEmpty()) continue;
-                String[] cols = linea.split(";");
-                if (cols.length < 9) continue;
-                
-                String fechaLinea = cols[2].trim();
-                String idEmp = cols[1].trim();
-                double coop = Double.parseDouble(cols[6].trim());
-                
-                if (fechaLinea.equals(fechaString)) {
-                    encontrado = true;
-                    
-                    if (coop > 0) {
-                        descuentosCooperativa.put(idEmp, coop);
-                    }
-                } else {
-                    LineasNuevas.add(linea);
+    File coopFile   = new File("src/BaseDeDatos/Cooperativa.txt");
+    File nominaFile = new File("src/BaseDeDatos/Nominas.txt");
+
+    SimpleDateFormat sdfFull = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date fechaSeleccionada = jdcFecha.getDate();
+    if (fechaSeleccionada == null) {
+        JOptionPane.showMessageDialog(null,
+                "Debe seleccionar la fecha a reversar.",
+                "Fecha no seleccionada",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    String fechaString = sdfFull.format(fechaSeleccionada);
+
+    if (!nominaFile.exists()) {
+        JOptionPane.showMessageDialog(null,
+                "El archivo de nómina no se encuentra.",
+                "Archivo no encontrado",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int opcion = JOptionPane.showConfirmDialog(
+            null,
+            "¿Seguro de reversar la nómina con la fecha: " + fechaString + "?",
+            "Confirmar reversión",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+    );
+
+    if (opcion != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    List<String> lineasNuevas = new ArrayList<>();
+    Map<String, Double> descuentosCooperativa = new HashMap<>();
+    boolean encontrado = false;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(nominaFile))) {
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            if (linea.trim().isEmpty()) continue;
+            String[] cols = linea.split(";");
+            if (cols.length < 9) continue;
+            String fechaLinea = cols[2].trim();
+            String idEmp      = cols[1].trim();
+            double coop       = Double.parseDouble(cols[6].trim());
+            if (fechaLinea.equals(fechaString)) {
+                encontrado = true;
+                if (coop > 0) {
+                    descuentosCooperativa.put(idEmp, coop);
                 }
+            } else {
+                lineasNuevas.add(linea);
             }
         }
-        
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "No es posible reversar porque no existe una nómina en la fecha" + fechaString, "No se puede reversar", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null,
+                "Error al leer la nómina: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!encontrado) {
+        JOptionPane.showMessageDialog(null,
+                "No es posible reversar porque no existe una nómina con fecha " + fechaString + ".",
+                "No se puede reversar",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(nominaFile, false))) {
+        for (String ln : lineasNuevas) {
+            bw.write(ln);
+            bw.newLine();
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null,
+                "Error al actualizar el archivo de nómina: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!descuentosCooperativa.isEmpty() && coopFile.exists()) {
+        List<String> lineasNuevasCoop = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(coopFile))) {
+            String ln;
+            while ((ln = br.readLine()) != null) {
+                if (ln.trim().isEmpty()) {
+                    lineasNuevasCoop.add(ln);
+                    continue;
+                }
+                String[] p = ln.split(";");
+                if (p.length < 3) {
+                    lineasNuevasCoop.add(ln);
+                    continue;
+                }
+                String id   = p[0].trim();
+                double pct  = Double.parseDouble(p[1].trim());
+                double bal  = Double.parseDouble(p[2].trim());
+                if (descuentosCooperativa.containsKey(id)) {
+                    bal -= descuentosCooperativa.get(id);
+                    if (bal < 0) bal = 0;
+                }
+                lineasNuevasCoop.add(String.format(Locale.US, "%s;%.2f;%.2f", id, pct, bal));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer archivo de cooperativa: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Nomina, false))) {
-            for (String In : LineasNuevas) {
-                bw.write(In);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(coopFile, false))) {
+            for (String s : lineasNuevasCoop) {
+                bw.write(s);
                 bw.newLine();
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Error al actualizar archivo de cooperativa: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        
-        if (!descuentosCooperativa.isEmpty() && Coop.exists()) {
-            List<String> lineasNuevasCoop = new ArrayList<>();
-            
-            try (BufferedReader br = new BufferedReader(new FileReader(Coop))) {
-                String I;
-                
-                while ((I = br.readLine())!= null) {
-                    if (I.trim().isEmpty()) {
-                        lineasNuevasCoop.add(I);
-                        continue;
-                    }
-                    
-                    String[] p = I.split(";");
-                    if (p.length < 3) {
-                        lineasNuevasCoop.add(I);
-                        continue;
-                    }
-                    
-                    String id = p[0].trim();
-                    double pct = Double.parseDouble(p[1].trim());
-                    double bal = Double.parseDouble(p[2].trim());
-                    
-                    if (descuentosCooperativa.containsKey(id)) {
-                        bal = bal - descuentosCooperativa.get(id);
-                        if (bal < 0) bal = 0;
-                    }
-                    
-                    lineasNuevasCoop.add(String.format(Locale.US, "%s;%.2f,%.2f", id, pct, bal));
-                }
-            }
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(Cooperativa, false))) {
-                for (String s : lineasNuevasCoop) {
-                    bw.write(s);
-                    bw.newLine();
-                }
-            }
-        }
-        
-        String rutaPDF = "src/VolantesDeNómina/Nominas.txt" + fechaString.replace("/", "-") + ".pdf";
-        
-        File pdf = new File(rutaPDF);
-        
-        if (pdf.exists()) {
-            pdf.delete();
-        }
-        
-        JOptionPane.showMessageDialog(null, "Nómina del" + fechString + " reversada exitosamente.", "Completado", JOptionPane.INFORMATION_MESSAGE);
-    } catch (Exception ex) {
-    ex.printStackTrace();
-    JOptionPane.showMessageDialog(null, "Error al reversar la nómina: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    ///Usar solo el mes y año para eliminar la nómina///
+    
+    SimpleDateFormat sdfMesAnio = new SimpleDateFormat("MM-yyyy");
+    String mesAnio = sdfMesAnio.format(fechaSeleccionada);
+
+    String rutaPDF = "src/VolantesDeNómina/" + mesAnio + "-Nómina.pdf";
+    File pdf = new File(rutaPDF);
+    if (pdf.exists()) {
+        pdf.delete();
+    }
+
+    JOptionPane.showMessageDialog(null,
+            "Nómina del " + fechaString + " reversada exitosamente.",
+            "Completado",
+            JOptionPane.INFORMATION_MESSAGE);
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -177,8 +234,10 @@ public class ReversarNomina extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tblNominas = new javax.swing.JTable();
         jdcFecha = new com.toedter.calendar.JDateChooser();
-        pnlBotonReverser = new Utilidades.PanelesBordesRedondeados();
+        pnlBotonReversar = new Utilidades.PanelesBordesRedondeados();
         btnReversar = new javax.swing.JButton();
+        pnlBotonSalir = new Utilidades.PanelesBordesRedondeados();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -216,14 +275,14 @@ public class ReversarNomina extends javax.swing.JFrame {
         tblNominas.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(tblNominas);
 
-        pnlContenido.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, 883, -1));
-        pnlContenido.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 50, -1, 50));
+        pnlContenido.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 883, -1));
+        pnlContenido.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 250, 50));
 
-        pnlBotonReverser.setRoundBottomLeft(20);
-        pnlBotonReverser.setRoundBottomRight(20);
-        pnlBotonReverser.setRoundTopLeft(20);
-        pnlBotonReverser.setRoundTopRight(20);
-        pnlBotonReverser.setLayout(new java.awt.BorderLayout());
+        pnlBotonReversar.setRoundBottomLeft(20);
+        pnlBotonReversar.setRoundBottomRight(20);
+        pnlBotonReversar.setRoundTopLeft(20);
+        pnlBotonReversar.setRoundTopRight(20);
+        pnlBotonReversar.setLayout(new java.awt.BorderLayout());
 
         btnReversar.setText("Reversar");
         btnReversar.addActionListener(new java.awt.event.ActionListener() {
@@ -231,9 +290,25 @@ public class ReversarNomina extends javax.swing.JFrame {
                 btnReversarActionPerformed(evt);
             }
         });
-        pnlBotonReverser.add(btnReversar, java.awt.BorderLayout.CENTER);
+        pnlBotonReversar.add(btnReversar, java.awt.BorderLayout.CENTER);
 
-        pnlContenido.add(pnlBotonReverser, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 130, 50));
+        pnlContenido.add(pnlBotonReversar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 560, 130, 50));
+
+        pnlBotonSalir.setRoundBottomLeft(20);
+        pnlBotonSalir.setRoundBottomRight(20);
+        pnlBotonSalir.setRoundTopLeft(20);
+        pnlBotonSalir.setRoundTopRight(20);
+        pnlBotonSalir.setLayout(new java.awt.BorderLayout());
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        pnlBotonSalir.add(btnSalir, java.awt.BorderLayout.CENTER);
+
+        pnlContenido.add(pnlBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 560, 130, 50));
 
         getContentPane().add(pnlContenido, java.awt.BorderLayout.CENTER);
 
@@ -241,8 +316,16 @@ public class ReversarNomina extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReversarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReversarActionPerformed
-        // TODO add your handling code here:
+        ProcesoReversar();
+        
+        ConsultaNominas.cargarNominasConEmpleados(tblNominas, 
+        "src/BaseDeDatos/Nominas.txt", 
+        "src/BaseDeDatos/Empleados.txt");
     }//GEN-LAST:event_btnReversarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,9 +365,11 @@ public class ReversarNomina extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReversar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JScrollPane jScrollPane4;
     private com.toedter.calendar.JDateChooser jdcFecha;
-    private Utilidades.PanelesBordesRedondeados pnlBotonReverser;
+    private Utilidades.PanelesBordesRedondeados pnlBotonReversar;
+    private Utilidades.PanelesBordesRedondeados pnlBotonSalir;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JTable tblNominas;
     // End of variables declaration//GEN-END:variables
