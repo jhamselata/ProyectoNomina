@@ -32,16 +32,10 @@ public class Departamentos extends javax.swing.JFrame {
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30)); //Redondea Bordes de la ventana Jframe
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Permite que solo se cierre la ventana
 
-        //Colores Transparentes para los campos
         txtIDDep.setBackground(new Color(0, 0, 0, 0));
         txtDescDep.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
 
-        /*if (txtIDDep.getText().isEmpty()) {
-            txtDescDep.setEnabled(false);
-        } else {
-            txtDescDep.setEnabled(true);
-        } */
     }
     
 
@@ -384,13 +378,11 @@ public class Departamentos extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String IDDepartamento = txtIDDep.getText().trim();
         
-        // Verificar si hay un usuario ingresado
         if (IDDepartamento.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese un departamento para eliminar.");
             return;
         }
-
-        // Buscar si el usuario existe
+        
         String lineaEncontrada = buscar(IDDepartamento);
         
        
@@ -401,8 +393,7 @@ public class Departamentos extends javax.swing.JFrame {
         
         String[] datos = lineaEncontrada.split(";");
         txtDescDep.setText(datos[1]);
-
-        // Confirmar eliminación
+        
         int confirmacion = JOptionPane.showConfirmDialog(
                 null,
                 "¿Está seguro de que desea eliminar el departamento '" + datos + "'?",
@@ -415,20 +406,16 @@ public class Departamentos extends javax.swing.JFrame {
             ManejoArchivos manejo = new ManejoArchivos();
 
             try {
-                // Eliminar el usuario usando el método de ManejoArchivos
                 manejo.Eliminar(lineaEncontrada, archivo);
                 JOptionPane.showMessageDialog(null, "Departamento eliminado correctamente.");
-
-                // Limpiar el formulario después de eliminar
+                
                 txtIDDep.setText("");
                 txtDescDep.setText("");
                 txtEstado.setText("Creando");
-
-                // Resetear variables de control
+                
                 encontrado = false;
                 cadenaAnterior = "";
-
-                // Deshabilitar campos
+                
                 txtDescDep.setEnabled(false);
 
             } catch (Exception ex) {
@@ -471,9 +458,7 @@ public class Departamentos extends javax.swing.JFrame {
                 txtDescDep.requestFocus();
                 return;
             } else {
-
-                // Al inicio de Anadir_btnActionPerformed
-                // Verifica si el usuario ya existe y no estamos modificando
+                
                 if (lineaExistente != null && !encontrado) {
                     JOptionPane.showMessageDialog(null, "El departamento ya existe. Presione ENTER para modificarlo.");
                     return;
@@ -496,7 +481,7 @@ public class Departamentos extends javax.swing.JFrame {
                         manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
                         JOptionPane.showMessageDialog(null, "Departamento modificado correctamente.");
                     }
-                    // Resetear formulario
+                    
                     encontrado = false;
                     txtIDDep.setText("");
                     txtDescDep.setText("");
@@ -562,18 +547,13 @@ public class Departamentos extends javax.swing.JFrame {
             String lineaEncontrada = buscar(IDDepartamento);
 
             if (lineaEncontrada != null) {
-                // Usuario encontrado - llenar todos los campos
                 String[] datos = lineaEncontrada.split(";");
-
-                // Solo llenar si los campos están vacíos o si estamos en modo modificación
                 if (txtDescDep.getText().trim().isEmpty() || encontrado) {
                     txtDescDep.setText(datos[1]);
                 }
-
-                // Llenar campos de información personal
+                
                 txtDescDep.setText(datos[1]);
                 
-                // Cambiar estado a "Modificando"
                 txtEstado.setText("Modificando");
                 btnEliminar.setEnabled(true);
                 encontrado = true;

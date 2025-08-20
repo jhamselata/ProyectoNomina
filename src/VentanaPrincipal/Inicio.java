@@ -47,7 +47,6 @@ public class Inicio extends javax.swing.JFrame {
     
 
     private void configurarCalendario() {
-        // Configurar el listener del JDateChooser
         jdcFecha.addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -173,91 +172,74 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     private void abrirVentanaUsuarios() {
-        // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-
-        // Abrir la ventana de usuarios
+        
         ventanaUsuarios = new Usuarios();
         ventanaUsuarios.setVisible(true);
-
-        // Agregar listener para detectar cuando se cierre la ventana
+        
         ventanaUsuarios.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaUsuarios = null;
-                cambiarEstadoInicio(0); // Volver al estado principal
+                cambiarEstadoInicio(0);
             }
         });
     }
 
     private void abrirVentanaDepartamentos() {
-        // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-
-        // Abrir la ventana de departamentos
         ventanaDepartamentos = new Departamentos();
         ventanaDepartamentos.setVisible(true);
-
-        // Agregar listener para detectar cuando se cierre la ventana
+        
         ventanaDepartamentos.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaDepartamentos = null;
-                cambiarEstadoInicio(0); // Volver al estado principal
+                cambiarEstadoInicio(0);
             }
         });
     }
 
     private void abrirVentanaEmpleados() {
-        // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-
-        // Abrir la ventana de empleados
+        
         ventanaEmpleados = new Empleados();
         ventanaEmpleados.setVisible(true);
-
-        // Agregar listener para detectar cuando se cierre la ventana
+        
         ventanaEmpleados.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaEmpleados = null;
-                cambiarEstadoInicio(0); // Volver al estado principal
+                cambiarEstadoInicio(0);
             }
         });
     }
 
     private void abrirVentanaPuestos() {
-        // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-
-        // Abrir la ventana de puestos
+        
         ventanaPuestos = new Puestos();
         ventanaPuestos.setVisible(true);
-
-        // Agregar listener para detectar cuando se cierre la ventana
+        
         ventanaPuestos.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaPuestos = null;
-                cambiarEstadoInicio(0); // Volver al estado principal
+                cambiarEstadoInicio(0);
             }
         });
     }
     
     private void abrirVentanaGenerarNómina() {
-        // Cerrar todas las otras ventanas antes de abrir esta
         cerrarTodasLasVentanas();
-
-        // Abrir la ventana de puestos
+        
         ventanaGenerarNomina = new GenerarNomina();
         ventanaGenerarNomina.setVisible(true);
-
-        // Agregar listener para detectar cuando se cierre la ventana
         ventanaGenerarNomina.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 ventanaGenerarNomina = null;
-                cambiarEstadoInicio(0); // Volver al estado principal
+                cambiarEstadoInicio(0);
             }
         });
     }
@@ -299,8 +281,7 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuConsultas = new JPopupMenu();
         popupMenuConsultas.setOpaque(false);
         popupMenuConsultas.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
-        // Empleados
+        
         popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "EMPLEADOS");
@@ -309,8 +290,7 @@ public class Inicio extends javax.swing.JFrame {
             cambiarEstadoInicio(5);
             cerrarTodasLasVentanas();
         }));
-
-        // Menú para mostrar panel de departamentos
+        
         popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "DEPARTAMENTOS");
@@ -319,8 +299,7 @@ public class Inicio extends javax.swing.JFrame {
             cambiarEstadoInicio(7);
             cerrarTodasLasVentanas();
         }));
-
-        // Menú para mostrar panel de puestos
+        
         popupMenuConsultas.add(createStyledMenuItem("Puestos", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "PUESTOS");
@@ -330,7 +309,6 @@ public class Inicio extends javax.swing.JFrame {
             cerrarTodasLasVentanas();
         }));
         
-        // Menú para mostrar panel de nomina
         popupMenuConsultas.add(createStyledMenuItem("Nomina", e -> {
     CardLayout cl = (CardLayout) pnlContenido.getLayout();
     cl.show(pnlContenido, "NOMINAS");
@@ -358,7 +336,7 @@ public class Inicio extends javax.swing.JFrame {
             cl.show(pnlContenido, "VACIO");
             cambiarEstadoInicio(1);
         });
-        //Desactiva la opción de mantenimiento de usuarios si el usuario no es administrador
+        
         if ("1".equals(rolUsuario)) {
             usuariosItem.setEnabled(false);
         }
@@ -393,8 +371,7 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuProcesos = new JPopupMenu();
         popupMenuProcesos.setOpaque(false);
         popupMenuProcesos.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
-        // Menú para mostrar panel de Crear Nómina
+        
         popupMenuProcesos.add(createStyledMenuItem("Generar Nómina", e -> {
             abrirVentanaGenerarNómina();
             cambiarEstadoInicio(8);
@@ -427,8 +404,6 @@ public class Inicio extends javax.swing.JFrame {
             JMenuItem item = createStyledMenuItem(opciones[i], acciones[i]);
             menu.add(item);
         }
-
-        // Mostrarlo debajo del componente
         menu.show(componente, 200, componente.getHeight() - 50);
     }
 

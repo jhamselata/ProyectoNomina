@@ -13,8 +13,6 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 public class GenerarPDF {
 
     public static void generarPDF(String rutaNominas, String rutaEmpleados, String rutaSalida, String fechaSeleccionada) throws IOException {
-    // ... resto del código ...
-        // Leer empleados
         List<String[]> empleados = new ArrayList<>();
         for (String linea : Files.readAllLines(Paths.get(rutaEmpleados))) {
             empleados.add(linea.split(";"));

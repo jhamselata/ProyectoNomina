@@ -37,12 +37,6 @@ public class Puestos extends javax.swing.JFrame {
         txtIDPuesto.setBackground(new Color(0, 0, 0, 0));
         txtDescPuesto.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
-
-        /*if (txtIDDep.getText().isEmpty()) {
-            txtDescDep.setEnabled(false);
-        } else {
-            txtDescDep.setEnabled(true);
-        } */
     }
 
     public String buscar(String PuestosBuscado) {
@@ -384,27 +378,22 @@ public class Puestos extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String IDPuesto = txtIDPuesto.getText().trim();
-
-// Verificar si hay un usuario ingresado
+        
         if (IDPuesto.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese un puesto para eliminar.");
             return;
         }
-
-// Buscar si el usuario existe
+        
         String lineaEncontrada = buscar(IDPuesto);
-
-// Verificar si se encontró
+        
         if (lineaEncontrada == null) {
             JOptionPane.showMessageDialog(null, "El puesto no existe.");
             return;
         }
-
-// Si existe, proceder a obtener datos
+        
         String[] datos = lineaEncontrada.split(";");
         txtDescPuesto.setText(datos[1]);
-
-// Confirmar eliminación
+        
         int confirmacion = JOptionPane.showConfirmDialog(
                 null,
                 "¿Está seguro de que desea eliminar el puesto '" + datos[1] + "'?",
@@ -417,20 +406,17 @@ public class Puestos extends javax.swing.JFrame {
             ManejoArchivos manejo = new ManejoArchivos();
 
             try {
-                // Eliminar el puesto
+                
                 manejo.Eliminar(lineaEncontrada, archivo);
                 JOptionPane.showMessageDialog(null, "Puesto eliminado correctamente.");
-
-                // Limpiar el formulario
+                
                 txtIDPuesto.setText("");
                 txtDescPuesto.setText("");
                 txtEstado.setText("Creando");
-
-                // Resetear variables de control
+                
                 encontrado = false;
                 cadenaAnterior = "";
-
-                // Deshabilitar campos
+                
                 txtDescPuesto.setEnabled(false);
 
             } catch (Exception ex) {
@@ -474,8 +460,6 @@ public class Puestos extends javax.swing.JFrame {
              
             } else {
 
-                // Al inicio de Anadir_btnActionPerformed
-                // Verifica si el usuario ya existe y no estamos modificando
                 if (lineaExistente != null && !encontrado) {
                     JOptionPane.showMessageDialog(null, "El puesto ya existe. Presione ENTER para modificarlo.");
                     return;
@@ -495,8 +479,7 @@ public class Puestos extends javax.swing.JFrame {
                         manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
                         JOptionPane.showMessageDialog(null, "Puesto modificado correctamente.");
                     }
-
-                    // Resetear formulario
+                    
                     encontrado = false;
                     txtIDPuesto.setText("");
                     txtDescPuesto.setText("");
@@ -561,18 +544,15 @@ public class Puestos extends javax.swing.JFrame {
             String lineaEncontrada = buscar(IDPuesto);
 
             if (lineaEncontrada != null) {
-                // Usuario encontrado - llenar todos los campos
+                
                 String[] datos = lineaEncontrada.split(";");
-
-                // Solo llenar si los campos están vacíos o si estamos en modo modificación
+                
                 if (txtDescPuesto.getText().trim().isEmpty() || encontrado) {
                     txtDescPuesto.setText(datos[1]);
                 }
-
-                // Llenar campos de información personal
+                
                 txtDescPuesto.setText(datos[1]);
-
-                // Cambiar estado a "Modificando"
+                
                 txtEstado.setText("Modificando");
                 btnEliminar.setEnabled(true);
                 encontrado = true;

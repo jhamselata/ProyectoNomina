@@ -12,14 +12,14 @@ public class cargarDatosenTabla {
     // Método para cargar datos en una JTable desde un archivo .txt
     public static void cargarEnTabla(JTable tabla, String rutaArchivo) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0); // Borra solo las filas
+        modelo.setRowCount(0);
 
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
             while ((linea = br.readLine()) != null) {
                 String[] campos = linea.split(";");
-                modelo.addRow(campos); // Agrega los datos directamente
+                modelo.addRow(campos);
             }
 
         } catch (IOException e) {
@@ -33,15 +33,13 @@ public class cargarDatosenTabla {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
         tabla.setRowSorter(sorter);
-
-        // Llenar el combo con nombres de columnas si está vacío
+        
         if (comboColumnas.getItemCount() == 0) {
             for (int i = 0; i < tabla.getColumnCount(); i++) {
                 comboColumnas.addItem(tabla.getColumnName(i));
             }
         }
-
-        // Escuchar cambios en el campo de texto
+        
         campoTexto.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 aplicarFiltro();
@@ -58,7 +56,7 @@ public class cargarDatosenTabla {
                 int columnaSeleccionada = comboColumnas.getSelectedIndex();
 
                 if (texto.trim().length() == 0) {
-                    sorter.setRowFilter(null); //Mostrar todo si está vacío
+                    sorter.setRowFilter(null);
                 } else {
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + texto, columnaSeleccionada));
                 }

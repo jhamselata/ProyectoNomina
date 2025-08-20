@@ -15,9 +15,8 @@ public class ConsultaNominas {
     // Método para cargar datos de nóminas con información de empleados
     public static void cargarNominasConEmpleados(JTable tablaNominas, String rutaNominas, String rutaEmpleados) {
         DefaultTableModel modelo = (DefaultTableModel) tablaNominas.getModel();
-        modelo.setRowCount(0); // Limpiar la tabla
+        modelo.setRowCount(0);
         
-        // Cargar empleados en un mapa para acceso rápido
         Map<String, String[]> empleados = cargarEmpleados(rutaEmpleados);
         
         try (BufferedReader br = new BufferedReader(new FileReader(rutaNominas))) {
@@ -26,31 +25,29 @@ public class ConsultaNominas {
             while ((linea = br.readLine()) != null) {
                 String[] camposNomina = linea.split(";");
                 
-                if (camposNomina.length >= 10) { // Verificar que tenga todos los campos
-                    String idEmpleado = camposNomina[1]; // ID Empleado está en posición 1
+                if (camposNomina.length >= 10) {
+                    String idEmpleado = camposNomina[1];
                     String[] datosEmpleado = empleados.get(idEmpleado);
                     
-                    // Crear fila con datos combinados
                     Object[] fila = new Object[11];
-                    fila[0] = camposNomina[0]; // ID Nómina
-                    fila[1] = idEmpleado; // ID Empleado
+                    fila[0] = camposNomina[0];
+                    fila[1] = idEmpleado;
                     
-                    // Si encontramos el empleado, usar su nombre completo, sino "Empleado no encontrado"
                     if (datosEmpleado != null) {
                         String nombreCompleto = datosEmpleado[1] + " " + datosEmpleado[2] + " " + datosEmpleado[3];
-                        fila[2] = nombreCompleto; // Nombre Completo
+                        fila[2] = nombreCompleto;
                     } else {
                         fila[2] = "Empleado no encontrado";
                     }
                     
-                    fila[3] = camposNomina[2]; // Fecha Nómina
-                    fila[4] = camposNomina[3]; // Salario
-                    fila[5] = camposNomina[4]; // AFP
-                    fila[6] = camposNomina[5]; // ARS
-                    fila[7] = camposNomina[6]; // Cooperativa
-                    fila[8] = camposNomina[7]; // ISR
-                    fila[9] = camposNomina[8]; // Sueldo Neto
-                    fila[10] = camposNomina[9]; // Status
+                    fila[3] = camposNomina[2];
+                    fila[4] = camposNomina[3];
+                    fila[5] = camposNomina[4];
+                    fila[6] = camposNomina[5];
+                    fila[7] = camposNomina[6];
+                    fila[8] = camposNomina[7];
+                    fila[9] = camposNomina[8];
+                    fila[10] = camposNomina[9];
                     
                     modelo.addRow(fila);
                 }
@@ -71,8 +68,8 @@ public class ConsultaNominas {
             
             while ((linea = br.readLine()) != null) {
                 String[] campos = linea.split(";");
-                if (campos.length >= 4) { // ID, Nombre, Apellido Paterno, Apellido Materno mínimo
-                    empleados.put(campos[0], campos); // Usar ID como clave
+                if (campos.length >= 4) {
+                    empleados.put(campos[0], campos);
                 }
             }
             
@@ -90,14 +87,14 @@ public class ConsultaNominas {
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
         tabla.setRowSorter(sorter);
         
-        // Configurar opciones de filtro específicas para nóminas
+        
         comboFiltro.removeAllItems();
         comboFiltro.addItem("ID Nómina");
         comboFiltro.addItem("ID Empleado");
         comboFiltro.addItem("Nombre Empleado");
         comboFiltro.addItem("Fecha Nómina");
         
-        // Listener para cambios en el campo de texto
+        
         campoTexto.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { aplicarFiltro(); }
             public void removeUpdate(DocumentEvent e) { aplicarFiltro(); }
@@ -115,18 +112,18 @@ public class ConsultaNominas {
                 int columnaFiltro = getColumnaFiltro(filtroSeleccionado);
                 
                 if (filtroSeleccionado.equals("Fecha Nómina")) {
-                    // Filtro especial para fechas - buscar coincidencias parciales
+                    
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, columnaFiltro));
                 } else {
-                    // Para otros campos, buscar que comience con el texto
+                    
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + texto, columnaFiltro));
                 }
             }
         });
         
-        // Listener para cambios en el combo de filtro
+        
         comboFiltro.addActionListener(e -> {
-            campoTexto.setText(""); // Limpiar el campo cuando cambie el filtro
+            campoTexto.setText("");
         });
     }
     
@@ -161,7 +158,7 @@ public class ConsultaNominas {
             Date fecha = formatoEntrada.parse(fechaOriginal);
             return formatoSalida.format(fecha);
         } catch (ParseException e) {
-            return fechaOriginal; // Devolver original si no se puede parsear
+            return fechaOriginal;
         }
     }
 }

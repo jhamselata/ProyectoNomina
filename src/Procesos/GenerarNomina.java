@@ -41,7 +41,7 @@ public class GenerarNomina extends javax.swing.JFrame {
     private static final double PORCENTAJE_ARS = 3.04;
     private static final double PORCENTAJE_AFP = 2.87;
 
-    // Rangos ISR en RD$
+    // Rangos
     private static final double ISR_RANGO1 = 34685.00;
     private static final double ISR_RANGO2 = 52027.42;
     private static final double ISR_RANGO3 = 72260.25;
@@ -362,7 +362,7 @@ public class GenerarNomina extends javax.swing.JFrame {
             idNomina,
             emp.idEmp,
             emp.getNombreCompleto(),
-            fechaStr, // Usar la fecha exacta seleccionada
+            fechaStr,
             "RD$ " + formatoMoneda.format(salario),
             "RD$ " + formatoMoneda.format(afp),
             "RD$ " + formatoMoneda.format(ars),
@@ -381,9 +381,6 @@ public class GenerarNomina extends javax.swing.JFrame {
             + formatoMoneda.format(totalNomina));
 }
 
-    /**
-     * Procesa y guarda la nómina que está mostrada en la tabla
-     */
    private void procesarNomina() {
        
        if (!validarFechaNomina(jdcFecha.getDate())) {

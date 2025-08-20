@@ -32,8 +32,7 @@ public class Empleados extends javax.swing.JFrame {
     private static final String ARCHIVO_PUESTOS = "src/BaseDeDatos/Puestos.txt";
     private static final String ESTADO_CREANDO = "Creando";
     private static final String ESTADO_MODIFICANDO = "Modificando";
-
-    // Variables de control
+    
     private boolean encontrado = false;
     private String cadenaAnterior = "";
     private File archivo = new File(ARCHIVO_EMPLEADOS);
@@ -51,8 +50,7 @@ public class Empleados extends javax.swing.JFrame {
         cargarComboBoxes();
         configurarValidaciones();
         configurarListenersCooperativa();
-
-        // Ocultar los botones al inicio
+        
         btnRegistrar.setVisible(false);
         btnEliminar.setVisible(false);
         lblBotonRegistrar.setVisible(false);
@@ -62,11 +60,7 @@ public class Empleados extends javax.swing.JFrame {
         cooperativaConfiguracionCompletada = false; 
     }
 
-    /**
-     * Configura la apariencia de la ventana
-     */
     private boolean validarCambioCooperativa() {
-        // Si está marcando "No" en cooperativa, verificar balance
         if (rbtnNo.isSelected()) {
             String idEmpleado = txtIDEmpleado.getText().trim();
             if (!idEmpleado.isEmpty()) {
@@ -84,9 +78,6 @@ public class Empleados extends javax.swing.JFrame {
         return true;
     }
 
-    /**
-     * Abre la ventana de gestión de cooperativa
-     */
     private void gestionarCooperativa() {
         // Validar que haya salario ingresado
        String salarioText = txtSalario.getText().trim();
@@ -95,8 +86,8 @@ public class Empleados extends javax.swing.JFrame {
                     "Debe ingresar un salario antes de configurar la cooperativa.",
                     "Salario requerido", JOptionPane.WARNING_MESSAGE);
             txtSalario.requestFocus();
-            rbtnNo.setSelected(true); // Si no hay salario, no puede ser de cooperativa
-            cooperativaConfiguracionCompletada = false; // Resetear la bandera
+            rbtnNo.setSelected(true);
+            cooperativaConfiguracionCompletada = false;
             return;
         }
 
@@ -106,16 +97,15 @@ public class Empleados extends javax.swing.JFrame {
 
             CooperativaDialog dialog = new CooperativaDialog(this, idEmpleado, salario);
             dialog.setVisible(true);
-
-            // Si no completó el proceso, desmarcar cooperativa
+            
             if (!dialog.isProcesoCompletado()) {
                 rbtnNo.setSelected(true);
                 JOptionPane.showMessageDialog(this,
                         "Se canceló el proceso de cooperativa. El empleado se guardará sin cooperativa.",
                         "Proceso cancelado", JOptionPane.INFORMATION_MESSAGE);
-                cooperativaConfiguracionCompletada = false; // El proceso no se completó
+                cooperativaConfiguracionCompletada = false;
             } else {
-                cooperativaConfiguracionCompletada = true; // El proceso se completó exitosamente
+                cooperativaConfiguracionCompletada = true;
             }
 
         } catch (NumberFormatException e) {
@@ -123,8 +113,8 @@ public class Empleados extends javax.swing.JFrame {
                     "El salario debe ser un número válido para configurar la cooperativa.",
                     "Salario inválido", JOptionPane.ERROR_MESSAGE);
             txtSalario.requestFocus();
-            rbtnNo.setSelected(true); // Si el salario es inválido, no puede ser de cooperativa
-            cooperativaConfiguracionCompletada = false; // Resetear la bandera
+            rbtnNo.setSelected(true);
+            cooperativaConfiguracionCompletada = false;
         }
     }
 
@@ -133,7 +123,6 @@ public class Empleados extends javax.swing.JFrame {
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-    /////////////////////////////////////////////////////////////////////////////
 
     private void configurarListenersCooperativa() {
         rbtnSi.addActionListener(new java.awt.event.ActionListener() {
@@ -150,13 +139,8 @@ public class Empleados extends javax.swing.JFrame {
     }
     
     private void establecerFechaActual() {
-    jdcFecha.setDate(new Date()); // Establece la fecha actual por defecto
-}
-
-    /**
-     * Configura los campos con fondo transparente
-     */
-    
+    jdcFecha.setDate(new Date());
+}   
 
     private void configurarCamposTransparentes() {
         Color transparente = new Color(0, 0, 0, 0);
@@ -169,19 +153,12 @@ public class Empleados extends javax.swing.JFrame {
         txtSalario.setBackground(transparente);
         txtEstado.setBackground(transparente);
     }
-//////////
 
-    /**
-     * Carga los datos en los ComboBox desde archivos
-     */
     private void cargarComboBoxes() {
         cargarDepartamentos();
         cargarPuestos();
     }
 
-    /**
-     * Carga departamentos desde archivo
-     */
     private void cargarDepartamentos() {
         cmbDepEmpleado.removeAllItems();
         cmbDepEmpleado.addItem("-- Seleccione --");
@@ -199,9 +176,6 @@ public class Empleados extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Carga puestos desde archivo
-     */
     private void cargarPuestos() {
         cmbPuestoEmpleado.removeAllItems();
         cmbPuestoEmpleado.addItem("-- Seleccione --");
@@ -219,20 +193,10 @@ public class Empleados extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Configura las validaciones de los campos
-     */
     private void configurarValidaciones() {
-        // Inicialmente deshabilitar campos hasta que se ingrese ID
         habilitarCampos(false);
     }
 
-    /**
-     * Busca un empleado por ID en el archivo
-     *
-     * @param empleadoBuscado ID del empleado a buscar
-     * @return línea encontrada o null si no existe
-     */
     public String buscarEmpleado(String empleadoBuscado) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -248,11 +212,6 @@ public class Empleados extends javax.swing.JFrame {
         return null;
     }
 
-    /**
-     * Habilita o deshabilita los campos del formulario
-     *
-     * @param habilitar true para habilitar, false para deshabilitar
-     */
     private void habilitarCampos(boolean habilitar) {
         txtNomEmpleado.setEnabled(habilitar);
         txtApePatEmpleado.setEnabled(habilitar);
@@ -269,9 +228,6 @@ public class Empleados extends javax.swing.JFrame {
         txtSalario.setEnabled(habilitar);
     }
 
-    /**
-     * Limpia todos los campos del formulario
-     */
     private void limpiarCampos() {
         txtIDEmpleado.setText("");
         txtNomEmpleado.setText("");
@@ -294,15 +250,9 @@ public class Empleados extends javax.swing.JFrame {
 
         establecerFechaActual();
         
-        // ¡Importante! Reiniciar la bandera cuando se limpian los campos para un nuevo registro
         cooperativaConfiguracionCompletada = false; 
     }
 
-    /**
-     * Carga los datos de un empleado en el formulario
-     *
-     * @param datos array con los datos del empleado
-     */
     private void cargarDatosEmpleado(String[] datos) {
         if (datos.length >= 12) {
             txtNomEmpleado.setText(datos[1]);

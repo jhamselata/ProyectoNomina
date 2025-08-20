@@ -27,7 +27,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
     private String registroAnterior = "";
     private File archivo = new File(ARCHIVO_COOPERATIVA);
     
-    // Declarar variables de componentes al inicio
     private javax.swing.JPanel panelPrincipal;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblIdEmpleado;
@@ -43,22 +42,16 @@ public class CooperativaDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnCancelar;
     
-    /**
-     * Constructor para nuevo registro de cooperativa
-     */
     public CooperativaDialog(java.awt.Frame parent, String empleadoId, BigDecimal salario) {
-        super(parent, true); // Modal
+        super(parent, true);
         this.empleadoId = empleadoId;
         this.salarioEmpleado = salario;
         initComponents();
-        personalizarFormulario(); // Llamar después de initComponents
+        personalizarFormulario();
         configurarVentana();
         verificarRegistroExistente();
     }
     
-    /**
-     * Constructor sin parámetros (para testing)
-     */
     public CooperativaDialog() {
         super((java.awt.Frame) null, true);
         initComponents();
@@ -70,22 +63,18 @@ public class CooperativaDialog extends javax.swing.JDialog {
         setTitle("Gestión de Cooperativa - Empleado ID: " + empleadoId);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         
-        // Configurar campos transparentes
         Color transparente = new Color(0, 0, 0, 0);
         txtIdEmpleado.setBackground(transparente);
         txtPorcentajeDesc.setBackground(transparente);
         txtBalanceAcumulado.setBackground(transparente);
         txtSalarioRef.setBackground(transparente);
         
-        // Configurar campos no editables
         txtIdEmpleado.setEditable(false);
         txtSalarioRef.setEditable(false);
         
-        // Mostrar información inicial
         txtIdEmpleado.setText(empleadoId);
         txtSalarioRef.setText(salarioEmpleado.toString());
         
-        // Calcular y mostrar máximo permitido
         lblMaximoPermitido.setText("Máximo permitido: 5% del salario");
 
     }
@@ -118,7 +107,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
                 }
             }
         } catch (IOException e) {
-            // Si el archivo no existe, no es un error crítico
             System.out.println("Archivo de cooperativa no encontrado, se creará uno nuevo");
         }
         return null;
@@ -221,9 +209,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
         return procesoCompletado;
     }
 
-    /**
-     * Método estático para verificar si un empleado tiene balance en cooperativa
-     */
     public static BigDecimal obtenerBalanceEmpleado(String idEmpleado) {
         File archivo = new File(ARCHIVO_COOPERATIVA);
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
@@ -244,7 +229,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
     }
     
     private void personalizarFormulario(){
-        // Crear los componentes
         panelPrincipal = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         lblIdEmpleado = new javax.swing.JLabel();
@@ -413,7 +397,6 @@ public class CooperativaDialog extends javax.swing.JDialog {
     }// </editor-fold>                        
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -424,8 +407,7 @@ public class CooperativaDialog extends javax.swing.JDialog {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CooperativaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(() -> {
             new CooperativaDialog().setVisible(true);
         });

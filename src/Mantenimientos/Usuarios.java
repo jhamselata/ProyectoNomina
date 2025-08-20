@@ -392,10 +392,6 @@ public class Usuarios extends javax.swing.JFrame {
         if (!Apellido_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$") || !Nombre_txt.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s-]+$")) {
         JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
 } else {
-        
-        
-        // Al inicio de Anadir_btnActionPerformed
-        
 
         // Verifica si el usuario ya existe y no estamos modificando
         if (lineaExistente != null && !encontrado) {
@@ -426,16 +422,13 @@ public class Usuarios extends javax.swing.JFrame {
 
         try {
             if (!encontrado) {
-                // Guardar nuevo
                 manejo.GuardarDatos(nuevaLinea, archivo);
                 JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
             } else {
-                // Modificar usuario existente usando tu método Modificar
                 manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
                 JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
             }
-
-            // Resetear formulario
+            
             encontrado = false;
             Usuario_txt.setText("");
             Contrasena_pwd.setText("");
@@ -454,16 +447,16 @@ public class Usuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_Anadir_btnActionPerformed
 
     private void Limpiar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Limpiar_btnActionPerformed
-        // Limpiar todos los campos
+
         Usuario_txt.setText("");
         Contrasena_pwd.setText("");
         Nombre_txt.setText("");
         Apellido_txt.setText("");
         Email_txt.setText("");
-        Estado_txt.setText("Creando"); // Cambiar estado a "Creando"
+        Estado_txt.setText("Creando");
         RolGroup.clearSelection();
 
-        // Resetear las variables de control
+        
         encontrado = false;
         cadenaAnterior = "";
 
@@ -548,22 +541,19 @@ public class Usuarios extends javax.swing.JFrame {
 
     private void Eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Eliminar_btnActionPerformed
         String usuario = Usuario_txt.getText().trim();
-
-        // Verificar si hay un usuario ingresado
+        
         if (usuario.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese un usuario para eliminar.");
             return;
         }
-
-        // Buscar si el usuario existe
+        
         String lineaEncontrada = buscar(usuario);
 
         if (lineaEncontrada == null) {
             JOptionPane.showMessageDialog(null, "El usuario no existe.");
             return;
         }
-
-        // Confirmar eliminación
+        
         int confirmacion = JOptionPane.showConfirmDialog(
                 null,
                 "¿Está seguro de que desea eliminar el usuario '" + usuario + "'?",
@@ -576,11 +566,9 @@ public class Usuarios extends javax.swing.JFrame {
             ManejoArchivos manejo = new ManejoArchivos();
 
             try {
-                // Eliminar el usuario usando el método de ManejoArchivos
                 manejo.Eliminar(lineaEncontrada, archivo);
                 JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente.");
-
-                // Limpiar el formulario después de eliminar
+                
                 Usuario_txt.setText("");
                 Contrasena_pwd.setText("");
                 Nombre_txt.setText("");
@@ -588,12 +576,10 @@ public class Usuarios extends javax.swing.JFrame {
                 Email_txt.setText("");
                 Estado_txt.setText("Creando");
                 RolGroup.clearSelection();
-
-                // Resetear variables de control
+                
                 encontrado = false;
                 cadenaAnterior = "";
-
-                // Deshabilitar campos
+                
                 Admin_rbtn.setEnabled(false);
                 Empleado_rbtn.setEnabled(false);
                 Nombre_txt.setEnabled(false);
@@ -611,13 +597,9 @@ public class Usuarios extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "El apellido o el nombre solo debe contener letras, espacios o guiones.", "Dato inválido", JOptionPane.WARNING_MESSAGE);
 } else {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            // TODO add your handling code here:
-
-            // Al inicio de Anadir_btnActionPerformed
             String usuario = Usuario_txt.getText().trim();
             String lineaExistente = buscar(usuario);
-
-            // Verifica si el usuario ya existe y no estamos modificando
+            
             if (lineaExistente != null && !encontrado) {
                 JOptionPane.showMessageDialog(null, "El usuario ya existe. Presione ENTER para modificarlo.");
                 return;
@@ -649,16 +631,13 @@ public class Usuarios extends javax.swing.JFrame {
 
             try {
                 if (!encontrado) {
-                    // Guardar nuevo
                     manejo.GuardarDatos(nuevaLinea, archivo);
                     JOptionPane.showMessageDialog(null, "Usuario guardado correctamente.");
                 } else {
-                    // Modificar usuario existente usando tu método Modificar
                     manejo.Modificar(cadenaAnterior, nuevaLinea, archivo);
                     JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
                 }
-
-                // Resetear formulario
+                
                 encontrado = false;
                 Usuario_txt.setText("");
                 Contrasena_pwd.setText("");
@@ -718,25 +697,19 @@ public class Usuarios extends javax.swing.JFrame {
             String lineaEncontrada = buscar(usuario);
 
             if (lineaEncontrada != null) {
-                // Usuario encontrado - llenar todos los campos
                 String[] datos = lineaEncontrada.split(";");
-
-                // Solo llenar si los campos están vacíos o si estamos en modo modificación
+                
                 if (Contrasena_pwd.getText().trim().isEmpty() || encontrado) {
                     Contrasena_pwd.setText(datos[1]);
                 }
-
-                // Seleccionar el rol apropiado
                 if (datos[2].equals("0")) {
                     Admin_rbtn.setSelected(true);
                 } else if (datos[2].equals("1")) {
                     Empleado_rbtn.setSelected(true);
                 }
-
-                // Llenar campos de información personal
                 Nombre_txt.setText(datos[3]);
                 Apellido_txt.setText(datos[4]);
-                if (datos.length > 5) { // Verificar que existe el campo email
+                if (datos.length > 5) {
                     Email_txt.setText(datos[5]);
                 }
 
