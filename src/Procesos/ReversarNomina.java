@@ -5,6 +5,7 @@
 package Procesos;
 
 import Utilidades.ConsultaNominas;
+import Utilidades.EstilosTabla;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,7 +45,7 @@ public class ReversarNomina extends javax.swing.JFrame {
         
         ConsultaNominas.cargarNominasConEmpleados(tblNominas, 
         "src/BaseDeDatos/Nominas.txt", 
-        "src/BaseDeDatos/Empleados.txt");
+        "src/BaseDeDatos/Empleados.txt", "src/BaseDeDatos/Cooperativa.txt");
         
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(tblNominas.getModel());
         tblNominas.setRowSorter(sorter);
@@ -63,7 +64,21 @@ public class ReversarNomina extends javax.swing.JFrame {
             }
         });
         
+        configurarEstilosUI();
+        
     }
+    private void configurarEstilosUI() {
+    // Ajuste proporcional automático (por defecto)
+    EstilosTabla.aplicarEstiloPrincipal(tblNominas, jScrollPane4);
+    
+    // Todas las columnas del mismo tamaño
+   // EstilosTabla.aplicarEstiloConColumnasIguales(jTable2, jScrollPane2);
+    
+    // Columnas con porcentajes específicos
+    //double[] pesos = {0.15, 0.25, 0.20, 0.25, 0.15}; // ID, Nombre, Salario, AFP, ARS
+    //EstilosTabla.aplicarEstiloConPesos(jTable3, jScrollPane3, pesos);
+}
+    
     
     public void ProcesoReversar() {
     File coopFile   = new File("src/BaseDeDatos/Cooperativa.txt");
@@ -254,7 +269,7 @@ public class ReversarNomina extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "ID Empleado", "Nombre Empleado", "Fecha Nómina", "Salario", "AFP", "ARS", "Cooperativa", "IRS", "Sueldo Neto", "Status"
+                "ID", "ID Empleado", "Nombre Empleado", "Fecha Nómina", "Salario", "AFP", "ARS", "Cooperativa", "IRS", "Sueldo Neto", "Balance Coop. Acumulado"
             }
         ) {
             Class[] types = new Class [] {
@@ -274,6 +289,19 @@ public class ReversarNomina extends javax.swing.JFrame {
         });
         tblNominas.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(tblNominas);
+        if (tblNominas.getColumnModel().getColumnCount() > 0) {
+            tblNominas.getColumnModel().getColumn(0).setResizable(false);
+            tblNominas.getColumnModel().getColumn(1).setResizable(false);
+            tblNominas.getColumnModel().getColumn(2).setResizable(false);
+            tblNominas.getColumnModel().getColumn(3).setResizable(false);
+            tblNominas.getColumnModel().getColumn(4).setResizable(false);
+            tblNominas.getColumnModel().getColumn(5).setResizable(false);
+            tblNominas.getColumnModel().getColumn(6).setResizable(false);
+            tblNominas.getColumnModel().getColumn(7).setResizable(false);
+            tblNominas.getColumnModel().getColumn(8).setResizable(false);
+            tblNominas.getColumnModel().getColumn(9).setResizable(false);
+            tblNominas.getColumnModel().getColumn(10).setResizable(false);
+        }
 
         pnlContenido.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 883, -1));
         pnlContenido.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 250, 50));
@@ -320,7 +348,7 @@ public class ReversarNomina extends javax.swing.JFrame {
         
         ConsultaNominas.cargarNominasConEmpleados(tblNominas, 
         "src/BaseDeDatos/Nominas.txt", 
-        "src/BaseDeDatos/Empleados.txt");
+        "src/BaseDeDatos/Empleados.txt", "src/BaseDeDatos/Cooperativa.txt");
     }//GEN-LAST:event_btnReversarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

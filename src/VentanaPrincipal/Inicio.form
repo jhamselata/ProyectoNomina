@@ -1510,10 +1510,10 @@
                             <Column editable="false" title="Salario" type="java.lang.String"/>
                             <Column editable="false" title="AFP" type="java.lang.String"/>
                             <Column editable="false" title="ARS" type="java.lang.String"/>
-                            <Column editable="false" title="Cooperativa" type="java.lang.Integer"/>
+                            <Column editable="false" title="%Desc. Cooperativa" type="java.lang.Integer"/>
                             <Column editable="false" title="IRS" type="java.lang.String"/>
                             <Column editable="false" title="Sueldo Neto" type="java.lang.Integer"/>
-                            <Column editable="false" title="Status" type="java.lang.String"/>
+                            <Column editable="false" title="Balance Cooperativa" type="java.lang.String"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

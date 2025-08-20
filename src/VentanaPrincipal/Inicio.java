@@ -13,6 +13,7 @@ import Procesos.GenerarNomina;
 import Procesos.ReversarNomina;
 import Utilidades.ConsultaGeneral;
 import Utilidades.ConsultaNominas;
+import Utilidades.EstilosTabla;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -338,7 +339,7 @@ public class Inicio extends javax.swing.JFrame {
     
     ConsultaNominas.cargarNominasConEmpleados(tblNominas, 
         "src/BaseDeDatos/Nominas.txt", 
-        "src/BaseDeDatos/Empleados.txt");
+        "src/BaseDeDatos/Empleados.txt", "src/BaseDeDatos/Cooperativa.txt");
     
     ConsultaNominas.configurarFiltrosNominas(tblNominas, txtBusquedaNominas, cbbxFiltroNominas);
     
@@ -522,8 +523,26 @@ public class Inicio extends javax.swing.JFrame {
         jdcFecha1.setEnabled(false);
         
         txtBusquedaNominas.setBackground(new Color(0, 0, 0, 0));
+        
+        configurarEstilosUI();
 
     }
+    
+    private void configurarEstilosUI() {
+    // Ajuste proporcional automático (por defecto)
+    EstilosTabla.aplicarEstiloPrincipal(tblNominas, jScrollPane4);
+    EstilosTabla.aplicarEstiloPrincipal(tblEmpleados, jScrollPane3);
+    EstilosTabla.aplicarEstiloPrincipal(tblDepartamentos, jScrollPane2);
+    EstilosTabla.aplicarEstiloPrincipal(tblPuestos, jScrollPane1);
+
+    
+    // Todas las columnas del mismo tamaño
+    //EstilosTabla.aplicarEstiloConColumnasIguales(jTable2, jScrollPane2);
+    
+    // Columnas con porcentajes específicos
+    //double[] pesos = {0.15, 0.25, 0.20, 0.25, 0.15}; // ID, Nombre, Salario, AFP, ARS
+    //EstilosTabla.aplicarEstiloConPesos(jTable3, jScrollPane3, pesos);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1264,7 +1283,7 @@ public class Inicio extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "ID Empleado", "Nombre Empleado", "Fecha Nómina", "Salario", "AFP", "ARS", "Cooperativa", "IRS", "Sueldo Neto", "Status"
+                "ID", "ID Empleado", "Nombre Empleado", "Fecha Nómina", "Salario", "AFP", "ARS", "%Desc. Cooperativa", "IRS", "Sueldo Neto", "Balance Cooperativa"
             }
         ) {
             Class[] types = new Class [] {

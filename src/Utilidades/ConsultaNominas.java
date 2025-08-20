@@ -13,51 +13,77 @@ import javax.swing.table.TableRowSorter;
 public class ConsultaNominas {
     
     // Método para cargar datos de nóminas con información de empleados
-    public static void cargarNominasConEmpleados(JTable tablaNominas, String rutaNominas, String rutaEmpleados) {
-        DefaultTableModel modelo = (DefaultTableModel) tablaNominas.getModel();
-        modelo.setRowCount(0);
-        
-        Map<String, String[]> empleados = cargarEmpleados(rutaEmpleados);
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaNominas))) {
-            String linea;
-            
-            while ((linea = br.readLine()) != null) {
-                String[] camposNomina = linea.split(";");
-                
-                if (camposNomina.length >= 10) {
-                    String idEmpleado = camposNomina[1];
-                    String[] datosEmpleado = empleados.get(idEmpleado);
-                    
-                    Object[] fila = new Object[11];
-                    fila[0] = camposNomina[0];
-                    fila[1] = idEmpleado;
-                    
-                    if (datosEmpleado != null) {
-                        String nombreCompleto = datosEmpleado[1] + " " + datosEmpleado[2] + " " + datosEmpleado[3];
-                        fila[2] = nombreCompleto;
-                    } else {
-                        fila[2] = "Empleado no encontrado";
-                    }
-                    
-                    fila[3] = camposNomina[2];
-                    fila[4] = camposNomina[3];
-                    fila[5] = camposNomina[4];
-                    fila[6] = camposNomina[5];
-                    fila[7] = camposNomina[6];
-                    fila[8] = camposNomina[7];
-                    fila[9] = camposNomina[8];
-                    fila[10] = camposNomina[9];
-                    
-                    modelo.addRow(fila);
+    public static void cargarNominasConEmpleados(JTable tablaNominas, String rutaNominas, String rutaEmpleados, String rutaCooperativa) {
+    DefaultTableModel modelo = (DefaultTableModel) tablaNominas.getModel();
+    modelo.setRowCount(0);
+
+    Map<String, String[]> empleados = cargarEmpleados(rutaEmpleados);
+    Map<String, String> balances = cargarBalancesCooperativa(rutaCooperativa);
+
+    try (BufferedReader br = new BufferedReader(new FileReader(rutaNominas))) {
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            String[] camposNomina = linea.split(";");
+
+            if (camposNomina.length >= 10) {
+                String idEmpleado = camposNomina[1];
+                String[] datosEmpleado = empleados.get(idEmpleado);
+
+                Object[] fila = new Object[11];
+                fila[0] = camposNomina[0]; // ID Nómina
+                fila[1] = idEmpleado;      // ID Empleado
+
+                if (datosEmpleado != null) {
+                    String nombreCompleto = datosEmpleado[1] + " " + datosEmpleado[2] + " " + datosEmpleado[3];
+                    fila[2] = nombreCompleto;
+                } else {
+                    fila[2] = "Empleado no encontrado";
                 }
+
+                fila[3] = camposNomina[2];
+                fila[4] = camposNomina[3];
+                fila[5] = camposNomina[4];
+                fila[6] = camposNomina[5];
+                fila[7] = camposNomina[6];
+                fila[8] = camposNomina[7];
+                fila[9] = camposNomina[8];
+
+                // Reemplazamos status por balance acumulado de cooperativa
+                String balance = balances.getOrDefault(idEmpleado, "0.0");
+                fila[10] = balance;
+
+                modelo.addRow(fila);
             }
-            
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al leer el archivo de nóminas:\n" + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al leer el archivo de nóminas:\n" + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
+    
+    private static Map<String, String> cargarBalancesCooperativa(String rutaCooperativa) {
+    Map<String, String> balances = new HashMap<>();
+
+    try (BufferedReader br = new BufferedReader(new FileReader(rutaCooperativa))) {
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            String[] campos = linea.split(";");
+            if (campos.length >= 3) {
+                // campos[0] = idEmpleado, campos[2] = balance acumulado
+                balances.put(campos[0], campos[2]);
+            }
+        }
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al leer el archivo de balances de cooperativa:\n" + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    return balances;
+}
     
     // Método auxiliar para cargar empleados en un mapa
     private static Map<String, String[]> cargarEmpleados(String rutaEmpleados) {

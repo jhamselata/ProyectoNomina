@@ -4,6 +4,7 @@
  */
 package Procesos;
 
+import Utilidades.EstilosTabla;
 import Utilidades.GenerarPDF;
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -152,7 +153,13 @@ public class GenerarNomina extends javax.swing.JFrame {
         //Seleccionar fecha minima
         jdcFecha.setMinSelectableDate(new Date());
 
+        configurarEstilosUI();
     }
+    
+    private void configurarEstilosUI() {
+    // Ajuste proporcional automático (por defecto)
+    EstilosTabla.aplicarEstiloPrincipal(TableNominas, ScrollPaneDepartamentos);
+}
 
     /**
      * Configura la tabla para mostrar nóminas
