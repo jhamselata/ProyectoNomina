@@ -1,0 +1,1 @@
+1;Administración2;Contabilidad3;Recursos Humanos4;Tecnología5;Ventas6;Producción7;Marketing8;Logística9;Atención al Cliente10;Legal

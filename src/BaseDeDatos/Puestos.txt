@@ -1,0 +1,10 @@
+1;Gerente
+2;Analista
+3;Asistente
+4;Coordinador
+5;Supervisor
+6;Director
+7;Ejecutivo
+8;Representante
+9;Consultor
+10;Operador
