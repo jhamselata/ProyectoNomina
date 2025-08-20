@@ -6,6 +6,7 @@ package Procesos;
 
 import Utilidades.ConsultaNominas;
 import Utilidades.EstilosTabla;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -65,6 +66,10 @@ public class ReversarNomina extends javax.swing.JFrame {
         });
         
         configurarEstilosUI();
+        btnSalir.setBackground(new Color(0, 0, 0, 0));
+        btnReversar.setBackground(new Color(0, 0, 0, 0));
+
+
         
     }
     private void configurarEstilosUI() {
@@ -306,12 +311,15 @@ public class ReversarNomina extends javax.swing.JFrame {
         pnlContenido.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 883, -1));
         pnlContenido.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 250, 50));
 
+        pnlBotonReversar.setBackground(new java.awt.Color(59, 66, 82));
         pnlBotonReversar.setRoundBottomLeft(20);
         pnlBotonReversar.setRoundBottomRight(20);
         pnlBotonReversar.setRoundTopLeft(20);
         pnlBotonReversar.setRoundTopRight(20);
         pnlBotonReversar.setLayout(new java.awt.BorderLayout());
 
+        btnReversar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        btnReversar.setForeground(new java.awt.Color(236, 239, 244));
         btnReversar.setText("Reversar");
         btnReversar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -320,14 +328,17 @@ public class ReversarNomina extends javax.swing.JFrame {
         });
         pnlBotonReversar.add(btnReversar, java.awt.BorderLayout.CENTER);
 
-        pnlContenido.add(pnlBotonReversar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 560, 130, 50));
+        pnlContenido.add(pnlBotonReversar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 560, 130, 50));
 
+        pnlBotonSalir.setBackground(new java.awt.Color(59, 66, 82));
         pnlBotonSalir.setRoundBottomLeft(20);
         pnlBotonSalir.setRoundBottomRight(20);
         pnlBotonSalir.setRoundTopLeft(20);
         pnlBotonSalir.setRoundTopRight(20);
         pnlBotonSalir.setLayout(new java.awt.BorderLayout());
 
+        btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(236, 239, 244));
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,7 +347,7 @@ public class ReversarNomina extends javax.swing.JFrame {
         });
         pnlBotonSalir.add(btnSalir, java.awt.BorderLayout.CENTER);
 
-        pnlContenido.add(pnlBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 560, 130, 50));
+        pnlContenido.add(pnlBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 560, 130, 50));
 
         getContentPane().add(pnlContenido, java.awt.BorderLayout.CENTER);
 

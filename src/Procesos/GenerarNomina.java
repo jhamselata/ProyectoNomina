@@ -137,6 +137,10 @@ public class GenerarNomina extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Permite que solo se cierre la ventana 
 
         txtEstado.setBackground(new Color(0, 0, 0, 0));
+        
+        btnSalir.setBackground(new Color(0, 0, 0, 0));
+        btnProcesar.setBackground(new Color(0, 0, 0, 0));
+
 
         // Configurar fecha por defecto (día 30 del mes actual)
         Calendar cal = Calendar.getInstance();
