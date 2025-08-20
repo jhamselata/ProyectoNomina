@@ -10,9 +10,8 @@ import Mantenimientos.Empleados;
 import Mantenimientos.Puestos;
 import Mantenimientos.Usuarios;
 import Procesos.GenerarNomina;
+import Utilidades.ConsultaGeneral;
 import Utilidades.ConsultaNominas;
-import static Utilidades.cargarDatosenTabla.activarFiltro;
-import static Utilidades.cargarDatosenTabla.cargarEnTabla;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -37,7 +36,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-
 
 /**
  *
@@ -285,8 +283,8 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuConsultas.add(createStyledMenuItem("Empleados", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "EMPLEADOS");
-            cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
-            activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
+            ConsultaGeneral.cargarEnTabla(tblEmpleados, "src/BaseDeDatos/Empleados.txt");
+            ConsultaGeneral.activarFiltro(tblEmpleados, txtBusquedaEmpleados, cbbxFiltroEmpleados);
             cambiarEstadoInicio(5);
             cerrarTodasLasVentanas();
         }));
@@ -294,8 +292,8 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuConsultas.add(createStyledMenuItem("Departamentos", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "DEPARTAMENTOS");
-            cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
-            activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
+            ConsultaGeneral.cargarEnTabla(tblDepartamentos, "src/BaseDeDatos/Departamentos.txt");
+            ConsultaGeneral.activarFiltro(tblDepartamentos, txtBusquedaDepartamentos, cbbxFiltroBusqueda);
             cambiarEstadoInicio(7);
             cerrarTodasLasVentanas();
         }));
@@ -303,8 +301,8 @@ public class Inicio extends javax.swing.JFrame {
         popupMenuConsultas.add(createStyledMenuItem("Puestos", e -> {
             CardLayout cl = (CardLayout) pnlContenido.getLayout();
             cl.show(pnlContenido, "PUESTOS");
-            cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
-            activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
+            ConsultaGeneral.cargarEnTabla(tblPuestos, "src/BaseDeDatos/Puestos.txt");
+            ConsultaGeneral.activarFiltro(tblPuestos, txtBusquedaPuestos, cbbxFiltroPuestos);
             cambiarEstadoInicio(6);
             cerrarTodasLasVentanas();
         }));
