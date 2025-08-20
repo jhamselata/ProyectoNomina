@@ -37,6 +37,10 @@ public class Puestos extends javax.swing.JFrame {
         txtIDPuesto.setBackground(new Color(0, 0, 0, 0));
         txtDescPuesto.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
+        
+        btnRegistrar.setBackground(new Color(0, 0, 0, 0));
+        btnSalir.setBackground(new Color(0, 0, 0, 0));
+        btnEliminar.setBackground(new Color(0, 0, 0, 0));
     }
 
     public String buscar(String PuestosBuscado) {
@@ -151,9 +155,9 @@ public class Puestos extends javax.swing.JFrame {
         lblBotonRegistrar.setRoundTopLeft(20);
         lblBotonRegistrar.setRoundTopRight(20);
 
-        btnRegistrar.setBackground(new java.awt.Color(0, 0, 0));
+        btnRegistrar.setBackground(new java.awt.Color(236, 239, 244));
         btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(204, 204, 204));
+        btnRegistrar.setForeground(new java.awt.Color(236, 239, 244));
         btnRegistrar.setText("Registrar");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -201,9 +205,9 @@ public class Puestos extends javax.swing.JFrame {
         lblBotonEliminar.setRoundTopLeft(20);
         lblBotonEliminar.setRoundTopRight(20);
 
-        btnEliminar.setBackground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setBackground(new java.awt.Color(236, 239, 244));
         btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(204, 204, 204));
+        btnEliminar.setForeground(new java.awt.Color(236, 239, 244));
         btnEliminar.setText("Eliminar");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -272,9 +276,9 @@ public class Puestos extends javax.swing.JFrame {
         lblBtnSalir.setRoundTopLeft(20);
         lblBtnSalir.setRoundTopRight(20);
 
-        btnSalir.setBackground(new java.awt.Color(0, 0, 0));
+        btnSalir.setBackground(new java.awt.Color(236, 239, 244));
         btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnSalir.setForeground(new java.awt.Color(204, 204, 204));
+        btnSalir.setForeground(new java.awt.Color(236, 239, 244));
         btnSalir.setText("Salir");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -347,7 +351,9 @@ public class Puestos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelesBordesRedondeados1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelesBordesRedondeados1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();

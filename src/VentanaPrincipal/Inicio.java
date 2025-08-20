@@ -769,6 +769,9 @@ public class Inicio extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlBotonMatenimientosMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlBotonMatenimientosMouseEntered(evt);
+            }
         });
         pnlBotonMatenimientos.setLayout(new java.awt.BorderLayout());
 
@@ -1522,6 +1525,10 @@ public class Inicio extends javax.swing.JFrame {
     private void cbbxFiltroNominasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbxFiltroNominasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbxFiltroNominasActionPerformed
+
+    private void pnlBotonMatenimientosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonMatenimientosMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonMatenimientosMouseEntered
 
     /**
      * @param args the command line arguments

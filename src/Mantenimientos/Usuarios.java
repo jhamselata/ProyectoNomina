@@ -59,6 +59,8 @@ public class Usuarios extends javax.swing.JFrame {
         }
         
         Eliminar_btn.setEnabled(false);
+        
+        
     }
 
     public String buscar(String usuarioBuscado) {

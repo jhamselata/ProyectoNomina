@@ -35,6 +35,11 @@ public class Departamentos extends javax.swing.JFrame {
         txtIDDep.setBackground(new Color(0, 0, 0, 0));
         txtDescDep.setBackground(new Color(0, 0, 0, 0));
         txtEstado.setBackground(new Color(0, 0, 0, 0));
+        
+        
+        btnRegistrar.setBackground(new Color(0, 0, 0, 0));
+        btnEliminar.setBackground(new Color(0, 0, 0, 0));
+        btnSalir.setBackground(new Color(0, 0, 0, 0));
 
     }
     
@@ -153,7 +158,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBotonRegistrar.setRoundTopRight(20);
 
         btnRegistrar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnRegistrar.setForeground(new java.awt.Color(236, 239, 244));
         btnRegistrar.setText("Registrar");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -202,7 +207,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBotonEliminar.setRoundTopRight(20);
 
         btnEliminar.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setForeground(new java.awt.Color(236, 239, 244));
         btnEliminar.setText("Eliminar");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -272,7 +277,7 @@ public class Departamentos extends javax.swing.JFrame {
         lblBtnSalir.setRoundTopRight(20);
 
         btnSalir.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
+        btnSalir.setForeground(new java.awt.Color(236, 239, 244));
         btnSalir.setText("Salir");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

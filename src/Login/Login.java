@@ -196,6 +196,11 @@ public class Login extends javax.swing.JFrame {
         pnlBotonIniciarSesion.setRoundBottomRight(20);
         pnlBotonIniciarSesion.setRoundTopLeft(20);
         pnlBotonIniciarSesion.setRoundTopRight(20);
+        pnlBotonIniciarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBotonIniciarSesionMouseClicked(evt);
+            }
+        });
 
         btnInicioSesion.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         btnInicioSesion.setForeground(new java.awt.Color(204, 204, 204));
@@ -474,6 +479,10 @@ public class Login extends javax.swing.JFrame {
     private void btnInicioSesionMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioSesionMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnInicioSesionMousePressed
+
+    private void pnlBotonIniciarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBotonIniciarSesionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlBotonIniciarSesionMouseClicked
 
     /**
      * @param args the command line arguments
